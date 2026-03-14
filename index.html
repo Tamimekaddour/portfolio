@@ -87,7 +87,6 @@
     #hero {
       position: relative; width: 100%; height: 100vh; min-height: 700px;
       overflow: hidden; cursor: none;
-      display: flex; flex-direction: column; justify-content: flex-end;
     }
     .hero-blur {
       position: absolute; inset: 0;
@@ -129,8 +128,10 @@
       letter-spacing: .28em; text-transform: uppercase; color: rgba(246,230,209,.42);
     }
 
+    /* Pinned to very bottom — absolutely positioned */
     .hero-bottom {
-      position: relative; z-index: 5; padding: 0 52px 52px;
+      position: absolute; bottom: 0; left: 0; right: 0;
+      z-index: 5; padding: 0 52px 52px;
     }
 
     /* Name — one line, cream */
@@ -144,16 +145,15 @@
       white-space: nowrap;
     }
 
-    /* Subtitle — same visual width as name via JS scaleX */
+    /* Subtitle — simple spaced line, no scaleX */
     .hero-role {
       display: block;
       font-family: 'Lexend', sans-serif; font-weight: 300;
-      font-size: clamp(11px, 1.05vw, 16px);
-      letter-spacing: .44em; text-transform: uppercase;
+      font-size: clamp(10px, .95vw, 14px);
+      letter-spacing: .52em; text-transform: uppercase;
       color: var(--green-mid);
-      transform-origin: left center;
       white-space: nowrap;
-      margin-top: 8px;
+      margin-top: 10px;
     }
 
     /* ────────────────────────────── MARQUEE */
@@ -415,7 +415,7 @@
     /* ────────────────────────────── CONTACT */
     #contact { background: var(--bg2); border-top: 1px solid var(--border); padding: 100px 52px 0; }
 
-    .contact-inner { display: grid; grid-template-columns: 520px 1fr; gap: 72px; align-items: center; padding-bottom: 80px; }
+    .contact-inner { display: grid; grid-template-columns: 480px 1fr; gap: 72px; align-items: center; padding-bottom: 80px; }
     .contact-heading {
       font-family: 'Lexend', sans-serif; font-weight: 700;
       font-size: clamp(30px, 4.2vw, 58px); line-height: 1.2; color: var(--text); margin-bottom: 28px;
@@ -895,26 +895,6 @@
       el.addEventListener('mouseenter', () => cursor.classList.add('large'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('large'));
     });
-
-    /* ── HERO ROLE — scale to match name width */
-    function syncRoleWidth() {
-      const name = document.getElementById('heroName');
-      const role = document.getElementById('heroRole');
-      if (!name || !role) return;
-      // Reset first to get natural width
-      role.style.transform = 'scaleX(1)';
-      const nw = name.getBoundingClientRect().width;
-      const rw = role.getBoundingClientRect().width;
-      if (rw > 0 && nw > 0) {
-        role.style.transform = `scaleX(${nw / rw})`;
-        role.style.transformOrigin = 'left center';
-      }
-    }
-    document.fonts.ready.then(() => { syncRoleWidth(); });
-    window.addEventListener('resize', syncRoleWidth);
-    // Fallback in case fonts.ready doesn't fire
-    setTimeout(syncRoleWidth, 300);
-    setTimeout(syncRoleWidth, 800);
 
     /* ── HERO LENS */
     const heroEl  = document.getElementById('hero');
