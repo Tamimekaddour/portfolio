@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tamime Kaddour — Art Director & Visual Designer</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -53,7 +54,7 @@
       background: linear-gradient(to bottom, rgba(40,40,45,.96) 0%, rgba(40,40,45,0) 100%);
     }
     .nav-logo { display: flex; align-items: center; text-decoration: none; }
-    .nav-logo img { height: 46px; width: auto; filter: brightness(0) invert(1); opacity: .88; transition: opacity .3s; }
+    .nav-logo img { height: 46px; width: auto; opacity: .88; transition: opacity .3s; }
     .nav-logo:hover img { opacity: 1; }
     .nav-links { display: flex; gap: 40px; list-style: none; }
     .nav-links a {
@@ -414,7 +415,7 @@
     /* ────────────────────────────── CONTACT */
     #contact { background: var(--bg2); border-top: 1px solid var(--border); padding: 100px 52px 0; }
 
-    .contact-inner { display: grid; grid-template-columns: 1fr 480px; gap: 64px; align-items: start; padding-bottom: 80px; }
+    .contact-inner { display: grid; grid-template-columns: 520px 1fr; gap: 72px; align-items: center; padding-bottom: 80px; }
     .contact-heading {
       font-family: 'Lexend', sans-serif; font-weight: 700;
       font-size: clamp(30px, 4.2vw, 58px); line-height: 1.2; color: var(--text); margin-bottom: 28px;
@@ -845,6 +846,9 @@
   <section id="contact">
     <p class="section-eyebrow reveal">Contact</p>
     <div class="contact-inner">
+      <div class="contact-photo reveal">
+        <img src="photo2.jpg" alt="Tamime Kaddour" />
+      </div>
       <div class="reveal">
         <h2 class="contact-heading">Got a brief?<br>A spark? <em>Let's talk.</em></h2>
         <p class="contact-desc">Whether it's a brand in the making or a concept that needs form — open to meaningful collaborations with people who value strong visual thinking.</p>
@@ -857,6 +861,10 @@
             <svg viewBox="0 0 12 12"><rect x="1" y="2.5" width="10" height="7" rx=".5"/><path d="M1 3.5L6 7l5-3.5"/></svg>
             tamime.kaddour.b@gmail.com
           </a>
+          <a class="contact-pill" href="tel:+213553157737">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M2 2.5c0 4.5 3.5 8 8 8l.5-2-2-.5-.5 1c-1.5-.5-3-2-3.5-3.5l1-.5L5 3 3 2.5z"/></svg>
+            +213 55 31 57 73 37
+          </a>
           <a class="contact-pill" href="https://behance.net/Tamime" target="_blank">
             <svg viewBox="0 0 12 12"><path d="M1 2h4c1.2 0 2 .6 2 1.5S5.2 5 4 5H1V2z"/><path d="M1 5h4.5C7 5 8 5.8 8 7s-1 2-2.5 2H1V5z"/><line x1="8" y1="2" x2="11" y2="2"/><path d="M8 5c0-1.5 1-2.5 2-2.5s2 1 2 2.5H8z"/></svg>
             behance.net/Tamime
@@ -866,9 +874,6 @@
             @morros.design
           </a>
         </div>
-      </div>
-      <div class="contact-photo reveal">
-        <img src="photo2.jpg" alt="Tamime Kaddour" />
       </div>
     </div>
   </section>
