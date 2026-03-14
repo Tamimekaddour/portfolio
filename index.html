@@ -6,7 +6,7 @@
   <title>Tamime Kaddour — Art Director & Visual Designer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&display=swap" rel="stylesheet" />
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -20,8 +20,8 @@
       --sand:        #c8a77a;
       --sand-light:  #e8d8bd;
       --text:        #f6e6d1;
-      --muted:       rgba(246,230,209,0.45);
-      --border:      rgba(26,163,122,0.15);
+      --muted:       rgba(246,230,209,0.42);
+      --border:      rgba(26,163,122,0.14);
       --border-sand: rgba(200,167,122,0.15);
     }
 
@@ -35,7 +35,7 @@
       cursor: none;
     }
 
-    /* ─── CUSTOM CURSOR ─── */
+    /* ─── CURSOR ─── */
     #cursor {
       position: fixed;
       width: 8px; height: 8px;
@@ -45,7 +45,6 @@
       z-index: 9999;
       transform: translate(-50%, -50%);
       transition: width .2s, height .2s, background .2s;
-      mix-blend-mode: normal;
     }
     #cursor.large {
       width: 44px; height: 44px;
@@ -61,28 +60,24 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 28px 48px;
+      padding: 24px 48px;
+      background: linear-gradient(to bottom, rgba(40,40,45,0.95) 0%, rgba(40,40,45,0.0) 100%);
+      backdrop-filter: blur(0px);
     }
-
     .nav-logo {
       display: flex;
       align-items: center;
       text-decoration: none;
     }
     .nav-logo img {
-      height: 52px;
+      height: 48px;
       width: auto;
       filter: brightness(0) invert(1);
-      opacity: 0.9;
+      opacity: 0.88;
       transition: opacity 0.3s;
     }
     .nav-logo:hover img { opacity: 1; }
-
-    .nav-links {
-      display: flex;
-      gap: 40px;
-      list-style: none;
-    }
+    .nav-links { display: flex; gap: 40px; list-style: none; }
     .nav-links a {
       font-family: 'Barlow', sans-serif;
       font-weight: 500;
@@ -104,11 +99,8 @@
       overflow: hidden;
       cursor: none;
     }
-
-    /* Blurred background photo */
     .hero-blur {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background-image: url('photo.jpg');
       background-size: cover;
       background-position: center 20%;
@@ -116,35 +108,25 @@
       transform: scale(1.08);
       z-index: 1;
     }
-
-    /* Dark vignette overlay */
     .hero-overlay {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background:
-        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(0,0,0,0.7) 0%, transparent 70%),
-        linear-gradient(to bottom, rgba(40,40,45,0.3) 0%, rgba(40,40,45,0.1) 40%, rgba(40,40,45,0.6) 100%);
+        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(0,0,0,0.72) 0%, transparent 70%),
+        linear-gradient(to bottom, rgba(40,40,45,0.3) 0%, rgba(40,40,45,0.05) 40%, rgba(40,40,45,0.65) 100%);
       z-index: 2;
     }
-
-    /* Sharp layer — clipped to frame */
     .hero-sharp {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background-image: url('photo.jpg');
       background-size: cover;
       background-position: center 20%;
       z-index: 3;
-      clip-path: inset(50% 50% 50% 50%); /* starts fully hidden */
-      transition: clip-path 0s; /* no transition — JS drives it */
+      clip-path: inset(50% 50% 50% 50%);
       will-change: clip-path;
     }
-
-    /* Frame border */
     .hero-frame {
       position: absolute;
-      width: 360px;
-      height: 440px;
+      width: 360px; height: 440px;
       border: 1px solid rgba(246,230,209,0.55);
       pointer-events: none;
       z-index: 4;
@@ -153,132 +135,99 @@
       transition: opacity 0.4s ease;
     }
     .hero-frame.visible { opacity: 1; }
-
-    /* Crosshair in frame center */
-    .hero-frame::before,
-    .hero-frame::after {
-      content: '';
-      position: absolute;
+    .hero-frame::before, .hero-frame::after {
+      content: ''; position: absolute;
       top: 50%; left: 50%;
-      background: rgba(246,230,209,0.4);
+      background: rgba(246,230,209,0.35);
     }
-    .hero-frame::before {
-      width: 16px; height: 1px;
-      transform: translate(-50%, -50%);
-    }
-    .hero-frame::after {
-      width: 1px; height: 16px;
-      transform: translate(-50%, -50%);
-    }
+    .hero-frame::before { width: 16px; height: 1px; transform: translate(-50%,-50%); }
+    .hero-frame::after  { width: 1px; height: 16px; transform: translate(-50%,-50%); }
 
-    /* Tags spread horizontally */
     .hero-tags {
-      position: absolute;
-      top: 42%;
-      left: 0; right: 0;
-      z-index: 5;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 0 80px;
+      position: absolute; top: 42%;
+      left: 0; right: 0; z-index: 5;
+      display: flex; justify-content: space-around;
+      align-items: center; padding: 0 80px;
       pointer-events: none;
     }
     .hero-tag-item {
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 400;
-      font-size: 11px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: rgba(246,230,209,0.55);
+      font-weight: 400; font-size: 11px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(246,230,209,0.5);
     }
-
-    /* Bottom content: name + title */
     .hero-bottom {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      z-index: 5;
-      padding: 0 48px 48px;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
+      position: absolute; bottom: 0; left: 0; right: 0;
+      z-index: 5; padding: 0 48px 48px;
+      display: flex; justify-content: space-between; align-items: flex-end;
     }
-
     .hero-name {
       font-family: 'Barlow', sans-serif;
       font-weight: 800;
       font-size: clamp(80px, 10.5vw, 148px);
-      line-height: 0.88;
-      letter-spacing: -0.03em;
-      text-transform: uppercase;
-      color: var(--text);
+      line-height: 0.88; letter-spacing: -0.03em;
+      text-transform: uppercase; color: var(--text);
       text-shadow: 0 4px 40px rgba(0,0,0,0.4);
     }
-    .hero-name span {
-      display: block;
-    }
-    .hero-name .last {
-      font-weight: 200;
-      font-style: italic;
-      color: rgba(246,230,209,0.7);
-    }
-
+    .hero-name span { display: block; }
+    .hero-name .last { font-weight: 200; font-style: italic; color: rgba(246,230,209,0.68); }
     .hero-right-info {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 16px;
-      padding-bottom: 12px;
+      display: flex; flex-direction: column;
+      align-items: flex-end; gap: 16px; padding-bottom: 12px;
     }
     .hero-role {
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 300;
-      font-size: 13px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
+      font-weight: 300; font-size: 13px;
+      letter-spacing: 0.2em; text-transform: uppercase;
       color: var(--green-mid);
     }
     .hero-scroll-hint {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      display: flex; align-items: center; gap: 10px;
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 300;
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
+      font-weight: 300; font-size: 10px;
+      letter-spacing: 0.2em; text-transform: uppercase;
       color: var(--muted);
     }
     .hero-scroll-hint::after {
-      content: '';
-      display: block;
-      width: 40px;
-      height: 1px;
+      content: ''; display: block; width: 40px; height: 1px;
       background: linear-gradient(to right, var(--green-mid), transparent);
     }
 
-    /* ─── SECTION BASE ─── */
-    section { padding: 120px 48px; position: relative; }
+    /* ─── SECTION SHARED ─── */
+    section { padding: 130px 48px; position: relative; }
 
-    .section-label {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 400;
-      font-size: 10px;
-      letter-spacing: 0.25em;
+    /* Section titles — big, centered */
+    .section-title {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 800;
+      font-size: clamp(52px, 7vw, 96px);
+      line-height: 0.92;
+      letter-spacing: -0.03em;
       text-transform: uppercase;
+      color: var(--text);
+      text-align: center;
+      margin-bottom: 80px;
+    }
+    .section-title em {
+      font-style: italic;
+      font-weight: 200;
+      color: rgba(246,230,209,0.45);
+      display: block;
+    }
+    .section-title .accent { color: var(--sand); }
+
+    /* Eyebrow above title */
+    .section-eyebrow {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 400; font-size: 10px;
+      letter-spacing: 0.28em; text-transform: uppercase;
       color: var(--green-mid);
-      margin-bottom: 72px;
+      text-align: center;
+      margin-bottom: 20px;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
     }
-    .section-label .num {
-      color: var(--muted);
-      font-weight: 300;
-    }
-    .section-label::after {
-      content: '';
-      height: 1px;
-      width: 64px;
+    .section-eyebrow::before, .section-eyebrow::after {
+      content: ''; display: block; width: 32px; height: 1px;
       background: var(--border);
     }
 
@@ -286,125 +235,96 @@
     #about {
       background: var(--bg2);
       border-top: 1px solid var(--border);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 400px 1fr;
-      gap: 80px;
-      align-items: start;
-      max-width: 1100px;
-    }
-
-    .about-photo-wrap {
-      position: relative;
-    }
-    .about-photo {
-      width: 100%;
-      aspect-ratio: 3/4;
-      object-fit: cover;
-      object-position: center top;
-      display: block;
-      filter: saturate(0.75) contrast(1.05);
-    }
-    .about-photo-placeholder {
-      width: 100%; aspect-ratio: 3/4;
-      background: #1c1c20;
-      border: 1px dashed rgba(26,163,122,0.2);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 12px;
-      color: var(--muted);
-    }
-    .about-photo-placeholder span {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 300;
-      font-size: 10px;
-      letter-spacing: 0.16em; text-align: center;
-    }
-    .about-photo-deco {
-      position: absolute;
-      bottom: -20px; right: -20px;
-      width: 100%; height: 100%;
-      border: 1px solid rgba(26,163,122,0.12);
-      pointer-events: none;
-    }
-    .about-photo-line {
-      position: absolute;
-      top: 0; left: -1px;
-      width: 1px; height: 40%;
-      background: linear-gradient(to bottom, var(--green-mid), transparent);
-    }
-
-    .about-headline {
-      font-family: 'Barlow', sans-serif;
-      font-weight: 300;
-      font-style: italic;
-      font-size: clamp(44px, 5vw, 68px);
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      color: var(--text);
-      margin-bottom: 36px;
-    }
-    .about-headline strong {
-      font-weight: 800;
-      font-style: normal;
-      color: var(--sand);
-      display: block;
+      text-align: center;
     }
 
     .about-body {
       font-family: 'Barlow', sans-serif;
-      font-weight: 300;
-      font-size: 14px;
-      line-height: 1.9;
-      color: rgba(246,230,209,0.6);
-      margin-bottom: 52px;
+      font-weight: 300; font-size: 15px;
+      line-height: 1.95; color: rgba(246,230,209,0.58);
+      max-width: 680px; margin: 0 auto 64px;
       letter-spacing: 0.01em;
     }
 
     .about-stats {
-      display: grid;
+      display: inline-grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1px;
-      margin-bottom: 48px;
       background: var(--border);
       border: 1px solid var(--border);
+      margin-bottom: 64px;
+      min-width: 480px;
     }
-    .stat {
-      background: var(--bg2);
-      padding: 24px 20px;
-    }
+    .stat { background: var(--bg2); padding: 28px 36px; text-align: center; }
     .stat-num {
       font-family: 'Barlow', sans-serif;
-      font-weight: 700;
-      font-size: 44px;
-      line-height: 1;
-      color: var(--text);
-      margin-bottom: 6px;
+      font-weight: 700; font-size: 48px;
+      line-height: 1; color: var(--text); margin-bottom: 6px;
     }
-    .stat-num sup { font-size: 20px; color: var(--green-mid); font-weight: 400; }
+    .stat-num sup { font-size: 22px; color: var(--green-mid); font-weight: 400; }
     .stat-label {
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 400;
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
+      font-weight: 400; font-size: 9px;
+      letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted);
     }
 
-    .about-skills { display: flex; flex-wrap: wrap; gap: 8px; }
+    /* Skills */
+    .about-skills {
+      display: flex; flex-wrap: wrap;
+      gap: 8px; justify-content: center;
+      margin-bottom: 64px;
+    }
     .skill-tag {
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 400;
-      font-size: 9px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
+      font-weight: 400; font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--green-mid);
       border: 1px solid rgba(26,163,122,0.25);
-      padding: 7px 14px;
-      background: rgba(26,163,122,0.04);
+      padding: 8px 16px; background: rgba(26,163,122,0.04);
     }
+
+    /* Contact info */
+    .about-contact {
+      display: flex; justify-content: center;
+      gap: 48px; flex-wrap: wrap;
+      margin-bottom: 64px;
+    }
+    .contact-item {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 6px;
+    }
+    .contact-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 400; font-size: 9px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--green-mid);
+    }
+    .contact-value {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300; font-size: 14px;
+      color: var(--text); text-decoration: none;
+      transition: color 0.3s;
+    }
+    a.contact-value:hover { color: var(--green-mid); }
+
+    /* Tools in about */
+    .about-tools {
+      display: flex; flex-wrap: wrap;
+      gap: 1px; justify-content: center;
+      background: var(--border);
+      border: 1px solid var(--border);
+      max-width: 800px; margin: 0 auto;
+    }
+    .about-tool-item {
+      background: var(--bg2);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 500; font-size: 11px;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(246,230,209,0.45);
+      padding: 16px 28px;
+      transition: color 0.3s, background 0.3s;
+    }
+    .about-tool-item:hover { color: var(--green-mid); background: #1a1a1e; }
 
     /* ─── SERVICES ─── */
     #services { border-top: 1px solid var(--border); }
@@ -414,56 +334,49 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 1px;
       background: var(--border);
-      max-width: 1100px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
     .service-card {
-      background: var(--bg);
-      padding: 48px 36px;
-      position: relative;
-      overflow: hidden;
+      background: var(--bg); padding: 56px 40px;
+      position: relative; overflow: hidden;
       transition: background 0.4s;
+      text-align: center;
     }
     .service-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
       background: linear-gradient(to right, transparent, var(--green-deep), transparent);
-      opacity: 0;
-      transition: opacity 0.4s;
+      opacity: 0; transition: opacity 0.4s;
     }
     .service-card:hover { background: #1e1e22; }
     .service-card:hover::before { opacity: 1; }
-    .service-num {
+
+    .service-icon {
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 300;
-      font-size: 10px;
-      letter-spacing: 0.22em;
-      color: var(--green-mid);
-      margin-bottom: 28px;
+      font-weight: 300; font-size: 10px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--green-mid); margin-bottom: 28px;
     }
     .service-title {
       font-family: 'Barlow', sans-serif;
-      font-weight: 700;
-      font-size: 20px;
-      line-height: 1.3;
-      color: var(--text);
-      margin-bottom: 20px;
-      letter-spacing: -0.01em;
+      font-weight: 800;
+      font-size: clamp(26px, 2.5vw, 34px);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: var(--text); margin-bottom: 12px;
     }
-    .service-title em {
-      font-style: italic;
-      font-weight: 300;
-      color: var(--sand);
-      display: block;
-      font-size: 18px;
+    .service-subtitle {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300; font-style: italic;
+      font-size: 17px; color: var(--sand);
+      margin-bottom: 24px;
     }
     .service-desc {
       font-family: 'Barlow', sans-serif;
-      font-weight: 300;
-      font-size: 13px;
-      line-height: 1.8;
-      color: rgba(246,230,209,0.5);
+      font-weight: 300; font-size: 13px;
+      line-height: 1.85; color: rgba(246,230,209,0.45);
     }
 
     /* ─── TIMELINE ─── */
@@ -473,47 +386,35 @@
     }
     .timeline-intro {
       font-family: 'Barlow', sans-serif;
-      font-weight: 300;
-      font-size: 14px;
-      line-height: 1.9;
-      color: var(--muted);
-      margin-bottom: 80px;
-      max-width: 520px;
+      font-weight: 300; font-size: 15px;
+      line-height: 1.9; color: var(--muted);
+      margin: 0 auto 80px;
+      max-width: 560px; text-align: center;
     }
     .timeline-wrap {
-      position: relative;
-      max-width: 1000px;
+      position: relative; max-width: 1000px; margin: 0 auto;
     }
     .timeline-wrap::before {
-      content: '';
-      position: absolute;
-      left: 50%; top: 0; bottom: 0;
-      width: 1px;
+      content: ''; position: absolute;
+      left: 50%; top: 0; bottom: 0; width: 1px;
       background: linear-gradient(to bottom, transparent, var(--green-deep) 8%, var(--green-deep) 92%, transparent);
       transform: translateX(-50%);
     }
     .timeline-item {
-      display: grid;
-      grid-template-columns: 1fr 40px 1fr;
+      display: grid; grid-template-columns: 1fr 40px 1fr;
       position: relative;
     }
-    .tl-left { padding: 36px 48px 36px 0; text-align: right; }
-    .tl-right { padding: 36px 0 36px 48px; }
+    .tl-left { padding: 36px 52px 36px 0; text-align: right; }
+    .tl-right { padding: 36px 0 36px 52px; }
     .tl-center {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-start;
       padding-top: 40px;
     }
     .tl-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
+      width: 10px; height: 10px; border-radius: 50%;
       border: 1px solid var(--green-mid);
-      background: var(--bg2);
-      flex-shrink: 0;
-      position: relative;
-      z-index: 2;
+      background: var(--bg2); flex-shrink: 0; z-index: 2;
     }
     .tl-dot.active {
       background: var(--green-mid);
@@ -521,135 +422,69 @@
     }
     .tl-date {
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 400;
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--green-mid);
-      margin-bottom: 6px;
+      font-weight: 400; font-size: 10px;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--green-mid); margin-bottom: 6px;
     }
     .tl-company {
       font-family: 'Barlow', sans-serif;
-      font-weight: 700;
-      font-size: 12px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text);
-      margin-bottom: 4px;
+      font-weight: 700; font-size: 12px;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text); margin-bottom: 4px;
     }
     .tl-role {
       font-family: 'Barlow', sans-serif;
-      font-weight: 300;
-      font-style: italic;
-      font-size: 14px;
-      color: var(--sand);
-      margin-bottom: 12px;
+      font-weight: 300; font-style: italic;
+      font-size: 14px; color: var(--sand); margin-bottom: 12px;
     }
     .tl-desc {
       font-family: 'Barlow', sans-serif;
-      font-weight: 300;
-      font-size: 11px;
-      line-height: 1.8;
-      color: rgba(246,230,209,0.45);
-      margin-bottom: 10px;
+      font-weight: 300; font-size: 11px;
+      line-height: 1.8; color: rgba(246,230,209,0.42); margin-bottom: 10px;
     }
     .tl-tools {
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 400;
-      font-size: 9px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: rgba(26,163,122,0.5);
+      font-weight: 400; font-size: 9px;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(26,163,122,0.48);
     }
-
-    /* ─── TOOLS ─── */
-    #tools { border-top: 1px solid var(--border); }
-    .tools-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1px;
-      max-width: 1100px;
-      margin-bottom: 56px;
-      background: var(--border);
-      border: 1px solid var(--border);
-    }
-    .tool-item {
-      background: var(--bg);
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 500;
-      font-size: 12px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: rgba(246,230,209,0.5);
-      padding: 18px 32px;
-      transition: color 0.3s, background 0.3s;
-    }
-    .tool-item:hover { color: var(--green-mid); background: #1e1e22; }
-
-    .tools-disciplines {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 300;
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--muted);
-      display: flex;
-      flex-wrap: wrap;
-    }
-    .tools-disciplines span {
-      padding: 0 20px;
-      border-right: 1px solid var(--border-sand);
-      line-height: 2.2;
-    }
-    .tools-disciplines span:first-child { padding-left: 0; }
-    .tools-disciplines span:last-child { border-right: none; }
 
     /* ─── FOOTER ─── */
     footer {
-      padding: 40px 48px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      padding: 40px 48px; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
     }
     .footer-copy {
       font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 300;
-      font-size: 10px;
-      letter-spacing: 0.16em;
-      color: var(--muted);
+      font-weight: 300; font-size: 10px;
+      letter-spacing: 0.16em; color: var(--muted);
     }
     .footer-tag {
       font-family: 'Barlow', sans-serif;
-      font-weight: 300;
-      font-style: italic;
-      font-size: 15px;
-      color: rgba(246,230,209,0.3);
+      font-weight: 300; font-style: italic;
+      font-size: 15px; color: rgba(246,230,209,0.25);
     }
 
     /* ─── REVEAL ─── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.9s ease, transform 0.9s ease;
-    }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.9s ease, transform 0.9s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
     /* ─── RESPONSIVE ─── */
     @media (max-width: 900px) {
       nav { padding: 20px 24px; }
       .nav-links { display: none; }
-      section { padding: 80px 24px; }
-      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+      section { padding: 90px 24px; }
       .services-grid { grid-template-columns: 1fr; }
+      .about-stats { min-width: unset; grid-template-columns: repeat(3,1fr); }
       .timeline-wrap::before { left: 20px; }
       .timeline-item { grid-template-columns: 20px 1fr; }
       .tl-left { display: none !important; }
       .tl-right { padding: 24px 0 24px 28px; }
       .hero-bottom { padding: 0 24px 36px; }
-      .hero-name { font-size: clamp(60px, 14vw, 100px); }
+      .hero-name { font-size: clamp(56px, 14vw, 100px); }
       .hero-tags { display: none; }
       footer { flex-direction: column; gap: 12px; padding: 28px 24px; text-align: center; }
+      .about-contact { gap: 28px; }
     }
   </style>
 </head>
@@ -657,10 +492,10 @@
 
   <div id="cursor"></div>
 
-  <!-- ─── NAV ─── -->
+  <!-- NAV -->
   <nav>
     <a class="nav-logo" href="#">
-      <img src="logo.svg" alt="TK" />
+      <img src="logo.svg" alt="Tamime Kaddour" />
     </a>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
@@ -670,26 +505,18 @@
     </ul>
   </nav>
 
-  <!-- ─── HERO ─── -->
+  <!-- HERO -->
   <section id="hero">
-    <!-- Blurred background -->
     <div class="hero-blur"></div>
-    <!-- Vignette -->
     <div class="hero-overlay"></div>
-    <!-- Sharp layer clipped to frame -->
     <div class="hero-sharp" id="heroSharp"></div>
-    <!-- Frame border -->
     <div class="hero-frame" id="heroFrame"></div>
-
-    <!-- Tags middle -->
     <div class="hero-tags">
       <span class="hero-tag-item">Art Direction</span>
       <span class="hero-tag-item">Brand Design</span>
       <span class="hero-tag-item">Motion &amp; 3D</span>
       <span class="hero-tag-item">Algiers, DZ</span>
     </div>
-
-    <!-- Bottom: name + info -->
     <div class="hero-bottom">
       <div class="hero-name">
         <span>Tamime</span>
@@ -702,88 +529,117 @@
     </div>
   </section>
 
-  <!-- ─── ABOUT ─── -->
+  <!-- ABOUT -->
   <section id="about">
-    <p class="section-label"><span class="num">01 —</span> About</p>
-    <div class="about-grid">
-      <div class="about-photo-wrap reveal">
-        <!--
-          Photo de profil :
-          Place ton fichier "photo.jpg" dans le même dossier que index.html.
-          Décommente ensuite la balise <img> et supprime le placeholder.
-        -->
-        <img class="about-photo" src="photo.jpg" alt="Tamime Kaddour" />
-        <!--
-        <div class="about-photo-placeholder">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-            <circle cx="16" cy="12" r="6" stroke="#1aa37a" stroke-width="1"/>
-            <path d="M4 28c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="#1aa37a" stroke-width="1"/>
-          </svg>
-          <span>Place photo.jpg ici</span>
-        </div>
-        -->
-        <div class="about-photo-deco"></div>
-        <div class="about-photo-line"></div>
-      </div>
+    <p class="section-eyebrow reveal">About</p>
+    <h2 class="section-title reveal">
+      Graphic Designer<br>
+      <em>&amp; Art Director</em>
+    </h2>
 
-      <div class="about-text">
-        <h2 class="about-headline reveal">
-          Ideas,<br>
-          <strong>well-dressed.</strong>
-        </h2>
-        <p class="about-body reveal">
-          I'm a graphic designer and visual creator based in Algiers, with more than a decade of experience across branding, digital design, and visual communication.
-          <br><br>
-          My work focuses on creating clear and effective visual identities while exploring new creative tools and techniques — from traditional graphic design to motion, 3D, and AI-assisted creation. I enjoy building visual systems that are both meaningful and visually refined.
-          <br><br>
-          Curiosity and experimentation are central to my process. Strong design emerges from understanding real needs and translating them into thoughtful visual solutions.
-        </p>
-        <div class="about-stats reveal">
-          <div class="stat"><div class="stat-num">15<sup>+</sup></div><div class="stat-label">Years exp.</div></div>
-          <div class="stat"><div class="stat-num">6</div><div class="stat-label">Disciplines</div></div>
-          <div class="stat"><div class="stat-num">DZ</div><div class="stat-label">Algiers</div></div>
-        </div>
-        <div class="about-skills reveal">
-          <span class="skill-tag">Branding</span>
-          <span class="skill-tag">Visual Identity</span>
-          <span class="skill-tag">Art Direction</span>
-          <span class="skill-tag">3D / Cinema 4D</span>
-          <span class="skill-tag">Motion Design</span>
-          <span class="skill-tag">UI / UX</span>
-          <span class="skill-tag">Print</span>
-          <span class="skill-tag">Generative AI</span>
-          <span class="skill-tag">Photography</span>
-        </div>
+    <p class="about-body reveal">
+      I'm a graphic designer and visual creator based in Algiers, with more than a decade of experience across branding, digital design, and visual communication. My work focuses on creating clear and effective visual identities while exploring new creative tools — from traditional graphic design to motion, 3D, and AI-assisted creation. Strong design emerges from understanding real needs and translating them into thoughtful, visually refined solutions.
+    </p>
+
+    <!-- Stats -->
+    <div class="reveal" style="display:flex;justify-content:center;margin-bottom:64px;">
+      <div class="about-stats">
+        <div class="stat"><div class="stat-num">15<sup>+</sup></div><div class="stat-label">Years exp.</div></div>
+        <div class="stat"><div class="stat-num">6</div><div class="stat-label">Disciplines</div></div>
+        <div class="stat"><div class="stat-num">DZ</div><div class="stat-label">Algiers</div></div>
       </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="about-contact reveal">
+      <div class="contact-item">
+        <span class="contact-label">Email</span>
+        <a class="contact-value" href="mailto:tamime.kaddour.b@gmail.com">tamime.kaddour.b@gmail.com</a>
+      </div>
+      <div class="contact-item">
+        <span class="contact-label">Phone</span>
+        <a class="contact-value" href="tel:+213000000000">+213 — — — — — —</a>
+      </div>
+      <div class="contact-item">
+        <span class="contact-label">Location</span>
+        <span class="contact-value">El-Biar, Algiers</span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-label">Behance</span>
+        <a class="contact-value" href="https://behance.net/Tamime" target="_blank">behance.net/Tamime</a>
+      </div>
+      <div class="contact-item">
+        <span class="contact-label">Instagram</span>
+        <a class="contact-value" href="https://instagram.com/morros.design" target="_blank">@morros.design</a>
+      </div>
+    </div>
+
+    <!-- Skills -->
+    <div class="about-skills reveal">
+      <span class="skill-tag">Branding</span>
+      <span class="skill-tag">Visual Identity</span>
+      <span class="skill-tag">Art Direction</span>
+      <span class="skill-tag">3D / Cinema 4D</span>
+      <span class="skill-tag">Motion Design</span>
+      <span class="skill-tag">UI / UX</span>
+      <span class="skill-tag">Print</span>
+      <span class="skill-tag">Generative AI</span>
+      <span class="skill-tag">Photography</span>
+    </div>
+
+    <!-- Creative Tools -->
+    <p class="section-eyebrow reveal" style="margin-top:72px;margin-bottom:24px;">Creative Tools</p>
+    <div class="about-tools reveal">
+      <div class="about-tool-item">Photoshop</div>
+      <div class="about-tool-item">Illustrator</div>
+      <div class="about-tool-item">Cinema 4D</div>
+      <div class="about-tool-item">After Effects</div>
+      <div class="about-tool-item">Premiere Pro</div>
+      <div class="about-tool-item">InDesign</div>
+      <div class="about-tool-item">Lightroom</div>
+      <div class="about-tool-item">DaVinci Resolve</div>
+      <div class="about-tool-item">ArchiCAD</div>
+      <div class="about-tool-item">Generative AI</div>
     </div>
   </section>
 
-  <!-- ─── SERVICES ─── -->
+  <!-- SERVICES -->
   <section id="services">
-    <p class="section-label"><span class="num">02 —</span> What I do &amp; How I do it</p>
+    <p class="section-eyebrow reveal">What I do</p>
+    <h2 class="section-title reveal">
+      How I Work<br>
+      <em>&amp; What I Bring</em>
+    </h2>
     <div class="services-grid">
       <div class="service-card reveal">
-        <p class="service-num">001</p>
-        <h3 class="service-title">Bold Branding<br><em>&amp; Visual Identity</em></h3>
+        <p class="service-icon">001</p>
+        <h3 class="service-title">Bold<br>Branding</h3>
+        <p class="service-subtitle">&amp; Visual Identity</p>
         <p class="service-desc">Building timeless brands with sharp logos, cohesive guidelines, and strong visual storytelling that connect humanly. Each identity system is built to communicate clearly and endure.</p>
       </div>
       <div class="service-card reveal">
-        <p class="service-num">002</p>
-        <h3 class="service-title">Smart Digital<br><em>Design &amp; Interfaces</em></h3>
+        <p class="service-icon">002</p>
+        <h3 class="service-title">Smart<br>Digital</h3>
+        <p class="service-subtitle">Design &amp; Interfaces</p>
         <p class="service-desc">Designing smooth, modern, and human-centered experiences across apps, websites, and social media. Balancing aesthetics with function to create interfaces that feel inevitable.</p>
       </div>
       <div class="service-card reveal">
-        <p class="service-num">003</p>
-        <h3 class="service-title">Motion, 3D &amp;<br><em>Creative Exploration</em></h3>
+        <p class="service-icon">003</p>
+        <h3 class="service-title">Motion<br>&amp; 3D</h3>
+        <p class="service-subtitle">Creative Exploration</p>
         <p class="service-desc">From motion graphics and editing to 3D worlds and experimental tools — pushing limits beyond static design. Generative AI as an extension of craft, not a replacement for it.</p>
       </div>
     </div>
   </section>
 
-  <!-- ─── TIMELINE ─── -->
+  <!-- TIMELINE -->
   <section id="timeline">
-    <p class="section-label"><span class="num">03 —</span> Learning &amp; Professional Path</p>
-    <p class="timeline-intro">Tracing a path from studies to practice — blending creativity with technical skills across fifteen years of continuous growth.</p>
+    <p class="section-eyebrow reveal">Experience</p>
+    <h2 class="section-title reveal">
+      Professional<br>
+      <em>Journey</em>
+    </h2>
+    <p class="timeline-intro reveal">Tracing a path from studies to practice — blending creativity with technical skills across fifteen years of continuous growth.</p>
     <div class="timeline-wrap">
 
       <div class="timeline-item reveal">
@@ -884,72 +740,38 @@
     </div>
   </section>
 
-  <!-- ─── TOOLS ─── -->
-  <section id="tools">
-    <p class="section-label"><span class="num">04 —</span> Creative Tools</p>
-    <div class="tools-list reveal">
-      <div class="tool-item">Photoshop</div>
-      <div class="tool-item">Illustrator</div>
-      <div class="tool-item">Cinema 4D</div>
-      <div class="tool-item">After Effects</div>
-      <div class="tool-item">Premiere Pro</div>
-      <div class="tool-item">InDesign</div>
-      <div class="tool-item">Lightroom</div>
-      <div class="tool-item">DaVinci Resolve</div>
-      <div class="tool-item">ArchiCAD</div>
-      <div class="tool-item">Generative AI</div>
-    </div>
-    <div class="tools-disciplines reveal">
-      <span>Brand identity</span>
-      <span>Graphic design</span>
-      <span>Motion design</span>
-      <span>3D visualization</span>
-      <span>UI concepts</span>
-      <span>Visual storytelling</span>
-    </div>
-  </section>
-
-  <!-- ─── FOOTER ─── -->
+  <!-- FOOTER -->
   <footer>
     <p class="footer-copy">© 2025 Tamime Kaddour — All rights reserved</p>
     <p class="footer-tag">Ideas, well-dressed.</p>
   </footer>
 
   <script>
-    // ─── CURSOR
+    // CURSOR
     const cursor = document.getElementById('cursor');
-    let cx = 0, cy = 0;
     document.addEventListener('mousemove', e => {
-      cx = e.clientX; cy = e.clientY;
-      cursor.style.left = cx + 'px';
-      cursor.style.top  = cy + 'px';
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
     });
-    document.querySelectorAll('a, button, .service-card, .tool-item').forEach(el => {
+    document.querySelectorAll('a, button, .service-card, .about-tool-item').forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('large'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('large'));
     });
 
-    // ─── HERO LENS (Exvia style: rectangle frame, blurred outside, sharp inside)
-    const heroEl    = document.getElementById('hero');
-    const sharpEl   = document.getElementById('heroSharp');
-    const frameEl   = document.getElementById('heroFrame');
-
-    const FW = 360, FH = 440; // frame dimensions
-    let lx = window.innerWidth  / 2;
-    let ly = window.innerHeight / 2;
-    let tx = lx, ty = ly;
-    let frameVisible = false;
+    // HERO LENS
+    const heroEl  = document.getElementById('hero');
+    const sharpEl = document.getElementById('heroSharp');
+    const frameEl = document.getElementById('heroFrame');
+    const FW = 360, FH = 440;
+    let lx = window.innerWidth / 2, ly = window.innerHeight / 2;
+    let tx = lx, ty = ly, frameVisible = false;
 
     heroEl.addEventListener('mousemove', e => {
       const r = heroEl.getBoundingClientRect();
       tx = e.clientX - r.left;
       ty = e.clientY - r.top;
-      if (!frameVisible) {
-        frameVisible = true;
-        frameEl.classList.add('visible');
-      }
+      if (!frameVisible) { frameVisible = true; frameEl.classList.add('visible'); }
     });
-
     heroEl.addEventListener('mouseleave', () => {
       frameVisible = false;
       frameEl.classList.remove('visible');
@@ -957,40 +779,27 @@
     });
 
     (function animFrame() {
-      // Lerp
       lx += (tx - lx) * 0.075;
       ly += (ty - ly) * 0.075;
-
-      const heroW = heroEl.offsetWidth;
-      const heroH = heroEl.offsetHeight;
-
-      const frameLeft   = lx - FW / 2;
-      const frameTop    = ly - FH / 2;
-      const frameRight  = heroW - lx - FW / 2;
-      const frameBottom = heroH - ly - FH / 2;
-
-      // Move frame border
+      const W = heroEl.offsetWidth, H = heroEl.offsetHeight;
       frameEl.style.left = lx + 'px';
       frameEl.style.top  = ly + 'px';
-
-      // Clip sharp layer to frame rectangle
       if (frameVisible) {
         sharpEl.style.clipPath =
-          `inset(${frameTop}px ${frameRight}px ${frameBottom}px ${frameLeft}px)`;
+          `inset(${ly - FH/2}px ${W - lx - FW/2}px ${H - ly - FH/2}px ${lx - FW/2}px)`;
       }
-
       requestAnimationFrame(animFrame);
     })();
 
-    // ─── SCROLL REVEAL
+    // SCROLL REVEAL
     const obs = new IntersectionObserver(entries => {
       entries.forEach((e, i) => {
         if (e.isIntersecting) {
-          setTimeout(() => e.target.classList.add('visible'), i * 90);
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
           obs.unobserve(e.target);
         }
       });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.08 });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
   </script>
 </body>
