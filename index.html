@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tamime Kaddour — Art Director & Visual Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #28282d;
+      --bg2:         #1f1f23;
+      --surface:     #1c3b35;
+      --green-deep:  #00674f;
+      --green-mid:   #1aa37a;
+      --sand:        #c8a77a;
+      --sand-light:  #e8d8bd;
+      --text:        #f6e6d1;
+      --muted:       rgba(246,230,209,0.45);
+      --border:      rgba(26,163,122,0.15);
+      --border-sand: rgba(200,167,122,0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ─── CUSTOM CURSOR ─── */
+    #cursor {
+      position: fixed;
+      width: 8px; height: 8px;
+      background: var(--green-mid);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .2s, height .2s, background .2s;
+      mix-blend-mode: normal;
+    }
+    #cursor.large {
+      width: 44px; height: 44px;
+      background: transparent;
+      border: 1px solid rgba(26,163,122,0.6);
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 48px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    .nav-logo img {
+      height: 52px;
+      width: auto;
+      filter: brightness(0) invert(1);
+      opacity: 0.9;
+      transition: opacity 0.3s;
+    }
+    .nav-logo:hover img { opacity: 1; }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ─── HERO ─── */
+    #hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 700px;
+      overflow: hidden;
+      cursor: none;
+    }
+
+    /* Blurred background photo */
+    .hero-blur {
+      position: absolute;
+      inset: 0;
+      background-image: url('photo.jpg');
+      background-size: cover;
+      background-position: center 20%;
+      filter: blur(18px) brightness(0.55) saturate(0.7);
+      transform: scale(1.08);
+      z-index: 1;
+    }
+
+    /* Dark vignette overlay */
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(0,0,0,0.7) 0%, transparent 70%),
+        linear-gradient(to bottom, rgba(40,40,45,0.3) 0%, rgba(40,40,45,0.1) 40%, rgba(40,40,45,0.6) 100%);
+      z-index: 2;
+    }
+
+    /* Sharp layer — clipped to frame */
+    .hero-sharp {
+      position: absolute;
+      inset: 0;
+      background-image: url('photo.jpg');
+      background-size: cover;
+      background-position: center 20%;
+      z-index: 3;
+      clip-path: inset(50% 50% 50% 50%); /* starts fully hidden */
+      transition: clip-path 0s; /* no transition — JS drives it */
+      will-change: clip-path;
+    }
+
+    /* Frame border */
+    .hero-frame {
+      position: absolute;
+      width: 360px;
+      height: 440px;
+      border: 1px solid rgba(246,230,209,0.55);
+      pointer-events: none;
+      z-index: 4;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .hero-frame.visible { opacity: 1; }
+
+    /* Crosshair in frame center */
+    .hero-frame::before,
+    .hero-frame::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      background: rgba(246,230,209,0.4);
+    }
+    .hero-frame::before {
+      width: 16px; height: 1px;
+      transform: translate(-50%, -50%);
+    }
+    .hero-frame::after {
+      width: 1px; height: 16px;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Tags spread horizontally */
+    .hero-tags {
+      position: absolute;
+      top: 42%;
+      left: 0; right: 0;
+      z-index: 5;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0 80px;
+      pointer-events: none;
+    }
+    .hero-tag-item {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 400;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(246,230,209,0.55);
+    }
+
+    /* Bottom content: name + title */
+    .hero-bottom {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      z-index: 5;
+      padding: 0 48px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .hero-name {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 800;
+      font-size: clamp(80px, 10.5vw, 148px);
+      line-height: 0.88;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-shadow: 0 4px 40px rgba(0,0,0,0.4);
+    }
+    .hero-name span {
+      display: block;
+    }
+    .hero-name .last {
+      font-weight: 200;
+      font-style: italic;
+      color: rgba(246,230,209,0.7);
+    }
+
+    .hero-right-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 16px;
+      padding-bottom: 12px;
+    }
+    .hero-role {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 300;
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+    }
+    .hero-scroll-hint {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 300;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .hero-scroll-hint::after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(to right, var(--green-mid), transparent);
+    }
+
+    /* ─── SECTION BASE ─── */
+    section { padding: 120px 48px; position: relative; }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 400;
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      margin-bottom: 72px;
+    }
+    .section-label .num {
+      color: var(--muted);
+      font-weight: 300;
+    }
+    .section-label::after {
+      content: '';
+      height: 1px;
+      width: 64px;
+      background: var(--border);
+    }
+
+    /* ─── ABOUT ─── */
+    #about {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 80px;
+      align-items: start;
+      max-width: 1100px;
+    }
+
+    .about-photo-wrap {
+      position: relative;
+    }
+    .about-photo {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      filter: saturate(0.75) contrast(1.05);
+    }
+    .about-photo-placeholder {
+      width: 100%; aspect-ratio: 3/4;
+      background: #1c1c20;
+      border: 1px dashed rgba(26,163,122,0.2);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 12px;
+      color: var(--muted);
+    }
+    .about-photo-placeholder span {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 300;
+      font-size: 10px;
+      letter-spacing: 0.16em; text-align: center;
+    }
+    .about-photo-deco {
+      position: absolute;
+      bottom: -20px; right: -20px;
+      width: 100%; height: 100%;
+      border: 1px solid rgba(26,163,122,0.12);
+      pointer-events: none;
+    }
+    .about-photo-line {
+      position: absolute;
+      top: 0; left: -1px;
+      width: 1px; height: 40%;
+      background: linear-gradient(to bottom, var(--green-mid), transparent);
+    }
+
+    .about-headline {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: clamp(44px, 5vw, 68px);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 36px;
+    }
+    .about-headline strong {
+      font-weight: 800;
+      font-style: normal;
+      color: var(--sand);
+      display: block;
+    }
+
+    .about-body {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 1.9;
+      color: rgba(246,230,209,0.6);
+      margin-bottom: 52px;
+      letter-spacing: 0.01em;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin-bottom: 48px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .stat {
+      background: var(--bg2);
+      padding: 24px 20px;
+    }
+    .stat-num {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 44px;
+      line-height: 1;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .stat-num sup { font-size: 20px; color: var(--green-mid); font-weight: 400; }
+    .stat-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 400;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .about-skills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .skill-tag {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 400;
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      border: 1px solid rgba(26,163,122,0.25);
+      padding: 7px 14px;
+      background: rgba(26,163,122,0.04);
+    }
+
+    /* ─── SERVICES ─── */
+    #services { border-top: 1px solid var(--border); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      max-width: 1100px;
+    }
+    .service-card {
+      background: var(--bg);
+      padding: 48px 36px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.4s;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(to right, transparent, var(--green-deep), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .service-card:hover { background: #1e1e22; }
+    .service-card:hover::before { opacity: 1; }
+    .service-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 300;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      color: var(--green-mid);
+      margin-bottom: 28px;
+    }
+    .service-title {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 1.3;
+      color: var(--text);
+      margin-bottom: 20px;
+      letter-spacing: -0.01em;
+    }
+    .service-title em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--sand);
+      display: block;
+      font-size: 18px;
+    }
+    .service-desc {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-size: 13px;
+      line-height: 1.8;
+      color: rgba(246,230,209,0.5);
+    }
+
+    /* ─── TIMELINE ─── */
+    #timeline {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+    }
+    .timeline-intro {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 1.9;
+      color: var(--muted);
+      margin-bottom: 80px;
+      max-width: 520px;
+    }
+    .timeline-wrap {
+      position: relative;
+      max-width: 1000px;
+    }
+    .timeline-wrap::before {
+      content: '';
+      position: absolute;
+      left: 50%; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--green-deep) 8%, var(--green-deep) 92%, transparent);
+      transform: translateX(-50%);
+    }
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 1fr 40px 1fr;
+      position: relative;
+    }
+    .tl-left { padding: 36px 48px 36px 0; text-align: right; }
+    .tl-right { padding: 36px 0 36px 48px; }
+    .tl-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 40px;
+    }
+    .tl-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      border: 1px solid var(--green-mid);
+      background: var(--bg2);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 2;
+    }
+    .tl-dot.active {
+      background: var(--green-mid);
+      box-shadow: 0 0 20px rgba(26,163,122,0.6);
+    }
+    .tl-date {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 400;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      margin-bottom: 6px;
+    }
+    .tl-company {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .tl-role {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: 14px;
+      color: var(--sand);
+      margin-bottom: 12px;
+    }
+    .tl-desc {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-size: 11px;
+      line-height: 1.8;
+      color: rgba(246,230,209,0.45);
+      margin-bottom: 10px;
+    }
+    .tl-tools {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 400;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(26,163,122,0.5);
+    }
+
+    /* ─── TOOLS ─── */
+    #tools { border-top: 1px solid var(--border); }
+    .tools-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1px;
+      max-width: 1100px;
+      margin-bottom: 56px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .tool-item {
+      background: var(--bg);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(246,230,209,0.5);
+      padding: 18px 32px;
+      transition: color 0.3s, background 0.3s;
+    }
+    .tool-item:hover { color: var(--green-mid); background: #1e1e22; }
+
+    .tools-disciplines {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 300;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .tools-disciplines span {
+      padding: 0 20px;
+      border-right: 1px solid var(--border-sand);
+      line-height: 2.2;
+    }
+    .tools-disciplines span:first-child { padding-left: 0; }
+    .tools-disciplines span:last-child { border-right: none; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 40px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-copy {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 300;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+    .footer-tag {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: 15px;
+      color: rgba(246,230,209,0.3);
+    }
+
+    /* ─── REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      .nav-links { display: none; }
+      section { padding: 80px 24px; }
+      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+      .services-grid { grid-template-columns: 1fr; }
+      .timeline-wrap::before { left: 20px; }
+      .timeline-item { grid-template-columns: 20px 1fr; }
+      .tl-left { display: none !important; }
+      .tl-right { padding: 24px 0 24px 28px; }
+      .hero-bottom { padding: 0 24px 36px; }
+      .hero-name { font-size: clamp(60px, 14vw, 100px); }
+      .hero-tags { display: none; }
+      footer { flex-direction: column; gap: 12px; padding: 28px 24px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cursor"></div>
+
+  <!-- ─── NAV ─── -->
+  <nav>
+    <a class="nav-logo" href="#">
+      <img src="logo.svg" alt="TK" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Work</a></li>
+      <li><a href="#timeline">Journey</a></li>
+      <li><a href="https://www.behance.net/Tamime" target="_blank">Behance ↗</a></li>
+    </ul>
+  </nav>
+
+  <!-- ─── HERO ─── -->
+  <section id="hero">
+    <!-- Blurred background -->
+    <div class="hero-blur"></div>
+    <!-- Vignette -->
+    <div class="hero-overlay"></div>
+    <!-- Sharp layer clipped to frame -->
+    <div class="hero-sharp" id="heroSharp"></div>
+    <!-- Frame border -->
+    <div class="hero-frame" id="heroFrame"></div>
+
+    <!-- Tags middle -->
+    <div class="hero-tags">
+      <span class="hero-tag-item">Art Direction</span>
+      <span class="hero-tag-item">Brand Design</span>
+      <span class="hero-tag-item">Motion &amp; 3D</span>
+      <span class="hero-tag-item">Algiers, DZ</span>
+    </div>
+
+    <!-- Bottom: name + info -->
+    <div class="hero-bottom">
+      <div class="hero-name">
+        <span>Tamime</span>
+        <span class="last">Kaddour</span>
+      </div>
+      <div class="hero-right-info">
+        <span class="hero-role">Art Director &amp; Graphic Designer</span>
+        <div class="hero-scroll-hint">Scroll</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── ABOUT ─── -->
+  <section id="about">
+    <p class="section-label"><span class="num">01 —</span> About</p>
+    <div class="about-grid">
+      <div class="about-photo-wrap reveal">
+        <!--
+          Photo de profil :
+          Place ton fichier "photo.jpg" dans le même dossier que index.html.
+          Décommente ensuite la balise <img> et supprime le placeholder.
+        -->
+        <img class="about-photo" src="photo.jpg" alt="Tamime Kaddour" />
+        <!--
+        <div class="about-photo-placeholder">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="12" r="6" stroke="#1aa37a" stroke-width="1"/>
+            <path d="M4 28c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="#1aa37a" stroke-width="1"/>
+          </svg>
+          <span>Place photo.jpg ici</span>
+        </div>
+        -->
+        <div class="about-photo-deco"></div>
+        <div class="about-photo-line"></div>
+      </div>
+
+      <div class="about-text">
+        <h2 class="about-headline reveal">
+          Ideas,<br>
+          <strong>well-dressed.</strong>
+        </h2>
+        <p class="about-body reveal">
+          I'm a graphic designer and visual creator based in Algiers, with more than a decade of experience across branding, digital design, and visual communication.
+          <br><br>
+          My work focuses on creating clear and effective visual identities while exploring new creative tools and techniques — from traditional graphic design to motion, 3D, and AI-assisted creation. I enjoy building visual systems that are both meaningful and visually refined.
+          <br><br>
+          Curiosity and experimentation are central to my process. Strong design emerges from understanding real needs and translating them into thoughtful visual solutions.
+        </p>
+        <div class="about-stats reveal">
+          <div class="stat"><div class="stat-num">15<sup>+</sup></div><div class="stat-label">Years exp.</div></div>
+          <div class="stat"><div class="stat-num">6</div><div class="stat-label">Disciplines</div></div>
+          <div class="stat"><div class="stat-num">DZ</div><div class="stat-label">Algiers</div></div>
+        </div>
+        <div class="about-skills reveal">
+          <span class="skill-tag">Branding</span>
+          <span class="skill-tag">Visual Identity</span>
+          <span class="skill-tag">Art Direction</span>
+          <span class="skill-tag">3D / Cinema 4D</span>
+          <span class="skill-tag">Motion Design</span>
+          <span class="skill-tag">UI / UX</span>
+          <span class="skill-tag">Print</span>
+          <span class="skill-tag">Generative AI</span>
+          <span class="skill-tag">Photography</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SERVICES ─── -->
+  <section id="services">
+    <p class="section-label"><span class="num">02 —</span> What I do &amp; How I do it</p>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <p class="service-num">001</p>
+        <h3 class="service-title">Bold Branding<br><em>&amp; Visual Identity</em></h3>
+        <p class="service-desc">Building timeless brands with sharp logos, cohesive guidelines, and strong visual storytelling that connect humanly. Each identity system is built to communicate clearly and endure.</p>
+      </div>
+      <div class="service-card reveal">
+        <p class="service-num">002</p>
+        <h3 class="service-title">Smart Digital<br><em>Design &amp; Interfaces</em></h3>
+        <p class="service-desc">Designing smooth, modern, and human-centered experiences across apps, websites, and social media. Balancing aesthetics with function to create interfaces that feel inevitable.</p>
+      </div>
+      <div class="service-card reveal">
+        <p class="service-num">003</p>
+        <h3 class="service-title">Motion, 3D &amp;<br><em>Creative Exploration</em></h3>
+        <p class="service-desc">From motion graphics and editing to 3D worlds and experimental tools — pushing limits beyond static design. Generative AI as an extension of craft, not a replacement for it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── TIMELINE ─── -->
+  <section id="timeline">
+    <p class="section-label"><span class="num">03 —</span> Learning &amp; Professional Path</p>
+    <p class="timeline-intro">Tracing a path from studies to practice — blending creativity with technical skills across fifteen years of continuous growth.</p>
+    <div class="timeline-wrap">
+
+      <div class="timeline-item reveal">
+        <div class="tl-left"></div>
+        <div class="tl-center"><div class="tl-dot"></div></div>
+        <div class="tl-right">
+          <p class="tl-date">2007 – 2010</p>
+          <p class="tl-company">Artistimo Art School</p>
+          <p class="tl-role">BTS Graphic Design</p>
+          <p class="tl-desc">Higher Technician Certificate in Art and Graphic Communication. Parallel self-training in Illustrator, After Effects, Premiere, Cinema 4D.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="tl-left">
+          <p class="tl-date">2010 – 2011</p>
+          <p class="tl-company">Initiative Architecture</p>
+          <p class="tl-role">Graphic Designer</p>
+          <p class="tl-desc">Architectural plans, façade processing, and lithographic work. First professional environment at the crossroads of design and architecture.</p>
+          <p class="tl-tools">Photoshop · Illustrator · Archicad · Artlantis</p>
+        </div>
+        <div class="tl-center"><div class="tl-dot"></div></div>
+        <div class="tl-right"></div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="tl-left"></div>
+        <div class="tl-center"><div class="tl-dot"></div></div>
+        <div class="tl-right">
+          <p class="tl-date">2011 – 2016</p>
+          <p class="tl-company">Intellix-Communication</p>
+          <p class="tl-role">Graphic Designer</p>
+          <p class="tl-desc">Web design, graphic design, print, animations, and photography. Five years of technical breadth across multiple production domains.</p>
+          <p class="tl-tools">Photoshop · Illustrator · InDesign · Flash · After Effects</p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="tl-left">
+          <p class="tl-date">2017 – 2018</p>
+          <p class="tl-company">Wellcom Advertising</p>
+          <p class="tl-role">Graphic Designer</p>
+          <p class="tl-desc">Graphic design, digital communication, motion animations, and video editing in an advertising production environment.</p>
+          <p class="tl-tools">Photoshop · Illustrator · Lightroom · After Effects · Premiere · DaVinci</p>
+        </div>
+        <div class="tl-center"><div class="tl-dot"></div></div>
+        <div class="tl-right"></div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="tl-left"></div>
+        <div class="tl-center"><div class="tl-dot"></div></div>
+        <div class="tl-right">
+          <p class="tl-date">2018 – 2019</p>
+          <p class="tl-company">IDH Tours</p>
+          <p class="tl-role">Graphic Designer</p>
+          <p class="tl-desc">Graphic design, animation, and motion video presentations for client-facing communication in the travel sector.</p>
+          <p class="tl-tools">Photoshop · Illustrator · After Effects · Premiere</p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="tl-left">
+          <p class="tl-date">2020 – 2021</p>
+          <p class="tl-company">Nexus Digital Solutions</p>
+          <p class="tl-role">Graphic Designer &amp; Art Director</p>
+          <p class="tl-desc">Led creative direction across brand guidelines, digital content, 3D modeling, animations, editing, and print. First senior creative leadership role.</p>
+          <p class="tl-tools">Photoshop · Illustrator · Lightroom · After Effects · Premiere · Cinema 4D</p>
+        </div>
+        <div class="tl-center"><div class="tl-dot"></div></div>
+        <div class="tl-right"></div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="tl-left"></div>
+        <div class="tl-center"><div class="tl-dot active"></div></div>
+        <div class="tl-right">
+          <p class="tl-date">2022 – Today</p>
+          <p class="tl-company">Guiddini</p>
+          <p class="tl-role">Art Director &amp; Graphic Designer</p>
+          <p class="tl-desc">Managing graphic design, brand guidelines, website &amp; app design, digital content, 3D modeling, animations, editing, print, and illustrations. Integrating generative AI tools into the creative production workflow.</p>
+          <p class="tl-tools">Photoshop · Illustrator · Cinema 4D · After Effects · Premiere · AI Tools</p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="tl-left">
+          <p class="tl-date">All along</p>
+          <p class="tl-company">Freelance &amp; Consulting</p>
+          <p class="tl-role">Graphic Designer &amp; Trainer</p>
+          <p class="tl-desc">Brand communication for COMICCON Algeria. UIA website mockups. Brand identity, graphic guidelines, furniture and interior design. Graphic design trainer at Miquat School.</p>
+          <p class="tl-tools">Full stack creative · Training · Consulting</p>
+        </div>
+        <div class="tl-center"><div class="tl-dot"></div></div>
+        <div class="tl-right"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── TOOLS ─── -->
+  <section id="tools">
+    <p class="section-label"><span class="num">04 —</span> Creative Tools</p>
+    <div class="tools-list reveal">
+      <div class="tool-item">Photoshop</div>
+      <div class="tool-item">Illustrator</div>
+      <div class="tool-item">Cinema 4D</div>
+      <div class="tool-item">After Effects</div>
+      <div class="tool-item">Premiere Pro</div>
+      <div class="tool-item">InDesign</div>
+      <div class="tool-item">Lightroom</div>
+      <div class="tool-item">DaVinci Resolve</div>
+      <div class="tool-item">ArchiCAD</div>
+      <div class="tool-item">Generative AI</div>
+    </div>
+    <div class="tools-disciplines reveal">
+      <span>Brand identity</span>
+      <span>Graphic design</span>
+      <span>Motion design</span>
+      <span>3D visualization</span>
+      <span>UI concepts</span>
+      <span>Visual storytelling</span>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer>
+    <p class="footer-copy">© 2025 Tamime Kaddour — All rights reserved</p>
+    <p class="footer-tag">Ideas, well-dressed.</p>
+  </footer>
+
+  <script>
+    // ─── CURSOR
+    const cursor = document.getElementById('cursor');
+    let cx = 0, cy = 0;
+    document.addEventListener('mousemove', e => {
+      cx = e.clientX; cy = e.clientY;
+      cursor.style.left = cx + 'px';
+      cursor.style.top  = cy + 'px';
+    });
+    document.querySelectorAll('a, button, .service-card, .tool-item').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('large'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('large'));
+    });
+
+    // ─── HERO LENS (Exvia style: rectangle frame, blurred outside, sharp inside)
+    const heroEl    = document.getElementById('hero');
+    const sharpEl   = document.getElementById('heroSharp');
+    const frameEl   = document.getElementById('heroFrame');
+
+    const FW = 360, FH = 440; // frame dimensions
+    let lx = window.innerWidth  / 2;
+    let ly = window.innerHeight / 2;
+    let tx = lx, ty = ly;
+    let frameVisible = false;
+
+    heroEl.addEventListener('mousemove', e => {
+      const r = heroEl.getBoundingClientRect();
+      tx = e.clientX - r.left;
+      ty = e.clientY - r.top;
+      if (!frameVisible) {
+        frameVisible = true;
+        frameEl.classList.add('visible');
+      }
+    });
+
+    heroEl.addEventListener('mouseleave', () => {
+      frameVisible = false;
+      frameEl.classList.remove('visible');
+      sharpEl.style.clipPath = 'inset(50% 50% 50% 50%)';
+    });
+
+    (function animFrame() {
+      // Lerp
+      lx += (tx - lx) * 0.075;
+      ly += (ty - ly) * 0.075;
+
+      const heroW = heroEl.offsetWidth;
+      const heroH = heroEl.offsetHeight;
+
+      const frameLeft   = lx - FW / 2;
+      const frameTop    = ly - FH / 2;
+      const frameRight  = heroW - lx - FW / 2;
+      const frameBottom = heroH - ly - FH / 2;
+
+      // Move frame border
+      frameEl.style.left = lx + 'px';
+      frameEl.style.top  = ly + 'px';
+
+      // Clip sharp layer to frame rectangle
+      if (frameVisible) {
+        sharpEl.style.clipPath =
+          `inset(${frameTop}px ${frameRight}px ${frameBottom}px ${frameLeft}px)`;
+      }
+
+      requestAnimationFrame(animFrame);
+    })();
+
+    // ─── SCROLL REVEAL
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 90);
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>
