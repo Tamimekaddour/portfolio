@@ -11,6 +11,7 @@
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
       --bg:         #28282d;
       --bg2:        #1f1f23;
@@ -21,141 +22,335 @@
       --muted:      rgba(246,230,209,0.42);
       --border:     rgba(26,163,122,0.18);
     }
+
     html { scroll-behavior: smooth; }
-    body { background: var(--bg); color: var(--text); font-family: 'Lexend', sans-serif; overflow-x: hidden; cursor: none; }
 
-    /* ── CURSOR */
-    #cursor { position: fixed; width: 8px; height: 8px; background: var(--green-mid); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width .2s, height .2s, background .2s; }
-    #cursor.large { width: 44px; height: 44px; background: transparent; border: 1px solid rgba(26,163,122,0.55); }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Lexend', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
 
-    /* ── NAV */
+    /* ────────────────────────────── CURSOR */
+    #cursor {
+      position: fixed; width: 8px; height: 8px;
+      background: var(--green-mid); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: width .2s, height .2s, background .2s;
+    }
+    #cursor.large {
+      width: 44px; height: 44px; background: transparent;
+      border: 1px solid rgba(26,163,122,0.55);
+    }
+
+    /* ────────────────────────────── NAV */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
       display: flex; justify-content: space-between; align-items: center;
-      padding: 18px 52px;
-      background: transparent;
-      backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px);
-      border-bottom: 1px solid transparent;
-      transition: background .35s, backdrop-filter .35s, -webkit-backdrop-filter .35s, border-color .35s, padding .35s;
+      padding: 22px 52px;
+      background: linear-gradient(to bottom, rgba(40,40,45,.96) 0%, rgba(40,40,45,0) 100%);
     }
-    nav.scrolled { background: rgba(28,28,32,.82); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom-color: var(--border); padding: 14px 52px; }
     .nav-logo { display: flex; align-items: center; text-decoration: none; }
     .nav-logo img { height: 46px; width: auto; opacity: .88; transition: opacity .3s; }
     .nav-logo:hover img { opacity: 1; }
     .nav-links { display: flex; gap: 40px; list-style: none; }
-    .nav-links a { font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .3s; }
+    .nav-links a {
+      font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 10.5px;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; transition: color .3s;
+    }
     .nav-links a:hover { color: var(--text); }
-    .nav-cta { display: flex; align-items: center; gap: 14px; }
-    .nav-open { font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--green-mid); display: flex; align-items: center; gap: 8px; }
-    .nav-open::before { content: ''; display: block; width: 6px; height: 6px; border-radius: 50%; background: var(--green-mid); animation: blink 2s ease-in-out infinite; }
+    .nav-cta { display: flex; align-items: center; gap: 22px; }
+    .nav-open {
+      font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 10px;
+      letter-spacing: .18em; text-transform: uppercase; color: var(--green-mid);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .nav-open::before {
+      content: ''; display: block; width: 6px; height: 6px;
+      border-radius: 50%; background: var(--green-mid);
+      animation: blink 2s ease-in-out infinite;
+    }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
-    .btn-nav { font-family: 'Lexend', sans-serif; font-weight: 500; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--text); border: 1px solid rgba(246,230,209,.28); padding: 10px 24px; text-decoration: none; transition: all .3s; background: transparent; }
+    .btn-nav {
+      font-family: 'Lexend', sans-serif; font-weight: 500; font-size: 10px;
+      letter-spacing: .18em; text-transform: uppercase; color: var(--text);
+      border: 1px solid rgba(246,230,209,.28); padding: 10px 24px;
+      text-decoration: none; transition: all .3s; background: transparent;
+    }
     .btn-nav:hover { background: var(--text); color: var(--bg); }
 
-    /* ── LANG TOGGLE */
-    .btn-lang {
-      font-family: 'Lexend', sans-serif; font-weight: 500; font-size: 9.5px;
-      letter-spacing: .18em; text-transform: uppercase;
-      color: rgba(246,230,209,.5); border: 1px solid rgba(246,230,209,.16);
-      padding: 9px 16px; background: transparent; cursor: none;
-      transition: all .25s; display: flex; align-items: center; gap: 7px;
+    /* ────────────────────────────── HERO */
+    #hero {
+      position: relative; width: 100%; height: 100vh; min-height: 700px;
+      overflow: hidden; cursor: none;
     }
-    .btn-lang:hover { color: var(--text); border-color: rgba(246,230,209,.36); }
-    .btn-lang .lang-indicator {
-      display: inline-block; width: 5px; height: 5px; border-radius: 50%;
-      background: var(--green-mid); opacity: .7;
+    .hero-blur {
+      position: absolute; inset: 0;
+      background-image: url('photo.jpg'); background-size: cover; background-position: center 20%;
+      filter: blur(18px) brightness(.5) saturate(.65); transform: scale(1.08); z-index: 1;
     }
-
-    /* ── HERO */
-    #hero { position: relative; width: 100%; height: 100vh; min-height: 700px; overflow: hidden; cursor: none; }
-    .hero-blur { position: absolute; inset: 0; background-image: url('photo.jpg'); background-size: cover; background-position: center 20%; filter: blur(18px) brightness(.5) saturate(.65); transform: scale(1.08); z-index: 1; }
-    .hero-overlay { position: absolute; inset: 0; background: radial-gradient(ellipse 85% 60% at 50% 100%, rgba(0,0,0,.78) 0%, transparent 70%), linear-gradient(to bottom, rgba(40,40,45,.28) 0%, rgba(40,40,45,.04) 35%, rgba(40,40,45,.72) 100%); z-index: 2; }
-    .hero-sharp { position: absolute; inset: 0; background-image: url('photo.jpg'); background-size: cover; background-position: center 20%; z-index: 3; clip-path: inset(50% 50% 50% 50%); will-change: clip-path; }
-    .hero-frame { position: absolute; width: 340px; height: 420px; border: 1px solid rgba(246,230,209,.5); pointer-events: none; z-index: 4; transform: translate(-50%,-50%); opacity: 0; transition: opacity .4s ease; }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 85% 60% at 50% 100%, rgba(0,0,0,.78) 0%, transparent 70%),
+        linear-gradient(to bottom, rgba(40,40,45,.28) 0%, rgba(40,40,45,.04) 35%, rgba(40,40,45,.72) 100%);
+      z-index: 2;
+    }
+    .hero-sharp {
+      position: absolute; inset: 0;
+      background-image: url('photo.jpg'); background-size: cover; background-position: center 20%;
+      z-index: 3; clip-path: inset(50% 50% 50% 50%); will-change: clip-path;
+    }
+    .hero-frame {
+      position: absolute; width: 340px; height: 420px;
+      border: 1px solid rgba(246,230,209,.5);
+      pointer-events: none; z-index: 4;
+      transform: translate(-50%,-50%); opacity: 0; transition: opacity .4s ease;
+    }
     .hero-frame.visible { opacity: 1; }
-    .hero-frame::before, .hero-frame::after { content: ''; position: absolute; top: 50%; left: 50%; background: rgba(246,230,209,.35); }
+    .hero-frame::before, .hero-frame::after {
+      content: ''; position: absolute; top: 50%; left: 50%; background: rgba(246,230,209,.35);
+    }
     .hero-frame::before { width: 14px; height: 1px; transform: translate(-50%,-50%); }
     .hero-frame::after  { width: 1px; height: 14px; transform: translate(-50%,-50%); }
-    .hero-tags { position: absolute; top: 40%; left: 0; right: 0; z-index: 5; display: flex; justify-content: space-around; align-items: center; padding: 0 80px; pointer-events: none; }
-    .hero-tag-item { font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 10.5px; letter-spacing: .28em; text-transform: uppercase; color: rgba(246,230,209,.42); }
-    .hero-bottom { position: absolute; bottom: 0; left: 0; right: 0; z-index: 5; padding: 0 52px 52px; }
-    .hero-name { display: block; font-family: 'Lexend', sans-serif; font-weight: 800; font-size: clamp(64px, 9.8vw, 148px); line-height: .88; letter-spacing: -.03em; text-transform: uppercase; color: var(--text); text-shadow: 0 4px 48px rgba(0,0,0,.5); white-space: nowrap; }
-    .hero-role { display: block; font-family: 'Lexend', sans-serif; font-weight: 300; font-size: clamp(10px, .95vw, 14px); letter-spacing: .52em; text-transform: uppercase; color: var(--green-mid); white-space: nowrap; margin-top: 10px; }
 
-    /* ── MARQUEE */
-    .marquee-strip { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); overflow: hidden; position: relative; z-index: 10; }
-    .marquee-track { display: flex; width: max-content; animation: marqueeScroll 40s linear infinite; }
+    .hero-tags {
+      position: absolute; top: 40%; left: 0; right: 0; z-index: 5;
+      display: flex; justify-content: space-around; align-items: center;
+      padding: 0 80px; pointer-events: none;
+    }
+    .hero-tag-item {
+      font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 10.5px;
+      letter-spacing: .28em; text-transform: uppercase; color: rgba(246,230,209,.42);
+    }
+
+    .hero-bottom {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      z-index: 5; padding: 0 52px 52px;
+    }
+    .hero-name {
+      display: block;
+      font-family: 'Lexend', sans-serif; font-weight: 800;
+      font-size: clamp(64px, 9.8vw, 148px);
+      line-height: .88; letter-spacing: -.03em; text-transform: uppercase;
+      color: var(--text);
+      text-shadow: 0 4px 48px rgba(0,0,0,.5);
+      white-space: nowrap;
+    }
+    .hero-role {
+      display: block;
+      font-family: 'Lexend', sans-serif; font-weight: 300;
+      font-size: clamp(10px, .95vw, 14px);
+      letter-spacing: .52em; text-transform: uppercase;
+      color: var(--green-mid);
+      white-space: nowrap;
+      margin-top: 10px;
+    }
+
+    /* ────────────────────────────── MARQUEE */
+    .marquee-strip {
+      background: var(--bg2); border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border); overflow: hidden; position: relative; z-index: 10;
+    }
+    .marquee-track {
+      display: flex; width: max-content;
+      animation: marqueeScroll 40s linear infinite;
+    }
     .marquee-track:hover { animation-play-state: paused; }
     @keyframes marqueeScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-    .marquee-item { display: flex; align-items: center; gap: 14px; padding: 22px 48px; border-right: 1px solid var(--border); flex-shrink: 0; transition: background .25s; }
+    .marquee-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 22px 48px; border-right: 1px solid var(--border); flex-shrink: 0;
+      transition: background .25s;
+    }
     .marquee-item:hover { background: rgba(26,163,122,.04); }
-    .marquee-label { font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 9.5px; letter-spacing: .24em; text-transform: uppercase; color: rgba(246,230,209,.32); white-space: nowrap; }
+    .marquee-item svg { width: 30px; height: 30px; flex-shrink: 0; }
+    .marquee-label {
+      font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 9.5px;
+      letter-spacing: .24em; text-transform: uppercase;
+      color: rgba(246,230,209,.32); white-space: nowrap;
+    }
 
-    /* ── SECTION SHARED */
+    /* ────────────────────────────── SECTION SHARED */
     section { padding: 120px 52px; position: relative; }
-    .section-eyebrow { font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 10px; letter-spacing: .3em; text-transform: uppercase; color: var(--green-mid); display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 28px; }
-    .section-eyebrow::before, .section-eyebrow::after { content: ''; display: block; width: 36px; height: 1px; background: var(--green-mid); opacity: .45; }
 
-    /* ── ABOUT */
+    .section-eyebrow {
+      font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 10px;
+      letter-spacing: .3em; text-transform: uppercase; color: var(--green-mid);
+      display: flex; align-items: center; justify-content: center; gap: 16px;
+      margin-bottom: 28px;
+    }
+    .section-eyebrow::before, .section-eyebrow::after {
+      content: ''; display: block; width: 36px; height: 1px;
+      background: var(--green-mid); opacity: .45;
+    }
+
+    /* ────────────────────────────── ABOUT */
     #about { background: var(--bg2); border-top: 1px solid var(--border); text-align: center; }
-    .about-heading { font-family: 'Lexend', sans-serif; font-weight: 700; font-size: clamp(26px, 3.4vw, 52px); line-height: 1.3; color: var(--text); margin-bottom: 52px; }
+
+    .about-heading {
+      font-family: 'Lexend', sans-serif; font-weight: 700;
+      font-size: clamp(26px, 3.4vw, 52px); line-height: 1.3; color: var(--text);
+      margin-bottom: 52px;
+    }
     .about-heading em { font-style: normal; font-weight: 200; color: var(--green-mid); }
-    .about-body { font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 14px; line-height: 2; color: rgba(246,230,209,.52); max-width: 640px; margin: 0 auto 14px; }
+
+    .about-body {
+      font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 14px;
+      line-height: 2; color: rgba(246,230,209,.52);
+      max-width: 640px; margin: 0 auto 14px;
+    }
     .about-body:last-of-type { margin-bottom: 64px; }
-    .about-stats { display: inline-grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 64px; min-width: 420px; }
+
+    .about-stats {
+      display: inline-grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; background: var(--border); border: 1px solid var(--border);
+      margin-bottom: 64px; min-width: 420px;
+    }
     .stat { background: var(--bg2); padding: 30px 40px; text-align: center; }
-    .stat-num { font-family: 'Lexend', sans-serif; font-weight: 700; font-size: 44px; line-height: 1; color: var(--green-mid); margin-bottom: 8px; }
+    .stat-num {
+      font-family: 'Lexend', sans-serif; font-weight: 700;
+      font-size: 44px; line-height: 1; color: var(--green-mid); margin-bottom: 8px;
+    }
     .stat-num sup { font-size: 18px; font-weight: 400; }
-    .stat-label { font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 9px; letter-spacing: .28em; text-transform: uppercase; color: var(--muted); }
-    .about-disciplines { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 700px; margin: 0 auto; }
-    .disc-tag { font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: rgba(246,230,209,.55); border: 1px solid rgba(246,230,209,.12); padding: 9px 18px; transition: all .3s; }
+    .stat-label {
+      font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 9px;
+      letter-spacing: .28em; text-transform: uppercase; color: var(--muted);
+    }
+    .about-disciplines {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      justify-content: center; max-width: 700px; margin: 0 auto;
+    }
+    .disc-tag {
+      font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 9.5px;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: rgba(246,230,209,.55); border: 1px solid rgba(246,230,209,.12);
+      padding: 9px 18px; transition: all .3s;
+    }
     .disc-tag:hover { color: var(--green-mid); border-color: rgba(26,163,122,.42); }
 
-    /* ── SERVICES */
+    /* ────────────────────────────── SERVICES */
     #services { border-top: 1px solid var(--border); text-align: center; }
-    .services-heading { font-family: 'Lexend', sans-serif; font-weight: 700; font-size: clamp(30px, 4.4vw, 62px); line-height: 1.1; color: var(--text); margin-bottom: 16px; }
+
+    .services-heading {
+      font-family: 'Lexend', sans-serif; font-weight: 700;
+      font-size: clamp(30px, 4.4vw, 62px); line-height: 1.1; color: var(--text);
+      margin-bottom: 16px;
+    }
     .services-heading em { font-style: normal; font-weight: 200; color: var(--green-mid); }
-    .services-tagline { font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 13px; line-height: 1.9; color: rgba(246,230,209,.36); max-width: 340px; margin: 0 auto 72px; }
-    .services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); }
-    .service-card { background: var(--bg); padding: 56px 44px; position: relative; overflow: hidden; transition: background .4s; text-align: center; }
-    .service-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, transparent, var(--green-deep), transparent); opacity: 0; transition: opacity .4s; }
+    .services-tagline {
+      font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 13px;
+      line-height: 1.9; color: rgba(246,230,209,.36);
+      max-width: 340px; margin: 0 auto 72px;
+    }
+    .services-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; background: var(--border);
+    }
+    .service-card {
+      background: var(--bg); padding: 56px 44px;
+      position: relative; overflow: hidden; transition: background .4s; text-align: center;
+    }
+    .service-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(to right, transparent, var(--green-deep), transparent);
+      opacity: 0; transition: opacity .4s;
+    }
     .service-card:hover { background: #1e1e22; }
     .service-card:hover::before { opacity: 1; }
     .service-icon-wrap { margin-bottom: 28px; display: flex; justify-content: center; }
     .service-icon-wrap svg { width: 28px; height: 28px; }
-    .service-title { font-family: 'Lexend', sans-serif; font-weight: 700; font-size: clamp(15px, 1.5vw, 20px); line-height: 1.35; text-transform: uppercase; color: var(--text); margin-bottom: 18px; }
-    .service-desc { font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 12.5px; line-height: 1.9; color: rgba(246,230,209,.4); }
+    .service-title {
+      font-family: 'Lexend', sans-serif; font-weight: 700;
+      font-size: clamp(15px, 1.5vw, 20px); line-height: 1.35;
+      text-transform: uppercase; color: var(--text); margin-bottom: 18px;
+    }
+    .service-desc {
+      font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 12.5px;
+      line-height: 1.9; color: rgba(246,230,209,.4);
+    }
 
-    /* ── WORK */
+    /* ────────────────────────────── WORK */
     #work { border-top: 1px solid var(--border); text-align: center; }
-    .work-title { font-family: 'Lexend', sans-serif; font-weight: 800; font-size: clamp(48px, 7vw, 100px); line-height: .88; letter-spacing: -.03em; text-transform: uppercase; color: var(--text); margin-bottom: 60px; }
-    .work-title em { font-style: normal; font-weight: 200; color: rgba(246,230,209,.28); display: block; font-size: .62em; letter-spacing: .04em; }
-    .projects-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 2px; background: var(--border); }
-    .project-card { position: relative; overflow: hidden; background: var(--bg2); aspect-ratio: 4/3; cursor: none; }
+
+    .work-title {
+      font-family: 'Lexend', sans-serif; font-weight: 800;
+      font-size: clamp(48px, 7vw, 100px); line-height: .88;
+      letter-spacing: -.03em; text-transform: uppercase; color: var(--text);
+      margin-bottom: 60px;
+    }
+    .work-title em {
+      font-style: normal; font-weight: 200; color: rgba(246,230,209,.28);
+      display: block; font-size: .62em; letter-spacing: .04em;
+    }
+    .projects-grid {
+      display: grid; grid-template-columns: repeat(2,1fr);
+      gap: 2px; background: var(--border);
+    }
+    .project-card {
+      position: relative; overflow: hidden; background: var(--bg2);
+      aspect-ratio: 4/3; cursor: none;
+    }
     .project-card.wide { grid-column: span 2; aspect-ratio: 16/7; }
     .project-bg { position: absolute; inset: 0; transition: transform .7s cubic-bezier(.25,.46,.45,.94); }
     .project-card:hover .project-bg { transform: scale(1.04); }
     .project-bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .project-placeholder { width: 100%; height: 100%; background: linear-gradient(135deg, #1c3b35 0%, #1a1a1e 60%, #28282d 100%); display: flex; align-items: center; justify-content: center; }
-    .project-placeholder span { font-family: 'Lexend', sans-serif; font-size: 8.5px; font-weight: 200; letter-spacing: .28em; text-transform: uppercase; color: rgba(26,163,122,.22); border: 1px solid rgba(26,163,122,.1); padding: 8px 18px; }
-    .project-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(18,18,22,.94) 0%, rgba(18,18,22,.18) 55%, transparent 100%); z-index: 2; }
+    .project-placeholder {
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, #1c3b35 0%, #1a1a1e 60%, #28282d 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .project-placeholder span {
+      font-family: 'Lexend', sans-serif; font-size: 8.5px; font-weight: 200;
+      letter-spacing: .28em; text-transform: uppercase;
+      color: rgba(26,163,122,.22); border: 1px solid rgba(26,163,122,.1); padding: 8px 18px;
+    }
+    .project-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(18,18,22,.94) 0%, rgba(18,18,22,.18) 55%, transparent 100%);
+      z-index: 2;
+    }
     .project-info { position: absolute; bottom: 0; left: 0; right: 0; z-index: 3; padding: 32px; }
     .project-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
-    .project-tag { font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 8.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--green-mid); border: 1px solid rgba(26,163,122,.3); padding: 4px 10px; }
-    .project-name { font-family: 'Lexend', sans-serif; font-weight: 600; font-size: 18px; color: var(--text); margin-bottom: 5px; }
-    .project-meta { font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 10.5px; letter-spacing: .14em; color: rgba(246,230,209,.35); }
-    .project-vimeo-wrap { position: absolute; inset: 0; overflow: hidden; }
-    .project-vimeo-wrap iframe { position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; min-width: 100%; min-height: 100%; transform: translate(-50%,-50%) scale(1.01); border: 0; pointer-events: none; }
-    .card-hint { position: absolute; top: 20px; right: 20px; z-index: 4; display: flex; align-items: center; gap: 8px; font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: .2em; text-transform: uppercase; color: rgba(246,230,209,.7); background: rgba(22,22,26,.75); backdrop-filter: blur(6px); border: 1px solid rgba(246,230,209,.1); padding: 7px 12px; opacity: 0; transition: opacity .25s; pointer-events: none; }
-    .project-card:hover .card-hint { opacity: 1; }
+    .project-tag {
+      font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 8.5px;
+      letter-spacing: .2em; text-transform: uppercase; color: var(--green-mid);
+      border: 1px solid rgba(26,163,122,.3); padding: 4px 10px;
+    }
+    .project-name {
+      font-family: 'Lexend', sans-serif; font-weight: 600; font-size: 18px;
+      color: var(--text); margin-bottom: 5px;
+    }
+    .project-meta {
+      font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 10.5px;
+      letter-spacing: .14em; color: rgba(246,230,209,.35);
+    }
 
-    /* ── TIMELINE */
+    /* ────────────────────────────── TIMELINE */
     #timeline { background: var(--bg2); border-top: 1px solid var(--border); text-align: center; }
-    .section-title { font-family: 'Lexend', sans-serif; font-weight: 700; font-size: clamp(32px, 4.8vw, 62px); line-height: 1.1; color: var(--text); margin-bottom: 24px; }
+
+    .section-title {
+      font-family: 'Lexend', sans-serif; font-weight: 700;
+      font-size: clamp(32px, 4.8vw, 62px); line-height: 1.1;
+      color: var(--text); margin-bottom: 24px;
+    }
     .section-title em { font-style: normal; font-weight: 200; color: var(--green-mid); }
-    .timeline-intro { font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 14px; line-height: 1.9; color: var(--muted); margin: 0 auto 72px; max-width: 520px; }
+
+    .timeline-intro {
+      font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 14px;
+      line-height: 1.9; color: var(--muted);
+      margin: 0 auto 72px; max-width: 520px;
+    }
     .timeline-wrap { position: relative; max-width: 1000px; margin: 0 auto; text-align: left; }
-    .timeline-wrap::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: linear-gradient(to bottom, transparent, var(--green-deep) 8%, var(--green-deep) 92%, transparent); transform: translateX(-50%); }
+    .timeline-wrap::before {
+      content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--green-deep) 8%, var(--green-deep) 92%, transparent);
+      transform: translateX(-50%);
+    }
     .timeline-item { display: grid; grid-template-columns: 1fr 40px 1fr; position: relative; }
     .tl-left  { padding: 36px 52px 36px 0; text-align: right; }
     .tl-right { padding: 36px 0 36px 52px; }
@@ -168,103 +363,164 @@
     .tl-desc    { font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 13px; line-height: 1.9; color: rgba(246,230,209,.5); margin-bottom: 12px; }
     .tl-tools   { font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: rgba(26,163,122,.55); }
 
-    /* ── SKILLS */
+    /* ────────────────────────────── SKILLS */
     #skills { border-top: 1px solid var(--border); text-align: center; }
-    .skills-heading { font-family: 'Lexend', sans-serif; font-weight: 800; font-size: clamp(32px, 5vw, 68px); line-height: 1; letter-spacing: -.02em; text-transform: uppercase; color: var(--text); margin-bottom: 64px; }
+
+    .skills-heading {
+      font-family: 'Lexend', sans-serif; font-weight: 800;
+      font-size: clamp(32px, 5vw, 68px); line-height: 1;
+      letter-spacing: -.02em; text-transform: uppercase; color: var(--text); margin-bottom: 64px;
+    }
     .skills-heading em { font-style: normal; font-weight: 200; color: var(--green-mid); }
-    .skills-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--border); margin-bottom: 64px; }
+
+    .skills-cols {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2px; background: var(--border); margin-bottom: 64px;
+    }
     .skills-col { background: var(--bg); padding: 44px; text-align: left; }
-    .skills-col-title { font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 9.5px; letter-spacing: .28em; text-transform: uppercase; color: var(--green-mid); display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+    .skills-col-title {
+      font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 9.5px;
+      letter-spacing: .28em; text-transform: uppercase; color: var(--green-mid);
+      display: flex; align-items: center; gap: 14px; margin-bottom: 28px;
+    }
     .skills-col-title::before { content: ''; display: block; width: 20px; height: 1px; background: var(--green-mid); }
     .skills-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-    .s-tag { font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: rgba(246,230,209,.55); border: 1px solid rgba(246,230,209,.12); padding: 8px 15px; transition: all .3s; }
+    .s-tag {
+      font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 9.5px;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: rgba(246,230,209,.55); border: 1px solid rgba(246,230,209,.12);
+      padding: 8px 15px; transition: all .3s;
+    }
     .s-tag:hover { color: var(--green-mid); border-color: rgba(26,163,122,.42); }
+
     .skill-bars { max-width: 860px; margin: 0 auto; text-align: left; }
-    .skill-bar-item { display: grid; grid-template-columns: 190px 1fr 46px; align-items: center; gap: 28px; padding: 18px 0; border-bottom: 1px solid var(--border); }
+    .skill-bar-item {
+      display: grid; grid-template-columns: 190px 1fr 46px;
+      align-items: center; gap: 28px;
+      padding: 18px 0; border-bottom: 1px solid var(--border);
+    }
     .skill-bar-name { font-family: 'Lexend', sans-serif; font-weight: 500; font-size: 13px; color: var(--text); }
     .skill-bar-track { height: 1px; background: rgba(246,230,209,.07); position: relative; }
-    .skill-bar-fill { position: absolute; left: 0; top: 0; height: 100%; background: linear-gradient(to right, var(--green-deep), var(--green-mid)); }
+    .skill-bar-fill {
+      position: absolute; left: 0; top: 0; height: 100%;
+      background: linear-gradient(to right, var(--green-deep), var(--green-mid));
+    }
     .skill-bar-pct { font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 10.5px; letter-spacing: .08em; color: var(--green-mid); text-align: right; }
 
-    /* ── CONTACT */
-    #contact { background: var(--bg2); border-top: 1px solid var(--border); padding: 100px 52px 0; }
-    .contact-inner { display: grid; grid-template-columns: 480px 1fr; gap: 72px; align-items: center; padding-bottom: 52px; max-width: 1100px; margin: 0 auto; }
-    .contact-heading { font-family: 'Lexend', sans-serif; font-weight: 700; font-size: clamp(30px, 4.2vw, 58px); line-height: 1.2; color: var(--text); margin-bottom: 28px; }
-    .contact-heading em { font-style: normal; font-weight: 200; color: var(--green-mid); }
-    .contact-desc { font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 13.5px; line-height: 1.9; color: rgba(246,230,209,.45); max-width: 420px; margin-bottom: 44px; }
-    .contact-btns { display: flex; gap: 14px; flex-wrap: wrap; }
-    .btn-primary { font-family: 'Lexend', sans-serif; font-weight: 600; font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--text); background: var(--green-deep); border: 1px solid var(--green-deep); padding: 15px 30px; text-decoration: none; transition: all .3s; }
-    .btn-primary:hover { background: var(--green-mid); border-color: var(--green-mid); }
-    .btn-secondary { font-family: 'Lexend', sans-serif; font-weight: 500; font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--text); background: transparent; border: 1px solid rgba(246,230,209,.22); padding: 15px 30px; text-decoration: none; transition: all .3s; }
-    .btn-secondary:hover { border-color: var(--text); }
-    .contact-pills-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 44px 0 72px; border-top: 1px solid var(--border); max-width: 1100px; margin: 0 auto; }
-    .contact-pill { display: flex; align-items: center; gap: 10px; font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 9.5px; letter-spacing: .15em; text-transform: uppercase; color: rgba(246,230,209,.48); border: 1px solid rgba(246,230,209,.1); padding: 11px 18px; text-decoration: none; transition: all .3s; }
-    .contact-pill:hover { color: var(--text); border-color: rgba(246,230,209,.28); }
-    .contact-pill svg { width: 12px; height: 12px; flex-shrink: 0; }
-    .contact-photo { position: relative; }
-    .contact-photo img { width: 100%; height: auto; display: block; filter: brightness(.95) saturate(.88); }
-    .contact-photo::after { content: ''; position: absolute; inset: 0; border: 1px solid rgba(26,163,122,.2); pointer-events: none; }
+    /* ────────────────────────────── CONTACT */
+    #contact {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      padding: 100px 52px 80px;
+    }
 
-    /* ── FOOTER */
-    footer { padding: 32px 52px; border-top: 1px solid var(--border); background: var(--bg2); display: flex; justify-content: space-between; align-items: center; }
+    /* Centered block: photo + text, même hauteur */
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      align-items: stretch;
+      max-width: 1100px;
+      margin: 0 auto 56px;
+      border: 1px solid var(--border);
+    }
+
+    /* Photo : remplit toute la hauteur du grid */
+    .contact-photo {
+      position: relative;
+      overflow: hidden;
+      min-height: 420px;
+    }
+    .contact-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      filter: brightness(.92) saturate(.82);
+    }
+    .contact-photo::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-right: 1px solid rgba(26,163,122,.2);
+      pointer-events: none;
+    }
+
+    /* Bloc texte : padding interne */
+    .contact-text {
+      padding: 56px 52px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .contact-heading {
+      font-family: 'Lexend', sans-serif; font-weight: 700;
+      font-size: clamp(30px, 4.2vw, 58px); line-height: 1.2; color: var(--text); margin-bottom: 28px;
+    }
+    .contact-heading em { font-style: normal; font-weight: 200; color: var(--green-mid); }
+    .contact-desc {
+      font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 13.5px;
+      line-height: 1.9; color: rgba(246,230,209,.45); max-width: 420px; margin-bottom: 44px;
+    }
+    .contact-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-primary {
+      font-family: 'Lexend', sans-serif; font-weight: 600; font-size: 9.5px;
+      letter-spacing: .2em; text-transform: uppercase; color: var(--text);
+      background: var(--green-deep); border: 1px solid var(--green-deep);
+      padding: 15px 30px; text-decoration: none; transition: all .3s;
+    }
+    .btn-primary:hover { background: var(--green-mid); border-color: var(--green-mid); }
+    .btn-secondary {
+      font-family: 'Lexend', sans-serif; font-weight: 500; font-size: 9.5px;
+      letter-spacing: .2em; text-transform: uppercase; color: var(--text);
+      background: transparent; border: 1px solid rgba(246,230,209,.22);
+      padding: 15px 30px; text-decoration: none; transition: all .3s;
+    }
+    .btn-secondary:hover { border-color: var(--text); }
+
+    /* Pills row — centrée, sous le bloc */
+    .contact-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .contact-pill {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 9.5px;
+      letter-spacing: .15em; text-transform: uppercase;
+      color: rgba(246,230,209,.48); border: 1px solid rgba(246,230,209,.1);
+      padding: 11px 18px; text-decoration: none; transition: all .3s;
+    }
+    .contact-pill:hover { color: var(--text); border-color: rgba(246,230,209,.28); }
+    .contact-pill svg { width: 12px; height: 12px; flex-shrink: 0; stroke: currentColor; fill: none; stroke-width: 1.3; }
+
+    /* ────────────────────────────── FOOTER */
+    footer {
+      padding: 32px 52px; border-top: 1px solid var(--border); background: var(--bg2);
+      display: flex; justify-content: space-between; align-items: center;
+    }
     .footer-copy { font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 9.5px; letter-spacing: .16em; color: var(--muted); }
     .footer-tag  { font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 13px; color: rgba(246,230,209,.2); }
 
-    /* ── REVEAL */
+    /* ────────────────────────────── REVEAL */
     .reveal { opacity: 0; transform: translateY(26px); transition: opacity .9s ease, transform .9s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* ── CATEGORY OVERLAY */
-    .cat-overlay { position: fixed; inset: 0; z-index: 600; background: rgba(20,20,24,.97); backdrop-filter: blur(18px); display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity .38s cubic-bezier(.25,.46,.45,.94); overflow-y: auto; }
-    .cat-overlay.open { opacity: 1; pointer-events: all; }
-    .cat-bar { position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; padding: 28px 52px; border-bottom: 1px solid var(--border); background: rgba(20,20,24,.95); backdrop-filter: blur(8px); flex-shrink: 0; }
-    .cat-bar-left { display: flex; flex-direction: column; gap: 5px; }
-    .cat-bar-eyebrow { font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 9px; letter-spacing: .32em; text-transform: uppercase; color: var(--green-mid); }
-    .cat-bar-title { font-family: 'Lexend', sans-serif; font-weight: 700; font-size: clamp(20px, 2.6vw, 36px); color: var(--text); letter-spacing: -.02em; line-height: 1; }
-    .cat-bar-count { font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: rgba(246,230,209,.25); }
-    .cat-close { width: 48px; height: 48px; border: 1px solid rgba(246,230,209,.14); background: transparent; color: rgba(246,230,209,.5); cursor: none; display: flex; align-items: center; justify-content: center; transition: all .22s; flex-shrink: 0; }
-    .cat-close:hover { border-color: var(--text); background: var(--text); color: var(--bg); }
-    .cat-close svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; }
-    .cat-body { padding: 52px; flex: 1; }
-    .cat-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 2px; background: var(--border); }
-    .cat-grid .ov-card.wide { grid-column: span 2; }
-    .cat-grid .ov-card.solo { grid-column: span 2; }
-    .ov-card { position: relative; overflow: hidden; background: var(--bg2); cursor: none; }
-    .ov-card:not(.ov-video) { aspect-ratio: 4/3; }
-    .ov-card.wide:not(.ov-video) { aspect-ratio: 16/7; }
-    .ov-card-bg { position: absolute; inset: 0; transition: transform .6s cubic-bezier(.25,.46,.45,.94); }
-    .ov-card:hover .ov-card-bg { transform: scale(1.03); }
-    .ov-card-bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .ov-placeholder { width: 100%; height: 100%; min-height: 280px; background: linear-gradient(135deg, #1c3b35 0%, #1a1a1e 60%, #28282d 100%); display: flex; align-items: center; justify-content: center; }
-    .ov-placeholder span { font-family: 'Lexend', sans-serif; font-size: 8px; font-weight: 200; letter-spacing: .26em; text-transform: uppercase; color: rgba(26,163,122,.2); border: 1px solid rgba(26,163,122,.1); padding: 7px 16px; }
-    .ov-card-grad { position: absolute; inset: 0; background: linear-gradient(to top, rgba(16,16,20,.92) 0%, rgba(16,16,20,.1) 50%, transparent 100%); z-index: 2; }
-    .ov-info { position: absolute; bottom: 0; left: 0; right: 0; z-index: 3; padding: 24px 28px; }
-    .ov-tags { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 7px; }
-    .ov-tag { font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 8px; letter-spacing: .2em; text-transform: uppercase; color: var(--green-mid); border: 1px solid rgba(26,163,122,.28); padding: 3px 8px; }
-    .ov-name { font-family: 'Lexend', sans-serif; font-weight: 600; font-size: 15px; color: var(--text); margin-bottom: 3px; }
-    .ov-meta { font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 9.5px; letter-spacing: .13em; color: rgba(246,230,209,.28); }
-    .ov-video { background: #07070a; }
-    .vimeo-wrap { position: relative; width: 100%; padding-top: 56.25%; background: #07070a; }
-    .vimeo-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-    .vimeo-placeholder { padding-top: 56.25%; position: relative; background: linear-gradient(135deg, #081812 0%, #09090c 100%); }
-    .vimeo-ph-inner { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
-    .vimeo-ph-inner svg { opacity: .2; }
-    .vimeo-ph-inner p { font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 8.5px; letter-spacing: .22em; text-transform: uppercase; color: rgba(26,163,122,.3); text-align: center; max-width: 260px; line-height: 1.8; }
-    .ov-video-info { padding: 20px 28px 28px; position: relative; z-index: 1; }
-
-    /* ── RESPONSIVE */
+    /* ────────────────────────────── RESPONSIVE */
     @media (max-width: 960px) {
       nav { padding: 18px 24px; }
-      nav.scrolled { padding: 14px 24px; }
       .nav-links, .nav-open { display: none; }
       section { padding: 80px 24px; }
-      #contact { padding: 80px 24px 0; }
+      #contact { padding: 80px 24px 60px; }
       .services-grid { grid-template-columns: 1fr; }
       .projects-grid { grid-template-columns: 1fr; }
       .project-card.wide { grid-column: span 1; aspect-ratio: 4/3; }
       .skills-cols { grid-template-columns: 1fr; }
-      .contact-inner { grid-template-columns: 1fr; }
-      .contact-pills-row { padding: 32px 0 52px; }
       .about-stats { min-width: unset; }
       .timeline-wrap::before { left: 20px; }
       .timeline-item { grid-template-columns: 20px 1fr; }
@@ -274,543 +530,402 @@
       .hero-tags { display: none; }
       .skill-bar-item { grid-template-columns: 120px 1fr 36px; }
       footer { flex-direction: column; gap: 12px; padding: 28px 24px; text-align: center; }
-      .cat-bar { padding: 20px 24px; }
-      .cat-body { padding: 28px 24px 52px; }
-      .cat-grid { grid-template-columns: 1fr; }
-      .cat-grid .ov-card.wide, .cat-grid .ov-card.solo { grid-column: span 1; }
-      .btn-lang span:not(.lang-indicator) { display: none; }
+
+      /* Contact responsive */
+      .contact-inner {
+        grid-template-columns: 1fr;
+        border: none;
+      }
+      .contact-photo {
+        min-height: 300px;
+        border: 1px solid var(--border);
+      }
+      .contact-photo::after { border-right: none; border-bottom: 1px solid rgba(26,163,122,.2); }
+      .contact-text {
+        padding: 40px 28px;
+        border: 1px solid var(--border);
+        border-top: none;
+      }
+      .contact-links {
+        gap: 8px;
+      }
+      .contact-pill {
+        font-size: 8.5px;
+        padding: 10px 14px;
+      }
     }
   </style>
 </head>
 <body>
 
-<div id="cursor"></div>
+  <div id="cursor"></div>
 
-<!-- ═══════ NAV -->
-<nav>
-  <a class="nav-logo" href="#"><img src="logo.svg" alt="Tamime Kaddour" /></a>
-  <ul class="nav-links">
-    <li><a href="#about"    data-i18n="nav-about">About</a></li>
-    <li><a href="#work"     data-i18n="nav-work">Work</a></li>
-    <li><a href="#timeline" data-i18n="nav-experience">Experience</a></li>
-    <li><a href="#skills"   data-i18n="nav-skills">Skills</a></li>
-    <li><a href="#contact"  data-i18n="nav-contact">Contact</a></li>
-  </ul>
-  <div class="nav-cta">
-    <span class="nav-open" data-i18n="nav-open">Open to Projects</span>
-    <button class="btn-lang" id="btnLang" aria-label="Switch language">
-      <span class="lang-indicator"></span>
-      <span id="langLabel">FR</span>
-    </button>
-    <a class="btn-nav" href="#contact" data-i18n="nav-cta">Get in Touch</a>
-  </div>
-</nav>
+  <!-- ═══════ NAV -->
+  <nav>
+    <a class="nav-logo" href="#"><img src="logo.svg" alt="Tamime Kaddour" /></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#timeline">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-cta">
+      <span class="nav-open">Open to Projects</span>
+      <a class="btn-nav" href="#contact">Get in Touch</a>
+    </div>
+  </nav>
 
-<!-- ═══════ HERO -->
-<section id="hero">
-  <div class="hero-blur"></div>
-  <div class="hero-overlay"></div>
-  <div class="hero-sharp" id="heroSharp"></div>
-  <div class="hero-frame" id="heroFrame"></div>
-  <div class="hero-tags">
-    <span class="hero-tag-item" data-i18n="hero-tag-1">Art Director</span>
-    <span class="hero-tag-item" data-i18n="hero-tag-2">Brand Design</span>
-    <span class="hero-tag-item" data-i18n="hero-tag-3">Visual Identity</span>
-    <span class="hero-tag-item" data-i18n="hero-tag-4">Algiers, Algeria</span>
-  </div>
-  <div class="hero-bottom">
-    <span class="hero-name">Tamime Kaddour</span>
-    <span class="hero-role" data-i18n="hero-role">Art Director &amp; Graphic Designer</span>
-  </div>
-</section>
+  <!-- ═══════ HERO -->
+  <section id="hero">
+    <div class="hero-blur"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-sharp" id="heroSharp"></div>
+    <div class="hero-frame" id="heroFrame"></div>
+    <div class="hero-tags">
+      <span class="hero-tag-item">Art Director</span>
+      <span class="hero-tag-item">Brand Design</span>
+      <span class="hero-tag-item">Visual Identity</span>
+      <span class="hero-tag-item">Algiers, Algeria</span>
+    </div>
+    <div class="hero-bottom">
+      <span class="hero-name" id="heroName">Tamime Kaddour</span>
+      <span class="hero-role" id="heroRole">Art Director &amp; Graphic Designer</span>
+    </div>
+  </section>
 
-<!-- ═══════ MARQUEE -->
-<div class="marquee-strip">
-  <div class="marquee-track">
-    <div class="marquee-item"><img src="ps.svg" style="width:30px;height:30px;flex-shrink:0;" alt="Photoshop"/><span class="marquee-label">Photoshop</span></div>
-    <div class="marquee-item"><img src="ai.svg" style="width:30px;height:30px;flex-shrink:0;" alt="Illustrator"/><span class="marquee-label">Illustrator</span></div>
-    <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><polygon points="15,5 25,10 25,20 15,25 5,20 5,10" stroke="var(--green-mid)" stroke-width="1.2" fill="none"/><line x1="15" y1="5" x2="15" y2="15" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><line x1="25" y1="10" x2="15" y2="15" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><line x1="5" y1="10" x2="15" y2="15" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><circle cx="15" cy="15" r="2" fill="var(--green-mid)" opacity=".8"/></svg><span class="marquee-label">Cinema 4D</span></div>
-    <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><path d="M8 21l4.5-12 4.5 12" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><line x1="9.5" y1="17" x2="16.5" y2="17" stroke="var(--green-mid)" stroke-width="1.2" stroke-linecap="round"/><line x1="19" y1="10" x2="19" y2="21" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round"/><line x1="19" y1="15" x2="23" y2="15" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round"/></svg><span class="marquee-label">After Effects</span></div>
-    <div class="marquee-item"><img src="pr.svg" style="width:30px;height:30px;flex-shrink:0;" alt="Premiere Pro"/><span class="marquee-label">Premiere Pro</span></div>
-    <div class="marquee-item"><img src="id.svg" style="width:30px;height:30px;flex-shrink:0;" alt="InDesign"/><span class="marquee-label">InDesign</span></div>
-    <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><circle cx="15" cy="15" r="7.5" stroke="var(--green-mid)" stroke-width="1.2"/><circle cx="15" cy="15" r="3.2" stroke="var(--green-mid)" stroke-width="1.1"/><path d="M15 7.5v2M15 20.5v2M7.5 15h2M20.5 15h2" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round"/></svg><span class="marquee-label">Lightroom</span></div>
-    <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><circle cx="15" cy="15" r="9" stroke="var(--green-mid)" stroke-width="1.2"/><circle cx="15" cy="15" r="5" stroke="var(--green-mid)" stroke-width="1.1" opacity=".6"/><circle cx="15" cy="15" r="1.8" fill="var(--green-mid)"/><line x1="15" y1="6" x2="15" y2="10" stroke="var(--green-mid)" stroke-width="1" stroke-linecap="round"/><line x1="15" y1="20" x2="15" y2="24" stroke="var(--green-mid)" stroke-width="1" stroke-linecap="round"/></svg><span class="marquee-label">DaVinci Resolve</span></div>
-    <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><polygon points="15,6 25,22 5,22" stroke="var(--green-mid)" stroke-width="1.3" fill="none" stroke-linejoin="round"/><line x1="15" y1="6" x2="15" y2="22" stroke="var(--green-mid)" stroke-width=".85" opacity=".45" stroke-dasharray="2 2"/><line x1="10" y1="17" x2="20" y2="17" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round"/></svg><span class="marquee-label">ArchiCAD</span></div>
-    <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><rect x="5" y="9" width="20" height="13" rx="1" stroke="var(--green-mid)" stroke-width="1.2"/><line x1="5" y1="14" x2="25" y2="14" stroke="var(--green-mid)" stroke-width=".85" opacity=".45"/><circle cx="9" cy="11.5" r="1.2" fill="var(--green-mid)" opacity=".7"/><path d="M9 17.5l3 3 8-6" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" opacity=".8"/></svg><span class="marquee-label">Artlantis</span></div>
-    <!-- SET 2 duplicate -->
-    <div class="marquee-item"><img src="ps.svg" style="width:30px;height:30px;flex-shrink:0;" alt="Photoshop"/><span class="marquee-label">Photoshop</span></div>
-    <div class="marquee-item"><img src="ai.svg" style="width:30px;height:30px;flex-shrink:0;" alt="Illustrator"/><span class="marquee-label">Illustrator</span></div>
-    <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><polygon points="15,5 25,10 25,20 15,25 5,20 5,10" stroke="var(--green-mid)" stroke-width="1.2" fill="none"/><line x1="15" y1="5" x2="15" y2="15" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><line x1="25" y1="10" x2="15" y2="15" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><line x1="5" y1="10" x2="15" y2="15" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><circle cx="15" cy="15" r="2" fill="var(--green-mid)" opacity=".8"/></svg><span class="marquee-label">Cinema 4D</span></div>
-    <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><path d="M8 21l4.5-12 4.5 12" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><line x1="9.5" y1="17" x2="16.5" y2="17" stroke="var(--green-mid)" stroke-width="1.2" stroke-linecap="round"/><line x1="19" y1="10" x2="19" y2="21" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round"/><line x1="19" y1="15" x2="23" y2="15" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round"/></svg><span class="marquee-label">After Effects</span></div>
-    <div class="marquee-item"><img src="pr.svg" style="width:30px;height:30px;flex-shrink:0;" alt="Premiere Pro"/><span class="marquee-label">Premiere Pro</span></div>
-    <div class="marquee-item"><img src="id.svg" style="width:30px;height:30px;flex-shrink:0;" alt="InDesign"/><span class="marquee-label">InDesign</span></div>
-    <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><circle cx="15" cy="15" r="7.5" stroke="var(--green-mid)" stroke-width="1.2"/><circle cx="15" cy="15" r="3.2" stroke="var(--green-mid)" stroke-width="1.1"/><path d="M15 7.5v2M15 20.5v2M7.5 15h2M20.5 15h2" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round"/></svg><span class="marquee-label">Lightroom</span></div>
-    <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><circle cx="15" cy="15" r="9" stroke="var(--green-mid)" stroke-width="1.2"/><circle cx="15" cy="15" r="5" stroke="var(--green-mid)" stroke-width="1.1" opacity=".6"/><circle cx="15" cy="15" r="1.8" fill="var(--green-mid)"/><line x1="15" y1="6" x2="15" y2="10" stroke="var(--green-mid)" stroke-width="1" stroke-linecap="round"/><line x1="15" y1="20" x2="15" y2="24" stroke="var(--green-mid)" stroke-width="1" stroke-linecap="round"/></svg><span class="marquee-label">DaVinci Resolve</span></div>
-    <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><polygon points="15,6 25,22 5,22" stroke="var(--green-mid)" stroke-width="1.3" fill="none" stroke-linejoin="round"/><line x1="15" y1="6" x2="15" y2="22" stroke="var(--green-mid)" stroke-width=".85" opacity=".45" stroke-dasharray="2 2"/><line x1="10" y1="17" x2="20" y2="17" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round"/></svg><span class="marquee-label">ArchiCAD</span></div>
-    <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><rect x="5" y="9" width="20" height="13" rx="1" stroke="var(--green-mid)" stroke-width="1.2"/><line x1="5" y1="14" x2="25" y2="14" stroke="var(--green-mid)" stroke-width=".85" opacity=".45"/><circle cx="9" cy="11.5" r="1.2" fill="var(--green-mid)" opacity=".7"/><path d="M9 17.5l3 3 8-6" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" opacity=".8"/></svg><span class="marquee-label">Artlantis</span></div>
-  </div>
-</div>
-
-<!-- ═══════ ABOUT -->
-<section id="about">
-  <p class="section-eyebrow reveal" data-i18n="about-eyebrow">About</p>
-  <h2 class="about-heading reveal" data-i18n-html="about-heading">I turn visual thinking into<br><em>clear, lasting identities</em><br>that resonate.</h2>
-  <p class="about-body reveal" data-i18n="about-body-1">I'm a graphic designer and visual creator based in Algiers with more than a decade of experience across branding, digital design, and visual communication.</p>
-  <p class="about-body reveal" data-i18n="about-body-2">My work focuses on creating clear and effective visual identities while exploring new creative tools and techniques. From traditional graphic design to motion, 3D, and AI-assisted creation, I enjoy building visual systems that are both meaningful and visually refined.</p>
-  <p class="about-body reveal" data-i18n="about-body-3">Curiosity and experimentation are central to my process. I believe strong design emerges from understanding real needs and translating them into thoughtful visual solutions.</p>
-  <div class="reveal" style="display:flex;justify-content:center;margin-bottom:64px;">
-    <div class="about-stats">
-      <div class="stat"><div class="stat-num">15<sup>+</sup></div><div class="stat-label" data-i18n="stat-label-1">Years Exp.</div></div>
-      <div class="stat"><div class="stat-num">6<sup>+</sup></div><div class="stat-label" data-i18n="stat-label-2">Studios</div></div>
-      <div class="stat"><div class="stat-num">7<sup>+</sup></div><div class="stat-label" data-i18n="stat-label-3">Disciplines</div></div>
+  <!-- ═══════ MARQUEE -->
+  <div class="marquee-strip">
+    <div class="marquee-track">
+      <div class="marquee-item"><img src="ps.svg" style="width:30px;height:30px;flex-shrink:0;" alt="Photoshop" /><span class="marquee-label">Photoshop</span></div>
+      <div class="marquee-item"><img src="ai.svg" style="width:30px;height:30px;flex-shrink:0;" alt="Illustrator" /><span class="marquee-label">Illustrator</span></div>
+      <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><polygon points="15,5 25,10 25,20 15,25 5,20 5,10" stroke="var(--green-mid)" stroke-width="1.2" fill="none"/><line x1="15" y1="5" x2="15" y2="15" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><line x1="25" y1="10" x2="15" y2="15" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><line x1="5" y1="10" x2="15" y2="15" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><circle cx="15" cy="15" r="2" fill="var(--green-mid)" opacity=".8"/></svg><span class="marquee-label">Cinema 4D</span></div>
+      <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><path d="M8 21l4.5-12 4.5 12" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><line x1="9.5" y1="17" x2="16.5" y2="17" stroke="var(--green-mid)" stroke-width="1.2" stroke-linecap="round"/><line x1="19" y1="10" x2="19" y2="21" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round"/><line x1="19" y1="15" x2="23" y2="15" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round"/></svg><span class="marquee-label">After Effects</span></div>
+      <div class="marquee-item"><img src="pr.svg" style="width:30px;height:30px;flex-shrink:0;" alt="Premiere Pro" /><span class="marquee-label">Premiere Pro</span></div>
+      <div class="marquee-item"><img src="id.svg" style="width:30px;height:30px;flex-shrink:0;" alt="InDesign" /><span class="marquee-label">InDesign</span></div>
+      <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><circle cx="15" cy="15" r="7.5" stroke="var(--green-mid)" stroke-width="1.2"/><circle cx="15" cy="15" r="3.2" stroke="var(--green-mid)" stroke-width="1.1"/><path d="M15 7.5v2M15 20.5v2M7.5 15h2M20.5 15h2" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round"/></svg><span class="marquee-label">Lightroom</span></div>
+      <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><circle cx="15" cy="15" r="9" stroke="var(--green-mid)" stroke-width="1.2"/><circle cx="15" cy="15" r="5" stroke="var(--green-mid)" stroke-width="1.1" opacity=".6"/><circle cx="15" cy="15" r="1.8" fill="var(--green-mid)"/><line x1="15" y1="6" x2="15" y2="10" stroke="var(--green-mid)" stroke-width="1" stroke-linecap="round"/><line x1="15" y1="20" x2="15" y2="24" stroke="var(--green-mid)" stroke-width="1" stroke-linecap="round"/></svg><span class="marquee-label">DaVinci Resolve</span></div>
+      <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><polygon points="15,6 25,22 5,22" stroke="var(--green-mid)" stroke-width="1.3" fill="none" stroke-linejoin="round"/><line x1="15" y1="6" x2="15" y2="22" stroke="var(--green-mid)" stroke-width=".85" opacity=".45" stroke-dasharray="2 2"/><line x1="10" y1="17" x2="20" y2="17" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round"/></svg><span class="marquee-label">ArchiCAD</span></div>
+      <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><rect x="5" y="9" width="20" height="13" rx="1" stroke="var(--green-mid)" stroke-width="1.2"/><line x1="5" y1="14" x2="25" y2="14" stroke="var(--green-mid)" stroke-width=".85" opacity=".45"/><circle cx="9" cy="11.5" r="1.2" fill="var(--green-mid)" opacity=".7"/><path d="M9 17.5l3 3 8-6" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" opacity=".8"/></svg><span class="marquee-label">Artlantis</span></div>
+      <!-- SET 2 duplicate -->
+      <div class="marquee-item"><img src="ps.svg" style="width:30px;height:30px;flex-shrink:0;" alt="Photoshop" /><span class="marquee-label">Photoshop</span></div>
+      <div class="marquee-item"><img src="ai.svg" style="width:30px;height:30px;flex-shrink:0;" alt="Illustrator" /><span class="marquee-label">Illustrator</span></div>
+      <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><polygon points="15,5 25,10 25,20 15,25 5,20 5,10" stroke="var(--green-mid)" stroke-width="1.2" fill="none"/><line x1="15" y1="5" x2="15" y2="15" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><line x1="25" y1="10" x2="15" y2="15" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><line x1="5" y1="10" x2="15" y2="15" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><circle cx="15" cy="15" r="2" fill="var(--green-mid)" opacity=".8"/></svg><span class="marquee-label">Cinema 4D</span></div>
+      <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><path d="M8 21l4.5-12 4.5 12" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><line x1="9.5" y1="17" x2="16.5" y2="17" stroke="var(--green-mid)" stroke-width="1.2" stroke-linecap="round"/><line x1="19" y1="10" x2="19" y2="21" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round"/><line x1="19" y1="15" x2="23" y2="15" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round"/></svg><span class="marquee-label">After Effects</span></div>
+      <div class="marquee-item"><img src="pr.svg" style="width:30px;height:30px;flex-shrink:0;" alt="Premiere Pro" /><span class="marquee-label">Premiere Pro</span></div>
+      <div class="marquee-item"><img src="id.svg" style="width:30px;height:30px;flex-shrink:0;" alt="InDesign" /><span class="marquee-label">InDesign</span></div>
+      <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><circle cx="15" cy="15" r="7.5" stroke="var(--green-mid)" stroke-width="1.2"/><circle cx="15" cy="15" r="3.2" stroke="var(--green-mid)" stroke-width="1.1"/><path d="M15 7.5v2M15 20.5v2M7.5 15h2M20.5 15h2" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round"/></svg><span class="marquee-label">Lightroom</span></div>
+      <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><circle cx="15" cy="15" r="9" stroke="var(--green-mid)" stroke-width="1.2"/><circle cx="15" cy="15" r="5" stroke="var(--green-mid)" stroke-width="1.1" opacity=".6"/><circle cx="15" cy="15" r="1.8" fill="var(--green-mid)"/><line x1="15" y1="6" x2="15" y2="10" stroke="var(--green-mid)" stroke-width="1" stroke-linecap="round"/><line x1="15" y1="20" x2="15" y2="24" stroke="var(--green-mid)" stroke-width="1" stroke-linecap="round"/></svg><span class="marquee-label">DaVinci Resolve</span></div>
+      <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><polygon points="15,6 25,22 5,22" stroke="var(--green-mid)" stroke-width="1.3" fill="none" stroke-linejoin="round"/><line x1="15" y1="6" x2="15" y2="22" stroke="var(--green-mid)" stroke-width=".85" opacity=".45" stroke-dasharray="2 2"/><line x1="10" y1="17" x2="20" y2="17" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round"/></svg><span class="marquee-label">ArchiCAD</span></div>
+      <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><rect x="5" y="9" width="20" height="13" rx="1" stroke="var(--green-mid)" stroke-width="1.2"/><line x1="5" y1="14" x2="25" y2="14" stroke="var(--green-mid)" stroke-width=".85" opacity=".45"/><circle cx="9" cy="11.5" r="1.2" fill="var(--green-mid)" opacity=".7"/><path d="M9 17.5l3 3 8-6" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" opacity=".8"/></svg><span class="marquee-label">Artlantis</span></div>
     </div>
   </div>
-  <div class="about-disciplines reveal">
-    <span class="disc-tag" data-i18n="disc-brand">Brand Identity</span>
-    <span class="disc-tag" data-i18n="disc-graphic">Graphic Design</span>
-    <span class="disc-tag" data-i18n="disc-motion">Motion Design</span>
-    <span class="disc-tag" data-i18n="disc-3d">3D Visualization</span>
-    <span class="disc-tag" data-i18n="disc-ui">UI Concepts</span>
-    <span class="disc-tag" data-i18n="disc-story">Visual Storytelling</span>
-    <span class="disc-tag" data-i18n="disc-ad">Art Direction</span>
-    <span class="disc-tag" data-i18n="disc-print">Print Design</span>
-    <span class="disc-tag" data-i18n="disc-photo">Photography</span>
-    <span class="disc-tag" data-i18n="disc-ai">AI Creation</span>
-  </div>
-</section>
 
-<!-- ═══════ SERVICES -->
-<section id="services">
-  <p class="section-eyebrow reveal" data-i18n="services-eyebrow">Services</p>
-  <h2 class="services-heading reveal" data-i18n-html="services-heading">What I do &amp; <em>How I do it</em></h2>
-  <p class="services-tagline reveal" data-i18n="services-tagline">Three disciplines, one principle: every visual should earn its place and leave a mark.</p>
-  <div class="services-grid">
-    <div class="service-card reveal">
-      <div class="service-icon-wrap"><svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="12" stroke="var(--green-mid)" stroke-width="1.3"/><circle cx="14" cy="14" r="7" stroke="var(--green-mid)" stroke-width="1.2"/><circle cx="14" cy="14" r="2.5" fill="var(--green-mid)"/></svg></div>
-      <h3 class="service-title" data-i18n-html="service-1-title">Bold Branding &amp; Visual Identity</h3>
-      <p class="service-desc" data-i18n="service-1-desc">Building timeless brands with sharp logos, cohesive guidelines, and strong visual storytelling that connect instantly.</p>
-    </div>
-    <div class="service-card reveal">
-      <div class="service-icon-wrap"><svg viewBox="0 0 28 28" fill="none"><rect x="2" y="3" width="24" height="17" rx="1.5" stroke="var(--green-mid)" stroke-width="1.3"/><line x1="9" y1="20" x2="19" y2="20" stroke="var(--green-mid)" stroke-width="1.2"/><line x1="14" y1="20" x2="14" y2="24" stroke="var(--green-mid)" stroke-width="1.2"/><line x1="8" y1="24" x2="20" y2="24" stroke="var(--green-mid)" stroke-width="1.2"/></svg></div>
-      <h3 class="service-title" data-i18n-html="service-2-title">Smart Digital Design &amp; Interfaces</h3>
-      <p class="service-desc" data-i18n="service-2-desc">Designing smooth, modern, and human-centered experiences across apps, websites, and social content.</p>
-    </div>
-    <div class="service-card reveal">
-      <div class="service-icon-wrap"><svg viewBox="0 0 28 28" fill="none"><polygon points="14,2 26,8 26,20 14,26 2,20 2,8" stroke="var(--green-mid)" stroke-width="1.3" fill="none"/><line x1="14" y1="2" x2="14" y2="14" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><line x1="26" y1="8" x2="14" y2="14" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><line x1="2" y1="8" x2="14" y2="14" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><circle cx="14" cy="14" r="2" fill="var(--green-mid)" opacity=".9"/></svg></div>
-      <h3 class="service-title" data-i18n-html="service-3-title">Motion, 3D &amp; Creative Exploration</h3>
-      <p class="service-desc" data-i18n="service-3-desc">From motion graphics and editing to 3D worlds and experimental tools — pushing ideas beyond static design.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════ WORK -->
-<section id="work">
-  <p class="section-eyebrow reveal" data-i18n="work-eyebrow">Work</p>
-  <h2 class="work-title reveal" data-i18n-html="work-title">Selected<br><em>Projects</em></h2>
-  <div class="projects-grid" id="projectsGrid"></div>
-</section>
-
-<!-- ═══════ TIMELINE -->
-<section id="timeline">
-  <p class="section-eyebrow reveal" data-i18n="timeline-eyebrow">Experience</p>
-  <h2 class="section-title reveal" data-i18n-html="timeline-heading">Professional <em>Journey</em></h2>
-  <p class="timeline-intro reveal" data-i18n="timeline-intro">Tracing a path from studies to practice — blending creativity with technical skills across fifteen years of continuous growth.</p>
-  <div class="timeline-wrap">
-    <div class="timeline-item reveal">
-      <div class="tl-left"></div><div class="tl-center"><div class="tl-dot"></div></div>
-      <div class="tl-right"><p class="tl-date">2007 – 2010</p><p class="tl-company">Artistimo Art School</p><p class="tl-role" data-i18n="tl-role-0">BTS Graphic Design</p><p class="tl-desc" data-i18n="tl-desc-0">Higher Technician Certificate in Art and Graphic Communication. Parallel self-training in Illustrator, After Effects, Premiere, Cinema 4D.</p></div>
-    </div>
-    <div class="timeline-item reveal">
-      <div class="tl-left"><p class="tl-date">2010 – 2011</p><p class="tl-company">Initiative Architecture</p><p class="tl-role" data-i18n="tl-role-1">Graphic Designer</p><p class="tl-desc" data-i18n="tl-desc-1">Architectural plans, façade processing, and lithographic work. First professional environment at the crossroads of design and architecture.</p><p class="tl-tools">Photoshop · Illustrator · Archicad · Artlantis</p></div>
-      <div class="tl-center"><div class="tl-dot"></div></div><div class="tl-right"></div>
-    </div>
-    <div class="timeline-item reveal">
-      <div class="tl-left"></div><div class="tl-center"><div class="tl-dot"></div></div>
-      <div class="tl-right"><p class="tl-date">2011 – 2016</p><p class="tl-company">Intellix-Communication</p><p class="tl-role" data-i18n="tl-role-2">Graphic Designer</p><p class="tl-desc" data-i18n="tl-desc-2">Web design, graphic design, print, animations, and photography. Five years of technical breadth across multiple production domains.</p><p class="tl-tools">Photoshop · Illustrator · InDesign · Flash · After Effects</p></div>
-    </div>
-    <div class="timeline-item reveal">
-      <div class="tl-left"><p class="tl-date">2017 – 2018</p><p class="tl-company">Wellcom Advertising</p><p class="tl-role" data-i18n="tl-role-3">Graphic Designer</p><p class="tl-desc" data-i18n="tl-desc-3">Graphic design, digital communication, motion animations, and video editing in an advertising production environment.</p><p class="tl-tools">Photoshop · Illustrator · Lightroom · After Effects · Premiere · DaVinci</p></div>
-      <div class="tl-center"><div class="tl-dot"></div></div><div class="tl-right"></div>
-    </div>
-    <div class="timeline-item reveal">
-      <div class="tl-left"></div><div class="tl-center"><div class="tl-dot"></div></div>
-      <div class="tl-right"><p class="tl-date">2018 – 2019</p><p class="tl-company">IDH Tours</p><p class="tl-role" data-i18n="tl-role-4">Graphic Designer</p><p class="tl-desc" data-i18n="tl-desc-4">Graphic design, animation, and motion video presentations for client-facing communication in the travel sector.</p><p class="tl-tools">Photoshop · Illustrator · After Effects · Premiere</p></div>
-    </div>
-    <div class="timeline-item reveal">
-      <div class="tl-left"><p class="tl-date">2020 – 2021</p><p class="tl-company">Nexus Digital Solutions</p><p class="tl-role" data-i18n="tl-role-5">Graphic Designer &amp; Art Director</p><p class="tl-desc" data-i18n="tl-desc-5">Led creative direction across brand guidelines, digital content, 3D modeling, animations, editing, and print. First senior creative leadership role.</p><p class="tl-tools">Photoshop · Illustrator · Lightroom · After Effects · Premiere · Cinema 4D</p></div>
-      <div class="tl-center"><div class="tl-dot"></div></div><div class="tl-right"></div>
-    </div>
-    <div class="timeline-item reveal">
-      <div class="tl-left"></div><div class="tl-center"><div class="tl-dot active"></div></div>
-      <div class="tl-right"><p class="tl-date" data-i18n="tl-date-6">2022 – Today</p><p class="tl-company">Guiddini</p><p class="tl-role" data-i18n="tl-role-6">Art Director &amp; Graphic Designer</p><p class="tl-desc" data-i18n="tl-desc-6">Managing graphic design, brand guidelines, website &amp; app design, digital content, 3D modeling, animations, editing, print, and illustrations. Integrating generative AI tools into the creative production workflow.</p><p class="tl-tools">Photoshop · Illustrator · Cinema 4D · After Effects · Premiere · AI Tools</p></div>
-    </div>
-    <div class="timeline-item reveal">
-      <div class="tl-left"><p class="tl-date" data-i18n="tl-date-7">All along</p><p class="tl-company">Freelance &amp; Consulting</p><p class="tl-role" data-i18n="tl-role-7">Graphic Designer &amp; Trainer</p><p class="tl-desc" data-i18n="tl-desc-7">Brand communication for COMICCON Algeria. UIA website mockups. Brand identity, graphic guidelines, furniture and interior design. Graphic design trainer at Miquat School.</p><p class="tl-tools" data-i18n="tl-tools-7">Full stack creative · Training · Consulting</p></div>
-      <div class="tl-center"><div class="tl-dot"></div></div><div class="tl-right"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════ SKILLS -->
-<section id="skills">
-  <p class="section-eyebrow reveal" data-i18n="skills-eyebrow">Skills</p>
-  <h2 class="skills-heading reveal" data-i18n-html="skills-heading">Creative <em>Tools</em> &amp; Disciplines</h2>
-  <div class="skills-cols reveal">
-    <div class="skills-col">
-      <p class="skills-col-title" data-i18n="skills-col-1">Disciplines</p>
-      <div class="skills-tags">
-        <span class="s-tag" data-i18n="disc-brand">Brand Identity</span>
-        <span class="s-tag" data-i18n="disc-graphic">Graphic Design</span>
-        <span class="s-tag" data-i18n="disc-motion">Motion Design</span>
-        <span class="s-tag" data-i18n="disc-3d">3D Visualization</span>
-        <span class="s-tag" data-i18n="disc-ui">UI Concepts</span>
-        <span class="s-tag" data-i18n="disc-story">Visual Storytelling</span>
-        <span class="s-tag" data-i18n="disc-ad">Art Direction</span>
-        <span class="s-tag" data-i18n="disc-print">Print Design</span>
-        <span class="s-tag" data-i18n="disc-photo">Photography</span>
-        <span class="s-tag" data-i18n="disc-ai">AI Creation</span>
+  <!-- ═══════ ABOUT -->
+  <section id="about">
+    <p class="section-eyebrow reveal">About</p>
+    <h2 class="about-heading reveal">
+      I turn visual thinking into<br>
+      <em>clear, lasting identities</em><br>
+      that resonate.
+    </h2>
+    <p class="about-body reveal">I'm a graphic designer and visual creator based in Algiers with more than a decade of experience across branding, digital design, and visual communication.</p>
+    <p class="about-body reveal">My work focuses on creating clear and effective visual identities while exploring new creative tools and techniques. From traditional graphic design to motion, 3D, and AI-assisted creation, I enjoy building visual systems that are both meaningful and visually refined.</p>
+    <p class="about-body reveal">Curiosity and experimentation are central to my process. I believe strong design emerges from understanding real needs and translating them into thoughtful visual solutions.</p>
+    <div class="reveal" style="display:flex;justify-content:center;margin-bottom:64px;">
+      <div class="about-stats">
+        <div class="stat"><div class="stat-num">15<sup>+</sup></div><div class="stat-label">Years Exp.</div></div>
+        <div class="stat"><div class="stat-num">6<sup>+</sup></div><div class="stat-label">Studios</div></div>
+        <div class="stat"><div class="stat-num">7<sup>+</sup></div><div class="stat-label">Disciplines</div></div>
       </div>
     </div>
-    <div class="skills-col">
-      <p class="skills-col-title" data-i18n="skills-col-2">Focus Areas</p>
-      <div class="skills-tags">
-        <span class="s-tag" data-i18n="focus-strategy">Brand Strategy</span>
-        <span class="s-tag" data-i18n="focus-vis">Visual Identity Systems</span>
-        <span class="s-tag" data-i18n="focus-logo">Logo Design</span>
-        <span class="s-tag" data-i18n="focus-guidelines">Design Guidelines</span>
-        <span class="s-tag" data-i18n="focus-social">Social Media Content</span>
-        <span class="s-tag" data-i18n="focus-video">Video Editing</span>
-        <span class="s-tag" data-i18n="focus-3d">3D Stands &amp; Events</span>
-        <span class="s-tag" data-i18n="focus-int">Interior Visualization</span>
-        <span class="s-tag" data-i18n="focus-illus">Illustration</span>
-        <span class="s-tag" data-i18n="focus-prompt">Prompt Engineering</span>
+    <div class="about-disciplines reveal">
+      <span class="disc-tag">Brand Identity</span><span class="disc-tag">Graphic Design</span>
+      <span class="disc-tag">Motion Design</span><span class="disc-tag">3D Visualization</span>
+      <span class="disc-tag">UI Concepts</span><span class="disc-tag">Visual Storytelling</span>
+      <span class="disc-tag">Art Direction</span><span class="disc-tag">Print Design</span>
+      <span class="disc-tag">Photography</span><span class="disc-tag">AI Creation</span>
+    </div>
+  </section>
+
+  <!-- ═══════ SERVICES -->
+  <section id="services">
+    <p class="section-eyebrow reveal">Services</p>
+    <h2 class="services-heading reveal">What I do &amp; <em>How I do it</em></h2>
+    <p class="services-tagline reveal">Three disciplines, one principle: every visual should earn its place and leave a mark.</p>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon-wrap"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="14" r="12" stroke="var(--green-mid)" stroke-width="1.3"/><circle cx="14" cy="14" r="7" stroke="var(--green-mid)" stroke-width="1.2"/><circle cx="14" cy="14" r="2.5" fill="var(--green-mid)"/></svg></div>
+        <h3 class="service-title">Bold Branding &amp; Visual Identity</h3>
+        <p class="service-desc">Building timeless brands with sharp logos, cohesive guidelines, and strong visual storytelling that connect instantly.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon-wrap"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="24" height="17" rx="1.5" stroke="var(--green-mid)" stroke-width="1.3"/><line x1="9" y1="20" x2="19" y2="20" stroke="var(--green-mid)" stroke-width="1.2"/><line x1="14" y1="20" x2="14" y2="24" stroke="var(--green-mid)" stroke-width="1.2"/><line x1="8" y1="24" x2="20" y2="24" stroke="var(--green-mid)" stroke-width="1.2"/></svg></div>
+        <h3 class="service-title">Smart Digital Design &amp; Interfaces</h3>
+        <p class="service-desc">Designing smooth, modern, and human-centered experiences across apps, websites, and social content.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon-wrap"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="14,2 26,8 26,20 14,26 2,20 2,8" stroke="var(--green-mid)" stroke-width="1.3" fill="none"/><line x1="14" y1="2" x2="14" y2="14" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><line x1="26" y1="8" x2="14" y2="14" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><line x1="2" y1="8" x2="14" y2="14" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><circle cx="14" cy="14" r="2" fill="var(--green-mid)" opacity=".9"/></svg></div>
+        <h3 class="service-title">Motion, 3D &amp; Creative Exploration</h3>
+        <p class="service-desc">From motion graphics and editing to 3D worlds and experimental tools — pushing ideas beyond static design.</p>
       </div>
     </div>
-  </div>
-  <div class="skill-bars reveal">
-    <div class="skill-bar-item"><span class="skill-bar-name">Photoshop</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:90%"></div></div><span class="skill-bar-pct">90%</span></div>
-    <div class="skill-bar-item"><span class="skill-bar-name">Illustrator</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:90%"></div></div><span class="skill-bar-pct">90%</span></div>
-    <div class="skill-bar-item"><span class="skill-bar-name">Cinema 4D</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:75%"></div></div><span class="skill-bar-pct">75%</span></div>
-    <div class="skill-bar-item"><span class="skill-bar-name">After Effects</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:60%"></div></div><span class="skill-bar-pct">60%</span></div>
-    <div class="skill-bar-item"><span class="skill-bar-name">Premiere Pro</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:60%"></div></div><span class="skill-bar-pct">60%</span></div>
-    <div class="skill-bar-item"><span class="skill-bar-name">InDesign</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:40%"></div></div><span class="skill-bar-pct">40%</span></div>
-  </div>
-</section>
+  </section>
 
-<!-- ═══════ CONTACT -->
-<section id="contact">
-  <p class="section-eyebrow reveal" data-i18n="contact-eyebrow">Contact</p>
-  <div class="contact-inner">
-    <div class="contact-photo reveal"><img src="photo2.jpg" alt="Tamime Kaddour" /></div>
-    <div class="reveal">
-      <h2 class="contact-heading" data-i18n-html="contact-heading">Got a brief?<br>A spark? <em>Let's talk.</em></h2>
-      <p class="contact-desc" data-i18n="contact-desc">Whether it's a brand in the making or a concept that needs form — open to meaningful collaborations with people who value strong visual thinking.</p>
-      <div class="contact-btns">
-        <a class="btn-primary"   href="mailto:tamime.kaddour.b@gmail.com" data-i18n="contact-btn-primary">Get in Touch</a>
-        <a class="btn-secondary" href="https://www.behance.net/Tamime" target="_blank" data-i18n="contact-btn-secondary">View Behance</a>
+  <!-- ═══════ WORK -->
+  <section id="work">
+    <p class="section-eyebrow reveal">Work</p>
+    <h2 class="work-title reveal">Selected<br><em>Projects</em></h2>
+    <div class="projects-grid">
+      <div class="project-card wide reveal">
+        <div class="project-bg"><div class="project-placeholder"><span>Vidéo à venir</span></div></div>
+        <div class="project-overlay"></div>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4;width:64px;height:64px;border:1.5px solid rgba(246,230,209,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);backdrop-filter:blur(4px);pointer-events:none;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 5l10 5-10 5V5z" fill="rgba(246,230,209,.8)"/></svg>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Vidéo</span><span class="project-tag">Animation</span><span class="project-tag">Motion</span></div>
+          <p class="project-name">Vidéo & Animation — Projet 01</p>
+          <p class="project-meta">Client · 2024</p>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-bg"><div class="project-placeholder"><span>Screenshot à venir</span></div></div>
+        <div class="project-overlay"></div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Brand Identity</span><span class="project-tag">Visual Identity</span></div>
+          <p class="project-name">Brand Identity — Projet 02</p>
+          <p class="project-meta">Client · 2024</p>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-bg"><div class="project-placeholder"><span>Screenshot à venir</span></div></div>
+        <div class="project-overlay"></div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">3D</span><span class="project-tag">Render</span></div>
+          <p class="project-name">3D Exploration — Projet 03</p>
+          <p class="project-meta">Client · 2024</p>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-bg"><div class="project-placeholder"><span>Screenshot à venir</span></div></div>
+        <div class="project-overlay"></div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Digital Design</span><span class="project-tag">UI</span></div>
+          <p class="project-name">Digital Design — Projet 04</p>
+          <p class="project-meta">Client · 2023</p>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-bg"><div class="project-placeholder"><span>Screenshot à venir</span></div></div>
+        <div class="project-overlay"></div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Logotype</span><span class="project-tag">Brand</span></div>
+          <p class="project-name">Logotype — Projet 05</p>
+          <p class="project-meta">Client · 2023</p>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-bg"><div class="project-placeholder"><span>Photo à venir</span></div></div>
+        <div class="project-overlay"></div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name">Photography — Projet 06</p>
+          <p class="project-meta">Client · 2023</p>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="contact-pills-row reveal">
-    <a class="contact-pill" href="mailto:tamime.kaddour.b@gmail.com"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1" y="2.5" width="10" height="7" rx=".5"/><path d="M1 3.5L6 7l5-3.5"/></svg>tamime.kaddour.b@gmail.com</a>
-    <a class="contact-pill" href="tel:+213553157737"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M2 2.5c0 4.5 3.5 8 8 8l.5-2-2-.5-.5 1c-1.5-.5-3-2-3.5-3.5l1-.5L5 3 3 2.5z"/></svg>+213 55 31 57 73 37</a>
-    <a class="contact-pill" href="https://behance.net/Tamime" target="_blank"><svg viewBox="0 0 12 12" fill="currentColor" stroke="none"><path d="M1 2h4c1.2 0 2 .6 2 1.5S5.2 5 4 5H1V2z" opacity=".7"/><path d="M1 5h4.5C7 5 8 5.8 8 7s-1 2-2.5 2H1V5z"/><line x1="8" y1="2" x2="11" y2="2" stroke="currentColor" stroke-width="1.3"/><path d="M8 5c0-1.5 1-2.5 2-2.5s2 1 2 2.5H8z"/></svg>behance.net/Tamime</a>
-    <a class="contact-pill" href="https://instagram.com/morros.design" target="_blank"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1" y="1" width="10" height="10" rx="2.5"/><circle cx="6" cy="6" r="2.3"/><circle cx="9" cy="3" r=".5" fill="currentColor" stroke="none"/></svg>@morros.design</a>
-    <a class="contact-pill" href="https://www.linkedin.com/in/tamime-kaddour-22781995/" target="_blank"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="10" height="10" rx="1.5"/><line x1="3.5" y1="5" x2="3.5" y2="9"/><line x1="3.5" y1="3" x2="3.5" y2="3.5"/><path d="M6 9V6.5c0-1 .5-1.5 1.5-1.5S9 5.5 9 6.5V9"/></svg>LinkedIn</a>
-  </div>
-</section>
+  </section>
 
-<!-- ═══════ FOOTER -->
-<footer>
-  <p class="footer-copy" data-i18n="footer-rights">© 2026 Tamime Kaddour — All rights reserved</p>
-  <p class="footer-tag"  data-i18n="footer-tag">Ideas, well-dressed.</p>
-</footer>
-
-<!-- ═══════ CATEGORY OVERLAY -->
-<div id="catOverlay" class="cat-overlay">
-  <div class="cat-bar">
-    <div class="cat-bar-left">
-      <span class="cat-bar-eyebrow" data-i18n="overlay-eyebrow">Selected Work</span>
-      <h2 class="cat-bar-title" id="catTitle"></h2>
-      <span class="cat-bar-count" id="catCount"></span>
+  <!-- ═══════ TIMELINE -->
+  <section id="timeline">
+    <p class="section-eyebrow reveal">Experience</p>
+    <h2 class="section-title reveal">Professional <em>Journey</em></h2>
+    <p class="timeline-intro reveal">Tracing a path from studies to practice — blending creativity with technical skills across fifteen years of continuous growth.</p>
+    <div class="timeline-wrap">
+      <div class="timeline-item reveal">
+        <div class="tl-left"></div>
+        <div class="tl-center"><div class="tl-dot"></div></div>
+        <div class="tl-right"><p class="tl-date">2007 – 2010</p><p class="tl-company">Artistimo Art School</p><p class="tl-role">BTS Graphic Design</p><p class="tl-desc">Higher Technician Certificate in Art and Graphic Communication. Parallel self-training in Illustrator, After Effects, Premiere, Cinema 4D.</p></div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="tl-left"><p class="tl-date">2010 – 2011</p><p class="tl-company">Initiative Architecture</p><p class="tl-role">Graphic Designer</p><p class="tl-desc">Architectural plans, façade processing, and lithographic work. First professional environment at the crossroads of design and architecture.</p><p class="tl-tools">Photoshop · Illustrator · Archicad · Artlantis</p></div>
+        <div class="tl-center"><div class="tl-dot"></div></div>
+        <div class="tl-right"></div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="tl-left"></div>
+        <div class="tl-center"><div class="tl-dot"></div></div>
+        <div class="tl-right"><p class="tl-date">2011 – 2016</p><p class="tl-company">Intellix-Communication</p><p class="tl-role">Graphic Designer</p><p class="tl-desc">Web design, graphic design, print, animations, and photography. Five years of technical breadth across multiple production domains.</p><p class="tl-tools">Photoshop · Illustrator · InDesign · Flash · After Effects</p></div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="tl-left"><p class="tl-date">2017 – 2018</p><p class="tl-company">Wellcom Advertising</p><p class="tl-role">Graphic Designer</p><p class="tl-desc">Graphic design, digital communication, motion animations, and video editing in an advertising production environment.</p><p class="tl-tools">Photoshop · Illustrator · Lightroom · After Effects · Premiere · DaVinci</p></div>
+        <div class="tl-center"><div class="tl-dot"></div></div>
+        <div class="tl-right"></div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="tl-left"></div>
+        <div class="tl-center"><div class="tl-dot"></div></div>
+        <div class="tl-right"><p class="tl-date">2018 – 2019</p><p class="tl-company">IDH Tours</p><p class="tl-role">Graphic Designer</p><p class="tl-desc">Graphic design, animation, and motion video presentations for client-facing communication in the travel sector.</p><p class="tl-tools">Photoshop · Illustrator · After Effects · Premiere</p></div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="tl-left"><p class="tl-date">2020 – 2021</p><p class="tl-company">Nexus Digital Solutions</p><p class="tl-role">Graphic Designer &amp; Art Director</p><p class="tl-desc">Led creative direction across brand guidelines, digital content, 3D modeling, animations, editing, and print. First senior creative leadership role.</p><p class="tl-tools">Photoshop · Illustrator · Lightroom · After Effects · Premiere · Cinema 4D</p></div>
+        <div class="tl-center"><div class="tl-dot"></div></div>
+        <div class="tl-right"></div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="tl-left"></div>
+        <div class="tl-center"><div class="tl-dot active"></div></div>
+        <div class="tl-right"><p class="tl-date">2022 – Today</p><p class="tl-company">Guiddini</p><p class="tl-role">Art Director &amp; Graphic Designer</p><p class="tl-desc">Managing graphic design, brand guidelines, website &amp; app design, digital content, 3D modeling, animations, editing, print, and illustrations. Integrating generative AI tools into the creative production workflow.</p><p class="tl-tools">Photoshop · Illustrator · Cinema 4D · After Effects · Premiere · AI Tools</p></div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="tl-left"><p class="tl-date">All along</p><p class="tl-company">Freelance &amp; Consulting</p><p class="tl-role">Graphic Designer &amp; Trainer</p><p class="tl-desc">Brand communication for COMICCON Algeria. UIA website mockups. Brand identity, graphic guidelines, furniture and interior design. Graphic design trainer at Miquat School.</p><p class="tl-tools">Full stack creative · Training · Consulting</p></div>
+        <div class="tl-center"><div class="tl-dot"></div></div>
+        <div class="tl-right"></div>
+      </div>
     </div>
-    <button class="cat-close" id="catClose">
-      <svg viewBox="0 0 16 16"><line x1="2" y1="2" x2="14" y2="14"/><line x1="14" y1="2" x2="2" y2="14"/></svg>
-    </button>
-  </div>
-  <div class="cat-body"><div class="cat-grid" id="catGrid"></div></div>
-</div>
+  </section>
 
-<script>
-/* ══════════════════════════════════════════════════════
-   TRANSLATIONS
-══════════════════════════════════════════════════════ */
-const T = {
-  en: {
-    'nav-about':'About','nav-work':'Work','nav-experience':'Experience',
-    'nav-skills':'Skills','nav-contact':'Contact',
-    'nav-open':'Open to Projects','nav-cta':'Get in Touch',
-    'hero-role':'Art Director &amp; Graphic Designer',
-    'hero-tag-1':'Art Director','hero-tag-2':'Brand Design',
-    'hero-tag-3':'Visual Identity','hero-tag-4':'Algiers, Algeria',
-    'about-eyebrow':'About',
-    'about-heading':'I turn visual thinking into<br><em>clear, lasting identities</em><br>that resonate.',
-    'about-body-1':"I'm a graphic designer and visual creator based in Algiers with more than a decade of experience across branding, digital design, and visual communication.",
-    'about-body-2':'My work focuses on creating clear and effective visual identities while exploring new creative tools and techniques. From traditional graphic design to motion, 3D, and AI-assisted creation, I enjoy building visual systems that are both meaningful and visually refined.',
-    'about-body-3':'Curiosity and experimentation are central to my process. I believe strong design emerges from understanding real needs and translating them into thoughtful visual solutions.',
-    'stat-label-1':'Years Exp.','stat-label-2':'Studios','stat-label-3':'Disciplines',
-    'disc-brand':'Brand Identity','disc-graphic':'Graphic Design','disc-motion':'Motion Design',
-    'disc-3d':'3D Visualization','disc-ui':'UI Concepts','disc-story':'Visual Storytelling',
-    'disc-ad':'Art Direction','disc-print':'Print Design','disc-photo':'Photography','disc-ai':'AI Creation',
-    'services-eyebrow':'Services',
-    'services-heading':'What I do &amp; <em>How I do it</em>',
-    'services-tagline':'Three disciplines, one principle: every visual should earn its place and leave a mark.',
-    'service-1-title':'Bold Branding &amp; Visual Identity',
-    'service-1-desc':'Building timeless brands with sharp logos, cohesive guidelines, and strong visual storytelling that connect instantly.',
-    'service-2-title':'Smart Digital Design &amp; Interfaces',
-    'service-2-desc':'Designing smooth, modern, and human-centered experiences across apps, websites, and social content.',
-    'service-3-title':'Motion, 3D &amp; Creative Exploration',
-    'service-3-desc':'From motion graphics and editing to 3D worlds and experimental tools — pushing ideas beyond static design.',
-    'work-eyebrow':'Work','work-title':'Selected<br><em>Projects</em>',
-    'card-hint':'See projects',
-    'overlay-count-single':'1 project','overlay-count-plural':'projects',
-    'timeline-eyebrow':'Experience',
-    'timeline-heading':'Professional <em>Journey</em>',
-    'timeline-intro':'Tracing a path from studies to practice — blending creativity with technical skills across fifteen years of continuous growth.',
-    'tl-role-0':'BTS Graphic Design',
-    'tl-desc-0':'Higher Technician Certificate in Art and Graphic Communication. Parallel self-training in Illustrator, After Effects, Premiere, Cinema 4D.',
-    'tl-role-1':'Graphic Designer',
-    'tl-desc-1':'Architectural plans, façade processing, and lithographic work. First professional environment at the crossroads of design and architecture.',
-    'tl-role-2':'Graphic Designer',
-    'tl-desc-2':'Web design, graphic design, print, animations, and photography. Five years of technical breadth across multiple production domains.',
-    'tl-role-3':'Graphic Designer',
-    'tl-desc-3':'Graphic design, digital communication, motion animations, and video editing in an advertising production environment.',
-    'tl-role-4':'Graphic Designer',
-    'tl-desc-4':'Graphic design, animation, and motion video presentations for client-facing communication in the travel sector.',
-    'tl-role-5':'Graphic Designer &amp; Art Director',
-    'tl-desc-5':'Led creative direction across brand guidelines, digital content, 3D modeling, animations, editing, and print. First senior creative leadership role.',
-    'tl-date-6':'2022 – Today','tl-role-6':'Art Director &amp; Graphic Designer',
-    'tl-desc-6':'Managing graphic design, brand guidelines, website &amp; app design, digital content, 3D modeling, animations, editing, print, and illustrations. Integrating generative AI tools into the creative production workflow.',
-    'tl-date-7':'All along','tl-role-7':'Graphic Designer &amp; Trainer',
-    'tl-desc-7':'Brand communication for COMICCON Algeria. UIA website mockups. Brand identity, graphic guidelines, furniture and interior design. Graphic design trainer at Miquat School.',
-    'tl-tools-7':'Full stack creative · Training · Consulting',
-    'skills-eyebrow':'Skills','skills-heading':'Creative <em>Tools</em> &amp; Disciplines',
-    'skills-col-1':'Disciplines','skills-col-2':'Focus Areas',
-    'focus-strategy':'Brand Strategy','focus-vis':'Visual Identity Systems','focus-logo':'Logo Design',
-    'focus-guidelines':'Design Guidelines','focus-social':'Social Media Content','focus-video':'Video Editing',
-    'focus-3d':'3D Stands &amp; Events','focus-int':'Interior Visualization',
-    'focus-illus':'Illustration','focus-prompt':'Prompt Engineering',
-    'contact-eyebrow':'Contact',
-    'contact-heading':"Got a brief?<br>A spark? <em>Let's talk.</em>",
-    'contact-desc':"Whether it's a brand in the making or a concept that needs form — open to meaningful collaborations with people who value strong visual thinking.",
-    'contact-btn-primary':'Get in Touch','contact-btn-secondary':'View Behance',
-    'overlay-eyebrow':'Selected Work',
-    'footer-rights':'© 2026 Tamime Kaddour — All rights reserved',
-    'footer-tag':'Ideas, well-dressed.'
-  },
-  fr: {
-    'nav-about':'À propos','nav-work':'Travaux','nav-experience':'Expérience',
-    'nav-skills':'Compétences','nav-contact':'Contact',
-    'nav-open':'Disponible','nav-cta':'Me contacter',
-    'hero-role':'Directeur Artistique &amp; Designer Graphique',
-    'hero-tag-1':'Directeur Artistique','hero-tag-2':'Design de Marque',
-    'hero-tag-3':'Identité Visuelle','hero-tag-4':'Alger, Algérie',
-    'about-eyebrow':'À propos',
-    'about-heading':'Je transforme la pensée visuelle en<br><em>identités claires et durables</em><br>qui marquent.',
-    'about-body-1':"Directeur artistique et designer graphique basé à Alger, avec plus d'une décennie d'expérience en branding, design digital et communication visuelle.",
-    'about-body-2':"Mon travail vise à créer des identités visuelles claires et efficaces, en explorant constamment de nouveaux outils et techniques. Du design graphique traditionnel au motion, à la 3D et à la création assistée par IA, je construis des systèmes visuels à la fois signifiants et raffinés.",
-    'about-body-3':"La curiosité et l'expérimentation sont au cœur de ma démarche. Un design fort naît de la compréhension des besoins réels, traduits en solutions visuelles réfléchies.",
-    'stat-label-1':"Ans d'Exp.",'stat-label-2':'Studios','stat-label-3':'Disciplines',
-    'disc-brand':'Identité de Marque','disc-graphic':'Design Graphique','disc-motion':'Motion Design',
-    'disc-3d':'Visualisation 3D','disc-ui':'Concepts UI','disc-story':'Storytelling Visuel',
-    'disc-ad':'Direction Artistique','disc-print':'Design Print','disc-photo':'Photographie','disc-ai':'Création IA',
-    'services-eyebrow':'Services',
-    'services-heading':'Ce que je fais &amp; <em>Comment je le fais</em>',
-    'services-tagline':'Trois disciplines, un principe : chaque visuel doit mériter sa place et laisser une trace.',
-    'service-1-title':'Branding Fort &amp; Identité Visuelle',
-    'service-1-desc':'Création de marques intemporelles avec des logos percutants, des chartes graphiques cohérentes et un storytelling visuel fort.',
-    'service-2-title':'Design Digital &amp; Interfaces',
-    'service-2-desc':"Conception d'expériences fluides, modernes et centrées sur l'humain, pour apps, sites web et contenus réseaux sociaux.",
-    'service-3-title':'Motion, 3D &amp; Exploration Créative',
-    'service-3-desc':"Du motion design et du montage aux univers 3D et aux outils expérimentaux — pour pousser les idées au-delà du design statique.",
-    'work-eyebrow':'Travaux','work-title':'Projets<br><em>Sélectionnés</em>',
-    'card-hint':'Voir les projets',
-    'overlay-count-single':'1 projet','overlay-count-plural':'projets',
-    'timeline-eyebrow':'Expérience',
-    'timeline-heading':'Parcours <em>Professionnel</em>',
-    'timeline-intro':"Un chemin tracé des études à la pratique — alliant créativité et compétences techniques à travers quinze ans de croissance continue.",
-    'tl-role-0':'BTS Design Graphique',
-    'tl-desc-0':"BTS Art et Communication Graphique. Autoformation parallèle sur Illustrator, After Effects, Premiere, Cinema 4D.",
-    'tl-role-1':'Designer Graphique',
-    'tl-desc-1':"Plans architecturaux, traitement de façades et travaux lithographiques. Premier environnement professionnel à la croisée du design et de l'architecture.",
-    'tl-role-2':'Designer Graphique',
-    'tl-desc-2':"Web design, graphisme, print, animations et photographie. Cinq ans de polyvalence technique sur de multiples domaines de production.",
-    'tl-role-3':'Designer Graphique',
-    'tl-desc-3':"Graphisme, communication digitale, animations motion et montage vidéo dans un environnement de production publicitaire.",
-    'tl-role-4':'Designer Graphique',
-    'tl-desc-4':"Graphisme, animation et présentations vidéo motion pour la communication client dans le secteur du voyage.",
-    'tl-role-5':'Designer Graphique &amp; Directeur Artistique',
-    'tl-desc-5':"Direction créative sur chartes graphiques, contenus digitaux, modélisation 3D, animations, montage et print. Premier rôle de leadership créatif senior.",
-    'tl-date-6':"2022 – Aujourd'hui",'tl-role-6':'Directeur Artistique &amp; Designer Graphique',
-    'tl-desc-6':"Gestion du design graphique, chartes de marque, design web &amp; app, contenus digitaux, modélisation 3D, animations, montage, print et illustrations. Intégration des outils d'IA générative dans le workflow de production créative.",
-    'tl-date-7':'En continu','tl-role-7':'Designer Graphique &amp; Formateur',
-    'tl-desc-7':"Communication visuelle pour COMICCON Algérie. Maquettes site UIA. Identité visuelle, chartes graphiques, design mobilier et d'intérieur. Formateur en design graphique à Miquat School.",
-    'tl-tools-7':'Créatif polyvalent · Formation · Consulting',
-    'skills-eyebrow':'Compétences','skills-heading':'<em>Outils</em> Créatifs &amp; Disciplines',
-    'skills-col-1':'Disciplines','skills-col-2':'Domaines de Focus',
-    'focus-strategy':'Stratégie de Marque','focus-vis':'Systèmes d\'Identité Visuelle','focus-logo':'Design de Logo',
-    'focus-guidelines':'Chartes Graphiques','focus-social':'Contenus Réseaux Sociaux','focus-video':'Montage Vidéo',
-    'focus-3d':'Stands 3D &amp; Événements','focus-int':'Visualisation d\'Intérieur',
-    'focus-illus':'Illustration','focus-prompt':'Prompt Engineering',
-    'contact-eyebrow':'Contact',
-    'contact-heading':"Un brief ?<br>Une idée ? <em>On en parle.</em>",
-    'contact-desc':"Qu'il s'agisse d'une marque en construction ou d'un concept qui cherche sa forme — ouvert à des collaborations significatives avec ceux qui valorisent la pensée visuelle forte.",
-    'contact-btn-primary':'Me contacter','contact-btn-secondary':'Voir Behance',
-    'overlay-eyebrow':'Travaux Sélectionnés',
-    'footer-rights':'© 2026 Tamime Kaddour — Tous droits réservés',
-    'footer-tag':'Des idées bien habillées.'
-  }
-};
+  <!-- ═══════ SKILLS -->
+  <section id="skills">
+    <p class="section-eyebrow reveal">Skills</p>
+    <h2 class="skills-heading reveal">Creative <em>Tools</em> &amp; Disciplines</h2>
+    <div class="skills-cols reveal">
+      <div class="skills-col">
+        <p class="skills-col-title">Disciplines</p>
+        <div class="skills-tags">
+          <span class="s-tag">Brand Identity</span><span class="s-tag">Graphic Design</span>
+          <span class="s-tag">Motion Design</span><span class="s-tag">3D Visualization</span>
+          <span class="s-tag">UI Concepts</span><span class="s-tag">Visual Storytelling</span>
+          <span class="s-tag">Art Direction</span><span class="s-tag">Print Design</span>
+          <span class="s-tag">Photography</span><span class="s-tag">AI Creation</span>
+        </div>
+      </div>
+      <div class="skills-col">
+        <p class="skills-col-title">Focus Areas</p>
+        <div class="skills-tags">
+          <span class="s-tag">Brand Strategy</span><span class="s-tag">Visual Identity Systems</span>
+          <span class="s-tag">Logo Design</span><span class="s-tag">Design Guidelines</span>
+          <span class="s-tag">Social Media Content</span><span class="s-tag">Video Editing</span>
+          <span class="s-tag">3D Stands &amp; Events</span><span class="s-tag">Interior Visualization</span>
+          <span class="s-tag">Illustration</span><span class="s-tag">Prompt Engineering</span>
+        </div>
+      </div>
+    </div>
+    <div class="skill-bars reveal">
+      <div class="skill-bar-item"><span class="skill-bar-name">Photoshop</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:90%"></div></div><span class="skill-bar-pct">90%</span></div>
+      <div class="skill-bar-item"><span class="skill-bar-name">Illustrator</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:90%"></div></div><span class="skill-bar-pct">90%</span></div>
+      <div class="skill-bar-item"><span class="skill-bar-name">Cinema 4D</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:75%"></div></div><span class="skill-bar-pct">75%</span></div>
+      <div class="skill-bar-item"><span class="skill-bar-name">After Effects</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:60%"></div></div><span class="skill-bar-pct">60%</span></div>
+      <div class="skill-bar-item"><span class="skill-bar-name">Premiere Pro</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:60%"></div></div><span class="skill-bar-pct">60%</span></div>
+      <div class="skill-bar-item"><span class="skill-bar-name">InDesign</span><div class="skill-bar-track"><div class="skill-bar-fill" style="width:40%"></div></div><span class="skill-bar-pct">40%</span></div>
+    </div>
+  </section>
 
-let currentLang = 'en';
+  <!-- ═══════ CONTACT -->
+  <section id="contact">
+    <p class="section-eyebrow reveal">Contact</p>
 
-function applyLang(lang) {
-  const dict = T[lang];
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.dataset.i18n;
-    if (dict[key] !== undefined) el.textContent = dict[key];
-  });
-  document.querySelectorAll('[data-i18n-html]').forEach(el => {
-    const key = el.dataset.i18nHtml;
-    if (dict[key] !== undefined) el.innerHTML = dict[key];
-  });
-  document.documentElement.lang = lang;
-  document.getElementById('langLabel').textContent = lang === 'en' ? 'FR' : 'EN';
-  // Re-render card hints in the grid
-  document.querySelectorAll('.card-hint').forEach(el => {
-    const svg = el.querySelector('svg');
-    el.innerHTML = '';
-    if (svg) el.appendChild(svg);
-    el.appendChild(document.createTextNode(' ' + dict['card-hint']));
-  });
-}
+    <!-- Bloc centré : photo gauche | texte droite, même hauteur -->
+    <div class="contact-inner">
+      <div class="contact-photo reveal">
+        <img src="photo2.jpg" alt="Tamime Kaddour" />
+      </div>
+      <div class="contact-text reveal">
+        <h2 class="contact-heading">Got a brief?<br>A spark? <em>Let's talk.</em></h2>
+        <p class="contact-desc">Whether it's a brand in the making or a concept that needs form — open to meaningful collaborations with people who value strong visual thinking.</p>
+        <div class="contact-btns">
+          <a class="btn-primary"   href="mailto:tamime.kaddour.b@gmail.com">Get in Touch</a>
+          <a class="btn-secondary" href="https://www.behance.net/Tamime" target="_blank">View Behance</a>
+        </div>
+      </div>
+    </div>
 
-document.getElementById('btnLang').addEventListener('click', () => {
-  currentLang = currentLang === 'en' ? 'fr' : 'en';
-  applyLang(currentLang);
-});
+    <!-- Pills row — centrée sous le bloc -->
+    <div class="contact-links reveal">
+      <a class="contact-pill" href="mailto:tamime.kaddour.b@gmail.com">
+        <svg viewBox="0 0 12 12"><rect x="1" y="2.5" width="10" height="7" rx=".5"/><path d="M1 3.5L6 7l5-3.5"/></svg>
+        tamime.kaddour.b@gmail.com
+      </a>
+      <a class="contact-pill" href="tel:+213553157737">
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M2 2.5c0 4.5 3.5 8 8 8l.5-2-2-.5-.5 1c-1.5-.5-3-2-3.5-3.5l1-.5L5 3 3 2.5z"/></svg>
+        +213 55 31 57 73 37
+      </a>
+      <a class="contact-pill" href="https://behance.net/Tamime" target="_blank">
+        <svg viewBox="0 0 12 12"><path d="M1 2h4c1.2 0 2 .6 2 1.5S5.2 5 4 5H1V2z"/><path d="M1 5h4.5C7 5 8 5.8 8 7s-1 2-2.5 2H1V5z"/><line x1="8" y1="2" x2="11" y2="2"/><path d="M8 5c0-1.5 1-2.5 2-2.5s2 1 2 2.5H8z"/></svg>
+        behance.net/Tamime
+      </a>
+      <a class="contact-pill" href="https://instagram.com/morros.design" target="_blank">
+        <svg viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="2.5"/><circle cx="6" cy="6" r="2.3"/><circle cx="9" cy="3" r=".5" fill="currentColor" stroke="none"/></svg>
+        @morros.design
+      </a>
+      <a class="contact-pill" href="https://linkedin.com/in/tamime-kaddour" target="_blank">
+        <svg viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="1.5"/><line x1="3.5" y1="5" x2="3.5" y2="9"/><line x1="3.5" y1="3" x2="3.5" y2="3.5"/><path d="M6 5v4M6 6.5c0-1 3-1.5 3 .5V9"/></svg>
+        LinkedIn
+      </a>
+    </div>
+  </section>
 
-/* ══════════════════════════════════════════════════════
-   PROJECT DATA
-══════════════════════════════════════════════════════ */
-const PROJECTS = [
-  { id:'p01', category:'video', catLabel:'Vidéo & Animation', name:'Vidéo & Animation — Projet 01', meta:'Client · 2024', tags:['Vidéo','Animation','Motion'], type:'vimeo', vimeoId:'1173747074', wide:true },
-  { id:'p02', category:'brand', catLabel:'Brand Identity',    name:'Brand Identity — Projet 02',    meta:'Client · 2024', tags:['Brand Identity','Visual Identity'], type:'image', img:'' },
-  { id:'p03', category:'3d',    catLabel:'3D Modélisation',   name:'3D Modélisation — Projet 03',   meta:'Client · 2024', tags:['3D','Modélisation','Render'],       type:'image', img:'' },
-  { id:'p04', category:'digital',catLabel:'Digital Design',   name:'Digital Design — Projet 04',    meta:'Client · 2023', tags:['Digital Design','UI'],              type:'image', img:'' },
-  { id:'p05', category:'logo',  catLabel:'Logotype',          name:'Logotype — Projet 05',          meta:'Client · 2023', tags:['Logotype','Brand'],                 type:'image', img:'' },
-  { id:'p06', category:'photo', catLabel:'Photography',       name:'Photography — Projet 06',       meta:'Client · 2023', tags:['Photography'],                      type:'image', img:'' },
-  { id:'p07', category:'print', catLabel:'Print Design',      name:'Print — Projet 07',             meta:'Client · 2024', tags:['Print','Editorial'],                type:'image', img:'' }
-];
-const GRID_ORDER = ['p01','p02','p03','p04','p05','p06','p07'];
+  <!-- ═══════ FOOTER -->
+  <footer>
+    <p class="footer-copy">© 2025 Tamime Kaddour — All rights reserved</p>
+    <p class="footer-tag">Ideas, well-dressed.</p>
+  </footer>
 
-function tagsHtml(tags, cls) { return tags.map(t=>`<span class="${cls}">${t}</span>`).join(''); }
+  <script>
+    /* ── CURSOR */
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button, .service-card, .project-card').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('large'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('large'));
+    });
 
-function buildGrid() {
-  document.getElementById('projectsGrid').innerHTML = GRID_ORDER.map(id => {
-    const p = PROJECTS.find(x=>x.id===id); if (!p) return '';
-    const wideClass = p.wide ? ' wide' : '';
-    let bg = p.type==='vimeo'
-      ? `<div class="project-vimeo-wrap"><iframe id="vimeo-main-${p.id}" src="https://player.vimeo.com/video/${p.vimeoId}?autoplay=0&muted=1&loop=1&background=1&color=1aa37a&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`
-      : `<div class="project-bg">${p.img?`<img src="${p.img}" alt="${p.name}"/>`:'<div class="project-placeholder"><span>Screenshot à venir</span></div>'}</div>`;
-    return `<div class="project-card${wideClass} reveal" data-cat="${p.category}"${p.type==='vimeo'?' data-vimeo-id="'+p.id+'"':''}>
-      ${bg}<div class="project-overlay"></div>
-      <div class="card-hint"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M1 5h8M6 2l3 3-3 3"/></svg> ${T[currentLang]['card-hint']}</div>
-      <div class="project-info"><div class="project-tags">${tagsHtml(p.tags,'project-tag')}</div><p class="project-name">${p.name}</p><p class="project-meta">${p.meta}</p></div>
-    </div>`;
-  }).join('');
-}
+    /* ── HERO LENS */
+    const heroEl  = document.getElementById('hero');
+    const sharpEl = document.getElementById('heroSharp');
+    const frameEl = document.getElementById('heroFrame');
+    const FW = 340, FH = 420;
+    let lx = window.innerWidth / 2, ly = window.innerHeight / 2;
+    let tx = lx, ty = ly, frameVisible = false;
 
-function initVimeoScroll() {
-  if (!window.Vimeo) return;
-  document.querySelectorAll('[data-vimeo-id]').forEach(card => {
-    const iframe = document.getElementById('vimeo-main-'+card.dataset.vimeoId);
-    if (!iframe) return;
-    const player = new Vimeo.Player(iframe);
-    new IntersectionObserver(entries => {
-      entries.forEach(e => { e.intersectionRatio>=0.4?player.play().catch(()=>{}):player.pause().catch(()=>{}); });
-    }, { threshold:[0,0.4] }).observe(card);
-  });
-}
+    heroEl.addEventListener('mousemove', e => {
+      const r = heroEl.getBoundingClientRect();
+      tx = e.clientX - r.left;
+      ty = e.clientY - r.top;
+      if (!frameVisible) { frameVisible = true; frameEl.classList.add('visible'); }
+    });
+    heroEl.addEventListener('mouseleave', () => {
+      frameVisible = false;
+      frameEl.classList.remove('visible');
+      sharpEl.style.clipPath = 'inset(50% 50% 50% 50%)';
+    });
+    (function animFrame() {
+      lx += (tx - lx) * 0.075;
+      ly += (ty - ly) * 0.075;
+      const W = heroEl.offsetWidth, H = heroEl.offsetHeight;
+      frameEl.style.left = lx + 'px';
+      frameEl.style.top  = ly + 'px';
+      if (frameVisible) {
+        sharpEl.style.clipPath =
+          `inset(${ly - FH/2}px ${W - lx - FW/2}px ${H - ly - FH/2}px ${lx - FW/2}px)`;
+      }
+      requestAnimationFrame(animFrame);
+    })();
 
-/* ── Overlay */
-const overlay=document.getElementById('catOverlay'), catTitle=document.getElementById('catTitle'),
-      catCount=document.getElementById('catCount'), catGrid=document.getElementById('catGrid'),
-      catClose=document.getElementById('catClose');
-
-function openOverlay(cat) {
-  const list = PROJECTS.filter(p=>p.category===cat); if (!list.length) return;
-  catTitle.textContent = list[0].catLabel;
-  const n=list.length, dict=T[currentLang];
-  catCount.textContent = n===1 ? dict['overlay-count-single'] : `${n} ${dict['overlay-count-plural']}`;
-  catGrid.innerHTML = list.map(p => {
-    const solo=list.length===1&&!p.wide?' solo':'', wide=p.wide?' wide':'';
-    if (p.type==='vimeo') {
-      const embed = p.vimeoId!=='VOTRE_ID_VIMEO'
-        ? `<div class="vimeo-wrap"><iframe src="https://player.vimeo.com/video/${p.vimeoId}?autoplay=0&color=1aa37a&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`
-        : `<div class="vimeo-placeholder"><div class="vimeo-ph-inner"><svg width="52" height="52" viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="24" stroke="var(--green-mid)" stroke-width="1.2"/><path d="M21 17l16 9-16 9V17z" stroke="var(--green-mid)" stroke-width="1.3" fill="none"/></svg><p>ID Vimeo manquant</p></div></div>`;
-      return `<div class="ov-card ov-video${wide}${solo}">${embed}<div class="ov-video-info"><div class="ov-tags">${tagsHtml(p.tags,'ov-tag')}</div><p class="ov-name">${p.name}</p><p class="ov-meta">${p.meta}</p></div></div>`;
-    }
-    const inner=p.img?`<img src="${p.img}" alt="${p.name}"/>`:'<div class="ov-placeholder"><span>Screenshot à venir</span></div>';
-    return `<div class="ov-card${wide}${solo}"><div class="ov-card-bg">${inner}</div><div class="ov-card-grad"></div><div class="ov-info"><div class="ov-tags">${tagsHtml(p.tags,'ov-tag')}</div><p class="ov-name">${p.name}</p><p class="ov-meta">${p.meta}</p></div></div>`;
-  }).join('');
-  overlay.classList.add('open'); document.body.style.overflow='hidden';
-}
-function closeOverlay() {
-  overlay.classList.remove('open'); document.body.style.overflow='';
-  catGrid.querySelectorAll('iframe').forEach(f=>{f.src=f.src;});
-}
-catClose.addEventListener('click',closeOverlay);
-overlay.addEventListener('click',e=>{if(e.target===overlay)closeOverlay();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeOverlay();});
-document.getElementById('projectsGrid').addEventListener('click',e=>{
-  const card=e.target.closest('[data-cat]'); if(card)openOverlay(card.dataset.cat);
-});
-
-/* ── Cursor */
-const cur=document.getElementById('cursor');
-document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';});
-function hookCursor(){
-  document.querySelectorAll('a,button,.service-card,.project-card,.ov-card').forEach(el=>{
-    el.addEventListener('mouseenter',()=>cur.classList.add('large'));
-    el.addEventListener('mouseleave',()=>cur.classList.remove('large'));
-  });
-}
-
-/* ── Hero lens */
-const heroEl=document.getElementById('hero'),sharpEl=document.getElementById('heroSharp'),frameEl=document.getElementById('heroFrame');
-const FW=340,FH=420; let lx=innerWidth/2,ly=innerHeight/2,tx=lx,ty=ly,fv=false;
-heroEl.addEventListener('mousemove',e=>{const r=heroEl.getBoundingClientRect();tx=e.clientX-r.left;ty=e.clientY-r.top;if(!fv){fv=true;frameEl.classList.add('visible');}});
-heroEl.addEventListener('mouseleave',()=>{fv=false;frameEl.classList.remove('visible');sharpEl.style.clipPath='inset(50% 50% 50% 50%)';});
-(function tick(){lx+=(tx-lx)*.075;ly+=(ty-ly)*.075;const W=heroEl.offsetWidth,H=heroEl.offsetHeight;frameEl.style.left=lx+'px';frameEl.style.top=ly+'px';if(fv)sharpEl.style.clipPath=`inset(${ly-FH/2}px ${W-lx-FW/2}px ${H-ly-FH/2}px ${lx-FW/2}px)`;requestAnimationFrame(tick);})();
-
-/* ── Scroll reveal */
-const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*80);obs.unobserve(e.target);}});},{threshold:0.08});
-
-/* ── Nav scroll */
-const navEl=document.querySelector('nav');
-window.addEventListener('scroll',()=>{navEl.classList.toggle('scrolled',window.scrollY>60);},{passive:true});
-
-/* ── Init */
-buildGrid();
-setTimeout(()=>{
-  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-  hookCursor();
-  const s=document.createElement('script');
-  s.src='https://player.vimeo.com/api/player.js';
-  s.onload=initVimeoScroll;
-  document.head.appendChild(s);
-},60);
-</script>
+    /* ── SCROLL REVEAL */
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
 </body>
 </html>
