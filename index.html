@@ -47,8 +47,19 @@
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
       display: flex; justify-content: space-between; align-items: center;
-      padding: 22px 52px;
-      background: linear-gradient(to bottom, rgba(40,40,45,.96) 0%, rgba(40,40,45,0) 100%);
+      padding: 18px 52px;
+      background: transparent;
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
+      border-bottom: 1px solid transparent;
+      transition: background .35s ease, backdrop-filter .35s ease, -webkit-backdrop-filter .35s ease, border-color .35s ease, padding .35s ease;
+    }
+    nav.scrolled {
+      background: rgba(28,28,32,.82);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom-color: var(--border);
+      padding: 14px 52px;
     }
     .nav-logo { display: flex; align-items: center; text-decoration: none; }
     .nav-logo img { height: 46px; width: auto; opacity: .88; transition: opacity .3s; }
@@ -971,6 +982,12 @@ const obs = new IntersectionObserver(entries => {
     }
   });
 }, { threshold: 0.08 });
+
+/* ── Nav scroll */
+const navEl = document.querySelector('nav');
+window.addEventListener('scroll', () => {
+  navEl.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
 
 /* ── Init */
 buildGrid();
