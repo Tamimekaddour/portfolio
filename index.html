@@ -399,8 +399,37 @@
     .project-overlay {
       position: absolute; inset: 0;
       background: linear-gradient(to top, rgba(18,18,22,.94) 0%, rgba(18,18,22,.18) 55%, transparent 100%);
-      z-index: 2;
+      z-index: 2; transition: background .4s ease;
     }
+    .project-card:hover .project-overlay {
+      background: rgba(0,103,79,.55);
+    }
+    .project-hover {
+      position: absolute; inset: 0; z-index: 4;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 20px;
+      opacity: 0; transform: translateY(10px);
+      transition: opacity .35s ease, transform .35s ease;
+      pointer-events: none;
+    }
+    .project-card:hover .project-hover {
+      opacity: 1; transform: translateY(0);
+      pointer-events: all;
+    }
+    .project-hover-title {
+      font-family: 'Lexend', sans-serif; font-weight: 700;
+      font-size: clamp(14px, 1.4vw, 20px); letter-spacing: .06em;
+      text-transform: uppercase; color: var(--text); text-align: center;
+      padding: 0 24px;
+    }
+    .project-hover-btn {
+      font-family: 'Lexend', sans-serif; font-weight: 500; font-size: 9px;
+      letter-spacing: .22em; text-transform: uppercase; color: var(--text);
+      border: 1px solid rgba(246,230,209,.55); padding: 11px 26px;
+      text-decoration: none; transition: all .25s;
+      background: transparent;
+    }
+    .project-hover-btn:hover { background: var(--text); color: var(--bg); }
     .project-info { position: absolute; bottom: 0; left: 0; right: 0; z-index: 3; padding: 32px; }
     .project-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
     .project-tag {
@@ -781,8 +810,12 @@
       </div>
 
       <div class="project-card reveal">
-        <div class="project-bg"><div class="project-placeholder"><span>Screenshot à venir</span></div></div>
+        <div class="project-bg"><img src="project-02.jpg" alt="Brand Identity — Projet 02" /></div>
         <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title">Brand Identity — Projet 02</span>
+          <a class="project-hover-btn" href="projects.html">Voir le projet</a>
+        </div>
         <div class="project-info">
           <div class="project-tags"><span class="project-tag">Brand Identity</span><span class="project-tag">Visual Identity</span></div>
           <p class="project-name">Brand Identity — Projet 02</p>
@@ -792,6 +825,10 @@
       <div class="project-card reveal">
         <div class="project-bg"><div class="project-placeholder"><span>Screenshot à venir</span></div></div>
         <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title">3D Exploration — Projet 03</span>
+          <a class="project-hover-btn" href="projects.html">Voir le projet</a>
+        </div>
         <div class="project-info">
           <div class="project-tags"><span class="project-tag">3D</span><span class="project-tag">Render</span></div>
           <p class="project-name">3D Exploration — Projet 03</p>
@@ -801,6 +838,10 @@
       <div class="project-card reveal">
         <div class="project-bg"><div class="project-placeholder"><span>Screenshot à venir</span></div></div>
         <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title">Digital Design — Projet 04</span>
+          <a class="project-hover-btn" href="projects.html">Voir le projet</a>
+        </div>
         <div class="project-info">
           <div class="project-tags"><span class="project-tag">Digital Design</span><span class="project-tag">UI</span></div>
           <p class="project-name">Digital Design — Projet 04</p>
@@ -810,6 +851,10 @@
       <div class="project-card reveal">
         <div class="project-bg"><div class="project-placeholder"><span>Screenshot à venir</span></div></div>
         <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title">Logotype — Projet 05</span>
+          <a class="project-hover-btn" href="projects.html">Voir le projet</a>
+        </div>
         <div class="project-info">
           <div class="project-tags"><span class="project-tag">Logotype</span><span class="project-tag">Brand</span></div>
           <p class="project-name">Logotype — Projet 05</p>
@@ -819,6 +864,10 @@
       <div class="project-card reveal">
         <div class="project-bg"><div class="project-placeholder"><span>Photo à venir</span></div></div>
         <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title">Photography — Projet 06</span>
+          <a class="project-hover-btn" href="projects.html">Voir le projet</a>
+        </div>
         <div class="project-info">
           <div class="project-tags"><span class="project-tag">Photography</span></div>
           <p class="project-name">Photography — Projet 06</p>
@@ -826,6 +875,19 @@
       </div>
 
     </div>
+
+    <div style="text-align:center;margin-top:52px;">
+      <a href="projects.html"
+         style="font-family:'Lexend',sans-serif;font-weight:500;font-size:9.5px;
+                letter-spacing:.22em;text-transform:uppercase;color:var(--text);
+                border:1px solid rgba(246,230,209,.22);padding:16px 38px;
+                text-decoration:none;transition:all .3s;display:inline-block;"
+         onmouseenter="this.style.borderColor='var(--green-mid)';this.style.color='var(--green-mid)'"
+         onmouseleave="this.style.borderColor='rgba(246,230,209,.22)';this.style.color='var(--text)'">
+        Voir tous les projets &nbsp;→
+      </a>
+    </div>
+
   </section>
 
   <!-- ═══════ TIMELINE -->
