@@ -73,6 +73,14 @@
       text-decoration: none; transition: all .3s; background: transparent;
     }
     .nav-cta:hover { background: var(--text); color: var(--bg); }
+    .lang-toggle {
+      font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 10px;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--muted); background: none;
+      border: 1px solid rgba(246,230,209,.15);
+      padding: 8px 14px; cursor: none; transition: all .3s;
+    }
+    .lang-toggle:hover { color: var(--green-mid); border-color: rgba(26,163,122,.4); }
 
     /* ── HEADER */
     .page-header {
@@ -274,25 +282,28 @@
   <!-- ═══════ NAV -->
   <nav>
     <a class="nav-logo" href="index.html"><img src="logo.svg" alt="Tamime Kaddour" /></a>
-    <a class="nav-back" href="index.html">Retour au portfolio</a>
-    <a class="nav-cta" href="index.html#contact">Get in Touch</a>
+    <a class="nav-back" href="index.html">Back to portfolio</a>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <button class="lang-toggle" id="langToggle">FR</button>
+      <a class="nav-cta" href="index.html#contact">Get in Touch</a>
+    </div>
   </nav>
 
   <!-- ═══════ HEADER -->
   <header class="page-header">
-    <p class="page-eyebrow">Portfolio</p>
+    <p class="page-eyebrow" data-i18n="eyebrow">Portfolio</p>
     <h1 class="page-title">
       All
-      <em>Projects</em>
+      <em data-i18n="title.sub">Projects</em>
     </h1>
-    <p class="page-desc">Une sélection de projets couvrant l'identité visuelle, le motion, la 3D et le design digital — réalisés en agence et en freelance.</p>
+    <p class="page-desc" data-i18n="desc">A selection of projects spanning visual identity, motion, 3D and digital design — produced in-house and freelance.</p>
     <div class="filters">
-      <button class="filter-btn active" data-filter="all">Tout</button>
-      <button class="filter-btn" data-filter="brand">Brand Identity</button>
-      <button class="filter-btn" data-filter="motion">Motion & Vidéo</button>
-      <button class="filter-btn" data-filter="3d">3D</button>
-      <button class="filter-btn" data-filter="digital">Digital</button>
-      <button class="filter-btn" data-filter="photo">Photography</button>
+      <button class="filter-btn active" data-filter="all"    data-i18n="f.all">All</button>
+      <button class="filter-btn" data-filter="brand"         data-i18n="f.brand">Brand Identity</button>
+      <button class="filter-btn" data-filter="motion"        data-i18n="f.motion">Motion & Video</button>
+      <button class="filter-btn" data-filter="3d"            data-i18n="f.3d">3D</button>
+      <button class="filter-btn" data-filter="digital"       data-i18n="f.digital">Digital</button>
+      <button class="filter-btn" data-filter="photo"         data-i18n="f.photo">Photography</button>
     </div>
   </header>
 
@@ -433,18 +444,78 @@
 
   <!-- ═══════ CTA -->
   <div class="cta-band">
-    <h2 class="cta-band-title">Un projet en tête ? <em>Parlons-en.</em></h2>
-    <p class="cta-band-sub">Disponible pour des collaborations en branding, motion, 3D et design digital.</p>
-    <a class="cta-band-btn" href="mailto:tamime.kaddour.b@gmail.com">Me contacter</a>
+    <h2 class="cta-band-title" data-i18n-html="cta.title">Got a project in mind? <em>Let's talk.</em></h2>
+    <p class="cta-band-sub" data-i18n="cta.sub">Available for collaborations in branding, motion, 3D and digital design.</p>
+    <a class="cta-band-btn" href="mailto:tamime.kaddour.b@gmail.com" data-i18n="cta.btn">Get in Touch</a>
   </div>
 
   <!-- ═══════ FOOTER -->
   <footer>
-    <p class="footer-copy">© 2026 Tamime Kaddour — All rights reserved</p>
+    <p class="footer-copy" data-i18n="footer">© 2026 Tamime Kaddour — All rights reserved</p>
     <p class="footer-tag">Ideas, well-dressed.</p>
   </footer>
 
   <script>
+    /* ── TRANSLATIONS */
+    const T = {
+      en: {
+        'nav.back':   'Back to portfolio',
+        'eyebrow':    'Portfolio',
+        'title.sub':  'Projects',
+        'desc':       'A selection of projects spanning visual identity, motion, 3D and digital design — produced in-house and freelance.',
+        'f.all':      'All',
+        'f.brand':    'Brand Identity',
+        'f.motion':   'Motion & Video',
+        'f.3d':       '3D',
+        'f.digital':  'Digital',
+        'f.photo':    'Photography',
+        'cta.title':  'Got a project in mind? <em>Let\'s talk.</em>',
+        'cta.sub':    'Available for collaborations in branding, motion, 3D and digital design.',
+        'cta.btn':    'Get in Touch',
+        'footer':     '© 2026 Tamime Kaddour — All rights reserved',
+      },
+      fr: {
+        'nav.back':   'Retour au portfolio',
+        'eyebrow':    'Portfolio',
+        'title.sub':  'Projets',
+        'desc':       "Une sélection de projets couvrant l'identité visuelle, le motion, la 3D et le design digital — réalisés en agence et en freelance.",
+        'f.all':      'Tout',
+        'f.brand':    'Brand Identity',
+        'f.motion':   'Motion & Vidéo',
+        'f.3d':       '3D',
+        'f.digital':  'Digital',
+        'f.photo':    'Photographie',
+        'cta.title':  'Un projet en tête ? <em>Parlons-en.</em>',
+        'cta.sub':    'Disponible pour des collaborations en branding, motion, 3D et design digital.',
+        'cta.btn':    'Me contacter',
+        'footer':     '© 2026 Tamime Kaddour — Tous droits réservés',
+      }
+    };
+
+    let currentLang = localStorage.getItem('lang') || 'en';
+
+    function applyLang(lang) {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (T[lang][key] !== undefined) el.textContent = T[lang][key];
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.dataset.i18nHtml;
+        if (T[lang][key] !== undefined) el.innerHTML = T[lang][key];
+      });
+      document.getElementById('langToggle').textContent = lang === 'en' ? 'FR' : 'EN';
+      document.querySelector('.nav-back').textContent = '← ' + T[lang]['nav.back'];
+      document.documentElement.lang = lang;
+      localStorage.setItem('lang', lang);
+      currentLang = lang;
+    }
+
+    document.getElementById('langToggle').addEventListener('click', () => {
+      applyLang(currentLang === 'en' ? 'fr' : 'en');
+    });
+
+    applyLang(currentLang);
+
     /* ── CURSOR */
     const cursor = document.getElementById('cursor');
     document.addEventListener('mousemove', e => {
