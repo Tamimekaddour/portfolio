@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tamime Kaddour — Art Director & Visual Designer</title>
   <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <script src="https://player.vimeo.com/api/player.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -763,16 +764,19 @@
     <h2 class="work-title reveal" data-i18n-html="work.title">Selected<br><em>Projects</em></h2>
     <div class="projects-grid">
 
-      <div class="project-card wide reveal">
-        <div class="project-bg"><div class="project-placeholder"><span>Vidéo à venir</span></div></div>
-        <div class="project-overlay"></div>
-        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4;width:64px;height:64px;border:1.5px solid rgba(246,230,209,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);backdrop-filter:blur(4px);pointer-events:none;">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 5l10 5-10 5V5z" fill="rgba(246,230,209,.8)"/></svg>
+      <div class="project-card wide reveal" id="card-vimeo">
+        <div class="project-bg" style="background:#000;">
+          <iframe
+            id="vimeo-player"
+            src="https://player.vimeo.com/video/1173747074?autoplay=0&muted=1&loop=1&byline=0&title=0&portrait=0&controls=0&dnt=1"
+            style="width:100%;height:100%;border:0;display:block;pointer-events:none;"
+            allow="autoplay; fullscreen">
+          </iframe>
         </div>
+        <div class="project-overlay"></div>
         <div class="project-info">
           <div class="project-tags"><span class="project-tag">Vidéo</span><span class="project-tag">Animation</span><span class="project-tag">Motion</span></div>
           <p class="project-name">Vidéo &amp; Animation — Projet 01</p>
-          <p class="project-meta">Client · 2024</p>
         </div>
       </div>
 
@@ -782,7 +786,6 @@
         <div class="project-info">
           <div class="project-tags"><span class="project-tag">Brand Identity</span><span class="project-tag">Visual Identity</span></div>
           <p class="project-name">Brand Identity — Projet 02</p>
-          <p class="project-meta">Client · 2024</p>
         </div>
       </div>
 
@@ -792,7 +795,6 @@
         <div class="project-info">
           <div class="project-tags"><span class="project-tag">3D</span><span class="project-tag">Render</span></div>
           <p class="project-name">3D Exploration — Projet 03</p>
-          <p class="project-meta">Client · 2024</p>
         </div>
       </div>
 
@@ -802,7 +804,6 @@
         <div class="project-info">
           <div class="project-tags"><span class="project-tag">Digital Design</span><span class="project-tag">UI</span></div>
           <p class="project-name">Digital Design — Projet 04</p>
-          <p class="project-meta">Client · 2023</p>
         </div>
       </div>
 
@@ -812,7 +813,6 @@
         <div class="project-info">
           <div class="project-tags"><span class="project-tag">Logotype</span><span class="project-tag">Brand</span></div>
           <p class="project-name">Logotype — Projet 05</p>
-          <p class="project-meta">Client · 2023</p>
         </div>
       </div>
 
@@ -822,7 +822,6 @@
         <div class="project-info">
           <div class="project-tags"><span class="project-tag">Photography</span></div>
           <p class="project-name">Photography — Projet 06</p>
-          <p class="project-meta">Client · 2023</p>
         </div>
       </div>
 
@@ -1194,6 +1193,17 @@
       });
     }, { threshold: 0.08 });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    /* ── VIMEO SCROLL AUTOPLAY */
+    const vimeoPlayer = new Vimeo.Player('vimeo-player');
+    const vimeoCard   = document.getElementById('card-vimeo');
+    const vimeoObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { vimeoPlayer.play(); }
+        else                  { vimeoPlayer.pause(); }
+      });
+    }, { threshold: 0.4 });
+    vimeoObs.observe(vimeoCard);
   </script>
 </body>
 </html>
