@@ -935,7 +935,7 @@
       </div>
 
       <!-- 07 -->
-      <div class="project-card reveal">
+      <div class="project-card">
         <div class="project-bg"><div class="project-placeholder"><span>Screenshot à venir</span></div></div>
         <div class="project-overlay"></div>
         <div class="project-hover">
@@ -1395,7 +1395,7 @@
           obs.unobserve(e.target);
         }
       });
-    }, { threshold: 0.08 });
+    }, { threshold: 0.01 });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
     /* ── VIMEO SCROLL AUTOPLAY */
