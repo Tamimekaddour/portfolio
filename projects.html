@@ -370,12 +370,12 @@
     </h1>
     <p class="page-desc" data-i18n="desc">A selection of projects spanning visual identity, motion, 3D and digital design — produced in-house and freelance.</p>
     <div class="filters">
-      <button class="filter-btn active" data-filter="all"    data-i18n="f.all">All</button>
-      <button class="filter-btn" data-filter="brand"         data-i18n="f.brand">Brand Identity</button>
-      <button class="filter-btn" data-filter="motion"        data-i18n="f.motion">Motion & Video</button>
-      <button class="filter-btn" data-filter="3d"            data-i18n="f.3d">3D</button>
-      <button class="filter-btn" data-filter="digital"       data-i18n="f.digital">Digital</button>
-      <button class="filter-btn" data-filter="photo"         data-i18n="f.photo">Photography</button>
+      <button class="filter-btn active" data-filter="all"     data-i18n="f.all">All</button>
+      <button class="filter-btn"        data-filter="brand"   data-i18n="f.brand">Brand Identity</button>
+      <button class="filter-btn"        data-filter="motion"  data-i18n="f.motion">Motion & Video</button>
+      <button class="filter-btn"        data-filter="3d"      data-i18n="f.3d">3D</button>
+      <button class="filter-btn"        data-filter="digital" data-i18n="f.digital">Digital</button>
+      <button class="filter-btn"        data-filter="photo"   data-i18n="f.photo">Photography</button>
     </div>
   </header>
 
@@ -797,6 +797,18 @@
     });
 
     /* ══════════════════════════════════════════════
+       URL PARAM → AUTO-ACTIVATE FILTER
+       Usage: projects.html?cat=brand
+       Valid values: all, brand, motion, 3d, digital, photo
+    ══════════════════════════════════════════════ */
+    (function() {
+      const param = new URLSearchParams(window.location.search).get('cat');
+      if (!param || param === 'all') return;
+      const target = document.querySelector(`.filter-btn[data-filter="${param}"]`);
+      if (target) target.click();
+    })();
+
+    /* ══════════════════════════════════════════════
        VIMEO THUMBNAILS
        API v2 : vimeo.com/api/v2/video/{id}.json
     ══════════════════════════════════════════════ */
@@ -817,10 +829,7 @@
           });
         })
         .catch(() => {
-          /* thumbnail fetch failed → placeholder stays */
-          if (loadingEl) {
-            loadingEl.querySelector('span').textContent = '▶';
-          }
+          if (loadingEl) loadingEl.querySelector('span').textContent = '▶';
         });
     });
 
@@ -831,61 +840,42 @@
     const modalIframe = document.getElementById('vimeoModalIframe');
     const modalClose  = document.getElementById('modalClose');
 
-    function openModal(id) {
-      modalIframe.src = `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0`;
+    function openModal(vimeoId) {
+      modalIframe.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&title=0&byline=0&portrait=0`;
       modal.classList.add('open');
       document.body.style.overflow = 'hidden';
     }
-
     function closeModal() {
-      modalIframe.src = '';
       modal.classList.remove('open');
+      modalIframe.src = '';
       document.body.style.overflow = '';
     }
 
-    /* Play button click */
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
     document.querySelectorAll('.vimeo-play-btn').forEach(btn => {
       btn.addEventListener('click', e => {
         e.stopPropagation();
-        const id = btn.closest('.vimeo-card').dataset.vimeoId;
-        openModal(id);
+        const card = btn.closest('.vimeo-card');
+        openModal(card.dataset.vimeoId);
       });
-    });
-
-    /* Click on the card itself (outside the hover layer buttons) */
-    document.querySelectorAll('.vimeo-card').forEach(card => {
-      card.addEventListener('click', e => {
-        if (!e.target.closest('.project-hover-btn')) {
-          openModal(card.dataset.vimeoId);
-        }
-      });
-    });
-
-    /* Close via button */
-    modalClose.addEventListener('click', closeModal);
-
-    /* Close via backdrop click */
-    modal.addEventListener('click', e => {
-      if (e.target === modal) closeModal();
-    });
-
-    /* Close via Escape */
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
     });
 
     /* ══════════════════════════════════════════════
        SCROLL REVEAL
     ══════════════════════════════════════════════ */
-    const obs = new IntersectionObserver(entries => {
+    const revealObs = new IntersectionObserver(entries => {
       entries.forEach((e, i) => {
         if (e.isIntersecting) {
           setTimeout(() => e.target.classList.add('visible'), i * 80);
-          obs.unobserve(e.target);
+          revealObs.unobserve(e.target);
         }
       });
     }, { threshold: 0.08 });
-    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
   </script>
 </body>
 </html>
