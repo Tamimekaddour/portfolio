@@ -370,18 +370,24 @@
     </h1>
     <p class="page-desc" data-i18n="desc">A selection of projects spanning visual identity, motion, 3D and digital design — produced in-house and freelance.</p>
     <div class="filters">
-      <button class="filter-btn active" data-filter="all"     data-i18n="f.all">All</button>
-      <button class="filter-btn"        data-filter="brand"   data-i18n="f.brand">Brand Identity</button>
-      <button class="filter-btn"        data-filter="motion"  data-i18n="f.motion">Motion & Video</button>
-      <button class="filter-btn"        data-filter="3d"      data-i18n="f.3d">3D</button>
-      <button class="filter-btn"        data-filter="digital" data-i18n="f.digital">Digital</button>
-      <button class="filter-btn"        data-filter="photo"   data-i18n="f.photo">Photography</button>
+      <button class="filter-btn active" data-filter="all"    data-i18n="f.all">All</button>
+      <button class="filter-btn" data-filter="brand"         data-i18n="f.brand">Brand Identity</button>
+      <button class="filter-btn" data-filter="motion"        data-i18n="f.motion">Motion & Video</button>
+      <button class="filter-btn" data-filter="3d"            data-i18n="f.3d">3D</button>
+      <button class="filter-btn" data-filter="digital"       data-i18n="f.digital">Digital</button>
+      <button class="filter-btn" data-filter="photo"         data-i18n="f.photo">Photography</button>
     </div>
   </header>
 
   <!-- ═══════ GRID -->
   <section class="projects-section">
     <div class="projects-grid" id="projectsGrid">
+
+      <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           🎬 MOTION / VIDEO — Vimeo cards
+           Pour ajouter une vidéo : copie un bloc "vimeo-card"
+           et remplace le data-vimeo-id par l'ID de ta vidéo Vimeo
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
 
       <!-- ══ V01 — Wide — Autoplay Vimeo background ══ -->
       <div class="project-card wide reveal" data-category="motion">
@@ -408,51 +414,34 @@
         </div>
       </div>
 
+      <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           🎨 BRAND IDENTITY — Image cards
+           Images à déposer dans : projects/brand/
+           Format recommandé : JPG, 1200×900px minimum
+           Nommage : nom-du-projet.jpg  (ex: guiddini-brand.jpg)
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+
       <!-- ══ P02 — Brand ══ -->
       <div class="project-card reveal" data-category="brand">
-        <div class="project-bg"><img src="project-02.jpg" alt="Brand Identity — Projet 02" /></div>
+        <!-- 📌 IMAGE : remplace "project-02.jpg" par le nom de ton fichier -->
+        <div class="project-bg"><img src="projects/brand/project-02.jpg" alt="Brand Identity — Projet 02" loading="lazy" /></div>
         <div class="project-overlay"></div>
         <div class="project-hover">
+          <!-- 📌 TITRE : remplace le texte entre les balises -->
           <span class="project-hover-title">Brand Identity — Projet 02</span>
           <a class="project-hover-btn" href="#">Voir le projet</a>
         </div>
         <div class="project-info">
           <div class="project-tags"><span class="project-tag">Brand Identity</span><span class="project-tag">Visual Identity</span></div>
+          <!-- 📌 NOM : affiché en bas de la carte -->
           <p class="project-name">Brand Identity — Projet 02</p>
-        </div>
-      </div>
-
-      <!-- ══ P03 — 3D ══ -->
-      <div class="project-card reveal" data-category="3d">
-        <div class="project-bg"><img src="project-03.jpg" alt="3D Exploration — Projet 03" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title">3D Exploration — Projet 03</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">3D</span><span class="project-tag">Render</span></div>
-          <p class="project-name">3D Exploration — Projet 03</p>
-        </div>
-      </div>
-
-      <!-- ══ P04 — Digital ══ -->
-      <div class="project-card reveal" data-category="digital">
-        <div class="project-bg"><img src="project-04.jpg" alt="Digital Design — Projet 04" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title">Digital Design — Projet 04</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Digital Design</span><span class="project-tag">UI</span></div>
-          <p class="project-name">Digital Design — Projet 04</p>
         </div>
       </div>
 
       <!-- ══ P05 — Brand ══ -->
       <div class="project-card reveal" data-category="brand">
-        <div class="project-bg"><img src="project-05.jpg" alt="Logotype — Projet 05" /></div>
+        <!-- 📌 IMAGE : remplace "project-05.jpg" par le nom de ton fichier -->
+        <div class="project-bg"><img src="projects/brand/project-05.jpg" alt="Logotype — Projet 05" loading="lazy" /></div>
         <div class="project-overlay"></div>
         <div class="project-hover">
           <span class="project-hover-title">Logotype — Projet 05</span>
@@ -464,9 +453,115 @@
         </div>
       </div>
 
+      <!-- ══ ➕ AJOUTER UN PROJET BRAND ICI ══
+           Copie le bloc ci-dessous, colle-le ici, et remplace :
+           - "mon-projet.jpg"  → nom de ton fichier dans projects/brand/
+           - "Mon Titre"       → nom de ton projet
+
+      <div class="project-card reveal" data-category="brand">
+        <div class="project-bg"><img src="projects/brand/mon-projet.jpg" alt="Mon Titre" loading="lazy" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title">Mon Titre</span>
+          <a class="project-hover-btn" href="#">Voir le projet</a>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Brand Identity</span></div>
+          <p class="project-name">Mon Titre</p>
+        </div>
+      </div>
+      ══ FIN BLOC BRAND ══ -->
+
+      <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           🧊 3D — Image cards
+           Images à déposer dans : projects/3d/
+           Format recommandé : JPG, 1200×900px minimum
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+
+      <!-- ══ P03 — 3D ══ -->
+      <div class="project-card reveal" data-category="3d">
+        <!-- 📌 IMAGE : remplace "project-03.jpg" par le nom de ton fichier -->
+        <div class="project-bg"><img src="projects/3d/project-03.jpg" alt="3D Exploration — Projet 03" loading="lazy" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title">3D Exploration — Projet 03</span>
+          <a class="project-hover-btn" href="#">Voir le projet</a>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">3D</span><span class="project-tag">Render</span></div>
+          <p class="project-name">3D Exploration — Projet 03</p>
+        </div>
+      </div>
+
+      <!-- ══ ➕ AJOUTER UN PROJET 3D ICI ══
+           Copie le bloc ci-dessous, colle-le ici, et remplace :
+           - "mon-rendu.jpg"  → nom de ton fichier dans projects/3d/
+           - "Mon Titre"      → nom de ton projet
+
+      <div class="project-card reveal" data-category="3d">
+        <div class="project-bg"><img src="projects/3d/mon-rendu.jpg" alt="Mon Titre" loading="lazy" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title">Mon Titre</span>
+          <a class="project-hover-btn" href="#">Voir le projet</a>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">3D</span><span class="project-tag">Render</span></div>
+          <p class="project-name">Mon Titre</p>
+        </div>
+      </div>
+      ══ FIN BLOC 3D ══ -->
+
+      <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           💻 DIGITAL — Image cards
+           Images à déposer dans : projects/digital/
+           Format recommandé : JPG ou PNG, 1200×900px minimum
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+
+      <!-- ══ P04 — Digital ══ -->
+      <div class="project-card reveal" data-category="digital">
+        <!-- 📌 IMAGE : remplace "project-04.jpg" par le nom de ton fichier -->
+        <div class="project-bg"><img src="projects/digital/project-04.jpg" alt="Digital Design — Projet 04" loading="lazy" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title">Digital Design — Projet 04</span>
+          <a class="project-hover-btn" href="#">Voir le projet</a>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Digital Design</span><span class="project-tag">UI</span></div>
+          <p class="project-name">Digital Design — Projet 04</p>
+        </div>
+      </div>
+
+      <!-- ══ ➕ AJOUTER UN PROJET DIGITAL ICI ══
+           Copie le bloc ci-dessous, colle-le ici, et remplace :
+           - "mon-ui.jpg"    → nom de ton fichier dans projects/digital/
+           - "Mon Titre"     → nom de ton projet
+
+      <div class="project-card reveal" data-category="digital">
+        <div class="project-bg"><img src="projects/digital/mon-ui.jpg" alt="Mon Titre" loading="lazy" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title">Mon Titre</span>
+          <a class="project-hover-btn" href="#">Voir le projet</a>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Digital Design</span></div>
+          <p class="project-name">Mon Titre</p>
+        </div>
+      </div>
+      ══ FIN BLOC DIGITAL ══ -->
+
+      <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           📷 PHOTOGRAPHY — Image cards
+           Images à déposer dans : projects/photo/
+           Format recommandé : JPG, 1200×900px minimum
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+
       <!-- ══ P06 — Photo ══ -->
       <div class="project-card reveal" data-category="photo">
-        <div class="project-bg"><div class="project-placeholder"><span>Photo à venir</span></div></div>
+        <!-- 📌 IMAGE : remplace "project-06.jpg" par le nom de ton fichier -->
+        <div class="project-bg"><img src="projects/photo/project-06.jpg" alt="Photography — Projet 06" loading="lazy" /></div>
         <div class="project-overlay"></div>
         <div class="project-hover">
           <span class="project-hover-title">Photography — Projet 06</span>
@@ -477,6 +572,32 @@
           <p class="project-name">Photography — Projet 06</p>
         </div>
       </div>
+
+      <!-- ══ ➕ AJOUTER UN PROJET PHOTO ICI ══
+           Copie le bloc ci-dessous, colle-le ici, et remplace :
+           - "ma-photo.jpg"  → nom de ton fichier dans projects/photo/
+           - "Mon Titre"     → nom de ton projet
+
+      <div class="project-card reveal" data-category="photo">
+        <div class="project-bg"><img src="projects/photo/ma-photo.jpg" alt="Mon Titre" loading="lazy" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title">Mon Titre</span>
+          <a class="project-hover-btn" href="#">Voir le projet</a>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name">Mon Titre</p>
+        </div>
+      </div>
+      ══ FIN BLOC PHOTO ══ -->
+
+      <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           🎬 MOTION — Vimeo cards (suite)
+           Pour ajouter une vidéo : copie un bloc vimeo-card
+           et remplace le data-vimeo-id par l'ID Vimeo
+           (l'ID = les chiffres dans l'URL vimeo.com/XXXXXXX)
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
 
       <!-- ══ V02 — Motion ══ -->
       <div class="project-card reveal vimeo-card" data-category="motion" data-vimeo-id="1174003908">
@@ -653,6 +774,37 @@
         </div>
       </div>
 
+      <!-- ══ ➕ AJOUTER UNE VIDÉO VIMEO ICI ══
+           Copie le bloc ci-dessous, colle-le ici, et remplace :
+           - "XXXXXXXXX"   → l'ID de ta vidéo Vimeo
+           - "Mon Titre"   → nom de ta vidéo
+           - "v09.title"   → incrémente le numéro
+
+      <div class="project-card reveal vimeo-card" data-category="motion" data-vimeo-id="XXXXXXXXX">
+        <div class="project-bg">
+          <div class="vimeo-thumb-wrap">
+            <img alt="Mon Titre" />
+            <div class="vimeo-thumb-loading"><span>Chargement…</span></div>
+          </div>
+        </div>
+        <div class="play-icon">
+          <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="26" cy="26" r="25" stroke="rgba(246,230,209,0.7)" stroke-width="1"/>
+            <polygon points="21,17 37,26 21,35" fill="rgba(246,230,209,0.9)"/>
+          </svg>
+        </div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title">Mon Titre</span>
+          <button class="project-hover-btn vimeo-play-btn">▶ Voir la vidéo</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Motion</span><span class="project-tag">Vidéo</span></div>
+          <p class="project-name">Mon Titre</p>
+        </div>
+      </div>
+      ══ FIN BLOC VIDÉO ══ -->
+
     </div>
   </section>
 
@@ -797,18 +949,6 @@
     });
 
     /* ══════════════════════════════════════════════
-       URL PARAM → AUTO-ACTIVATE FILTER
-       Usage: projects.html?cat=brand
-       Valid values: all, brand, motion, 3d, digital, photo
-    ══════════════════════════════════════════════ */
-    (function() {
-      const param = new URLSearchParams(window.location.search).get('cat');
-      if (!param || param === 'all') return;
-      const target = document.querySelector(`.filter-btn[data-filter="${param}"]`);
-      if (target) target.click();
-    })();
-
-    /* ══════════════════════════════════════════════
        VIMEO THUMBNAILS
        API v2 : vimeo.com/api/v2/video/{id}.json
     ══════════════════════════════════════════════ */
@@ -829,7 +969,9 @@
           });
         })
         .catch(() => {
-          if (loadingEl) loadingEl.querySelector('span').textContent = '▶';
+          if (loadingEl) {
+            loadingEl.querySelector('span').textContent = '▶';
+          }
         });
     });
 
@@ -840,42 +982,52 @@
     const modalIframe = document.getElementById('vimeoModalIframe');
     const modalClose  = document.getElementById('modalClose');
 
-    function openModal(vimeoId) {
-      modalIframe.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&title=0&byline=0&portrait=0`;
+    function openModal(id) {
+      modalIframe.src = `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0`;
       modal.classList.add('open');
       document.body.style.overflow = 'hidden';
     }
+
     function closeModal() {
-      modal.classList.remove('open');
       modalIframe.src = '';
+      modal.classList.remove('open');
       document.body.style.overflow = '';
     }
-
-    modalClose.addEventListener('click', closeModal);
-    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
     document.querySelectorAll('.vimeo-play-btn').forEach(btn => {
       btn.addEventListener('click', e => {
         e.stopPropagation();
-        const card = btn.closest('.vimeo-card');
-        openModal(card.dataset.vimeoId);
+        const id = btn.closest('.vimeo-card').dataset.vimeoId;
+        openModal(id);
       });
+    });
+
+    document.querySelectorAll('.vimeo-card').forEach(card => {
+      card.addEventListener('click', e => {
+        if (!e.target.closest('.project-hover-btn')) {
+          openModal(card.dataset.vimeoId);
+        }
+      });
+    });
+
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
     });
 
     /* ══════════════════════════════════════════════
        SCROLL REVEAL
     ══════════════════════════════════════════════ */
-    const revealObs = new IntersectionObserver(entries => {
+    const obs = new IntersectionObserver(entries => {
       entries.forEach((e, i) => {
         if (e.isIntersecting) {
           setTimeout(() => e.target.classList.add('visible'), i * 80);
-          revealObs.unobserve(e.target);
+          obs.unobserve(e.target);
         }
       });
     }, { threshold: 0.08 });
-    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
-
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
   </script>
 </body>
 </html>
