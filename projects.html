@@ -27,17 +27,19 @@
     body {
       background: var(--bg); color: var(--text);
       font-family: 'Lexend', sans-serif;
-      overflow-x: hidden; cursor: none;
+      overflow-x: hidden;
     }
 
-    /* ── CURSOR */
+    /* ── CURSOR (desktop only via JS) */
     #cursor {
       position: fixed; width: 8px; height: 8px;
       background: var(--green-mid); border-radius: 50%;
       pointer-events: none; z-index: 9999;
       transform: translate(-50%,-50%);
       transition: width .2s, height .2s, background .2s;
+      display: none;
     }
+    #cursor.active { display: block; }
     #cursor.large {
       width: 44px; height: 44px; background: transparent;
       border: 1px solid rgba(26,163,122,0.55);
@@ -62,10 +64,8 @@
       text-decoration: none; display: flex; align-items: center; gap: 10px;
       transition: color .3s;
     }
+    .nav-back::before { content: '←'; font-size: 14px; line-height: 1; }
     .nav-back:hover { color: var(--text); }
-    .nav-back::before {
-      content: '←'; font-size: 14px; line-height: 1;
-    }
     .nav-cta {
       font-family: 'Lexend', sans-serif; font-weight: 500; font-size: 10px;
       letter-spacing: .18em; text-transform: uppercase; color: var(--text);
@@ -78,7 +78,7 @@
       letter-spacing: .18em; text-transform: uppercase;
       color: var(--muted); background: none;
       border: 1px solid rgba(246,230,209,.15);
-      padding: 8px 14px; cursor: none; transition: all .3s;
+      padding: 8px 14px; cursor: pointer; transition: all .3s;
     }
     .lang-toggle:hover { color: var(--green-mid); border-color: rgba(26,163,122,.4); }
 
@@ -123,7 +123,7 @@
       font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 9.5px;
       letter-spacing: .16em; text-transform: uppercase;
       color: var(--muted); border: 1px solid rgba(246,230,209,.12);
-      padding: 9px 20px; background: none; cursor: none;
+      padding: 9px 20px; background: none; cursor: pointer;
       transition: all .3s;
     }
     .filter-btn:hover, .filter-btn.active {
@@ -143,7 +143,7 @@
     .project-card {
       position: relative; overflow: hidden;
       background: var(--bg2); aspect-ratio: 4/3;
-      cursor: none;
+      cursor: pointer;
     }
     .project-card.wide {
       grid-column: span 2; aspect-ratio: 16/7;
@@ -156,13 +156,11 @@
       position: absolute; inset: 0;
       transition: transform .7s cubic-bezier(.25,.46,.45,.94);
     }
-    /* Video bg must NOT scale — iframe breaks */
     .project-card.wide:hover .project-bg { transform: none; }
     .project-card:not(.wide):hover .project-bg { transform: scale(1.04); }
 
     .project-bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-    /* Vimeo bg iframe */
     .vimeo-bg-iframe {
       position: absolute; inset: 0; width: 100%; height: 100%;
       pointer-events: none; border: none;
@@ -180,10 +178,8 @@
       padding: 8px 18px;
     }
 
-    /* Vimeo thumbnail loading state */
-    .vimeo-thumb-wrap {
-      width: 100%; height: 100%; position: relative;
-    }
+    /* Vimeo thumbnail */
+    .vimeo-thumb-wrap { width: 100%; height: 100%; position: relative; }
     .vimeo-thumb-wrap img {
       width: 100%; height: 100%; object-fit: cover; display: block;
       opacity: 0; transition: opacity .5s ease;
@@ -202,99 +198,88 @@
       border: 1px solid rgba(26,163,122,.12); padding: 8px 18px;
     }
 
-    /* Play icon on video cards */
-    .play-icon {
-      position: absolute; inset: 0; z-index: 1;
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0; transition: opacity .3s;
-      pointer-events: none;
-    }
-    .project-card:hover .play-icon { opacity: 1; }
-    .play-icon svg {
-      width: 52px; height: 52px;
-      filter: drop-shadow(0 2px 12px rgba(0,0,0,.6));
-    }
-
-    /* Overlay normal */
+    /* ── HOVER OVERLAY — clean, no titles */
     .project-overlay {
       position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(18,18,22,.94) 0%, rgba(18,18,22,.18) 55%, transparent 100%);
+      background: linear-gradient(to top, rgba(18,18,22,.6) 0%, transparent 60%);
       z-index: 2; transition: background .4s ease;
     }
     .project-card:hover .project-overlay {
-      background: rgba(0,103,79,.55);
+      background: rgba(0,103,79,.52);
     }
 
-    /* Hover layer */
-    .project-hover {
+    /* Center icon on hover */
+    .project-hover-icon {
       position: absolute; inset: 0; z-index: 4;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 18px;
-      opacity: 0; transform: translateY(10px);
-      transition: opacity .35s ease, transform .35s ease;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transform: scale(.85);
+      transition: opacity .3s ease, transform .3s ease;
       pointer-events: none;
     }
-    .project-card:hover .project-hover {
-      opacity: 1; transform: translateY(0); pointer-events: all;
-    }
-    .project-hover-title {
-      font-family: 'Lexend', sans-serif; font-weight: 700;
-      font-size: clamp(13px, 1.3vw, 18px); letter-spacing: .06em;
-      text-transform: uppercase; color: var(--text);
-      text-align: center; padding: 0 24px;
-    }
-    .project-hover-btn {
-      font-family: 'Lexend', sans-serif; font-weight: 500; font-size: 9px;
-      letter-spacing: .22em; text-transform: uppercase; color: var(--text);
-      border: 1px solid rgba(246,230,209,.55); padding: 10px 24px;
-      text-decoration: none; transition: all .25s; background: transparent;
-      cursor: none;
-    }
-    .project-hover-btn:hover { background: var(--text); color: var(--bg); }
+    .project-card:hover .project-hover-icon { opacity: 1; transform: scale(1); }
 
-    /* Info at bottom */
-    .project-info {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      z-index: 3; padding: 28px;
-      transition: opacity .35s ease;
-    }
-    .project-card:hover .project-info { opacity: 0; }
+    /* Play icon (video) */
+    .icon-play svg { width: 58px; height: 58px; filter: drop-shadow(0 2px 14px rgba(0,0,0,.5)); }
 
-    .project-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
-    .project-tag {
-      font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 8.5px;
-      letter-spacing: .2em; text-transform: uppercase; color: var(--green-mid);
-      border: 1px solid rgba(26,163,122,.3); padding: 4px 10px;
+    /* Expand icon (image) */
+    .icon-expand {
+      width: 52px; height: 52px;
+      border: 1px solid rgba(246,230,209,.65); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      filter: drop-shadow(0 2px 14px rgba(0,0,0,.5));
     }
-    .project-name {
-      font-family: 'Lexend', sans-serif; font-weight: 600; font-size: 16px;
-      color: var(--text);
-    }
+    .icon-expand svg { width: 22px; height: 22px; }
 
-    /* ── VIMEO MODAL */
-    #vimeoModal {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,.92);
-      z-index: 1000;
+    /* ── MODALS (shared base) */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.93); z-index: 1000;
       align-items: center; justify-content: center;
     }
-    #vimeoModal.open { display: flex; }
+    .modal-overlay.open { display: flex; }
+
     .modal-close {
       position: absolute; top: 22px; right: 30px;
       background: none; border: 1px solid rgba(246,230,209,.2);
       color: var(--muted); font-size: 18px; line-height: 1;
-      padding: 8px 13px; cursor: none; transition: all .2s;
-      font-family: 'Lexend', sans-serif;
+      padding: 8px 13px; cursor: pointer; transition: all .2s;
+      font-family: 'Lexend', sans-serif; z-index: 10;
     }
     .modal-close:hover { color: var(--text); border-color: rgba(246,230,209,.5); }
-    .modal-inner {
+
+    /* ── VIDEO MODAL */
+    #vimeoModal .modal-inner {
       width: min(90vw, 1280px);
-      aspect-ratio: 16/9;
+      aspect-ratio: 16/9; position: relative;
+    }
+    #vimeoModal .modal-inner iframe {
+      width: 100%; height: 100%; border: none;
+    }
+
+    /* ── IMAGE MODAL */
+    #imageModal .modal-inner {
+      max-width: 90vw; max-height: 90vh;
+      display: flex; align-items: center; justify-content: center;
       position: relative;
     }
-    .modal-inner iframe {
-      width: 100%; height: 100%; border: none;
+    #imageModal .modal-inner img {
+      max-width: 90vw; max-height: 90vh;
+      object-fit: contain;
+      box-shadow: 0 0 80px rgba(0,0,0,.8);
+    }
+    /* Nav arrows for image modal */
+    .img-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: none; border: 1px solid rgba(246,230,209,.2);
+      color: var(--muted); font-size: 20px; padding: 12px 16px;
+      cursor: pointer; transition: all .2s; z-index: 10;
+    }
+    .img-nav:hover { color: var(--text); border-color: rgba(246,230,209,.5); background: rgba(246,230,209,.05); }
+    #imgPrev { left: -70px; }
+    #imgNext { right: -70px; }
+    @media (max-width: 768px) {
+      #imgPrev { left: 8px; }
+      #imgNext { right: 8px; }
     }
 
     /* ── CTA BAND */
@@ -333,17 +318,58 @@
     .reveal { opacity: 0; transform: translateY(26px); transition: opacity .9s ease, transform .9s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* ── RESPONSIVE */
+    /* ══════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════ */
+
+    /* Tablet — 2 columns */
     @media (max-width: 960px) {
-      nav { padding: 18px 24px; }
+      nav { padding: 16px 24px; gap: 12px; }
+      .nav-logo img { height: 36px; }
+      .nav-back { font-size: 9px; letter-spacing: .12em; }
       .page-header { padding: 120px 24px 60px; }
-      .projects-section { padding: 40px 24px 80px; }
-      .projects-grid { grid-template-columns: 1fr; }
-      .project-card.wide { grid-column: span 1; aspect-ratio: 4/3; }
+      .projects-section { padding: 40px 12px 80px; }
+      .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .project-card.wide { grid-column: span 2; aspect-ratio: 16/8; }
       .project-card.tall { grid-row: span 1; }
       footer { flex-direction: column; gap: 12px; padding: 24px; text-align: center; }
       .cta-band { padding: 60px 24px; }
-      .modal-inner { width: 96vw; }
+      #vimeoModal .modal-inner { width: 96vw; }
+    }
+
+    /* Mobile — 1 column */
+    @media (max-width: 600px) {
+      nav { padding: 14px 18px; }
+      .nav-cta { display: none; }
+      .nav-back { letter-spacing: .08em; }
+      .page-header { padding: 100px 18px 48px; }
+      .page-title { letter-spacing: -.02em; }
+      .page-desc { font-size: 13px; }
+      .filters { gap: 6px; }
+      .filter-btn { padding: 8px 14px; font-size: 8.5px; }
+      .projects-section { padding: 24px 0 60px; }
+      .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 1px;
+      }
+      .project-card.wide {
+        grid-column: span 1;
+        aspect-ratio: 4/3;
+      }
+      .project-card.tall { grid-row: span 1; }
+      .cta-band { padding: 48px 18px; }
+      footer { padding: 20px 18px; gap: 10px; }
+      .footer-copy, .footer-tag { font-size: 9px; }
+      #vimeoModal .modal-inner { width: 98vw; }
+      #imageModal .modal-inner img { max-width: 96vw; max-height: 80vh; }
+    }
+
+    /* Small mobile */
+    @media (max-width: 400px) {
+      .nav-back span { display: none; }
+      .page-title { font-size: 44px; }
     }
   </style>
 </head>
@@ -354,10 +380,10 @@
   <!-- ═══════ NAV -->
   <nav>
     <a class="nav-logo" href="index.html"><img src="logo.svg" alt="Tamime Kaddour" /></a>
-    <a class="nav-back" href="index.html">Back to portfolio</a>
+    <a class="nav-back" href="index.html" data-i18n="nav.back">Back to portfolio</a>
     <div style="display:flex;align-items:center;gap:14px;">
       <button class="lang-toggle" id="langToggle">FR</button>
-      <a class="nav-cta" href="index.html#contact">Get in Touch</a>
+      <a class="nav-cta" href="index.html#contact" data-i18n="nav.cta">Get in Touch</a>
     </div>
   </nav>
 
@@ -368,14 +394,14 @@
       All
       <em data-i18n="title.sub">Projects</em>
     </h1>
-    <p class="page-desc" data-i18n="desc">A selection of projects spanning visual identity, logos, motion, 3D and digital design — produced in-house and freelance.</p>
+    <p class="page-desc" data-i18n="desc">A selection of projects spanning visual identity, motion, 3D and digital design — produced in-house and freelance.</p>
     <div class="filters">
-      <button class="filter-btn active" data-filter="all"    data-i18n="f.all">All</button>
-      <button class="filter-btn" data-filter="brand"         data-i18n="f.brand">Brand Identity</button>
-      <button class="filter-btn" data-filter="motion"        data-i18n="f.motion">Motion & Video</button>
-      <button class="filter-btn" data-filter="3d"            data-i18n="f.3d">3D</button>
-      <button class="filter-btn" data-filter="digital"       data-i18n="f.digital">Digital</button>
-      <button class="filter-btn" data-filter="photo"         data-i18n="f.photo">Photography</button>
+      <button class="filter-btn active" data-filter="all"   data-i18n="f.all">All</button>
+      <button class="filter-btn" data-filter="brand"        data-i18n="f.brand">Brand Identity</button>
+      <button class="filter-btn" data-filter="motion"       data-i18n="f.motion">Motion & Video</button>
+      <button class="filter-btn" data-filter="3d"           data-i18n="f.3d">3D</button>
+      <button class="filter-btn" data-filter="digital"      data-i18n="f.digital">Digital</button>
+      <button class="filter-btn" data-filter="photo"        data-i18n="f.photo">Photography</button>
     </div>
   </header>
 
@@ -383,14 +409,8 @@
   <section class="projects-section">
     <div class="projects-grid" id="projectsGrid">
 
-      <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           🎬 MOTION / VIDEO — Vimeo cards
-           Pour ajouter une vidéo : copie un bloc "vimeo-card"
-           et remplace le data-vimeo-id par l'ID de ta vidéo Vimeo
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-
       <!-- ══ V01 — Wide — Autoplay Vimeo background ══ -->
-      <div class="project-card wide reveal" data-category="motion">
+      <div class="project-card wide reveal vimeo-card" data-category="motion" data-vimeo-id="1173747074">
         <div class="project-bg">
           <iframe
             class="vimeo-bg-iframe"
@@ -400,413 +420,88 @@
           ></iframe>
         </div>
         <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title" data-i18n="v01.title">Motion &amp; Animation — Vidéo 01</span>
-          <a class="project-hover-btn" href="https://vimeo.com/1173747074" target="_blank" rel="noopener" data-i18n="v.watch">Voir sur Vimeo</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags">
-            <span class="project-tag">Motion</span>
-            <span class="project-tag">Animation</span>
-            <span class="project-tag">Vidéo</span>
-          </div>
-          <p class="project-name" data-i18n="v01.title">Motion &amp; Animation — Vidéo 01</p>
+        <div class="project-hover-icon icon-play">
+          <svg viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="29" cy="29" r="28" stroke="rgba(246,230,209,0.7)" stroke-width="1"/>
+            <polygon points="23,19 41,29 23,39" fill="rgba(246,230,209,0.9)"/>
+          </svg>
         </div>
       </div>
 
-      <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           🎨 BRAND IDENTITY — Image cards
-           Images à déposer dans : projects/brand/
-           Format recommandé : JPG, 1200×900px minimum
-           Nommage : nom-du-projet.jpg  (ex: guiddini-brand.jpg)
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-
       <!-- ══ P02 — Brand ══ -->
-      <div class="project-card reveal" data-category="brand">
-        <!-- 📌 IMAGE : remplace "project-02.jpg" par le nom de ton fichier -->
-        <div class="project-bg"><img src="projects/brand/logo01-brand.jpg" alt="Brand Identity — Projet 02" loading="lazy" /></div>
+      <div class="project-card reveal img-card" data-category="brand" data-img="project-02.jpg" data-alt="Brand Identity — Projet 02">
+        <div class="project-bg"><img src="project-02.jpg" alt="Brand Identity — Projet 02" loading="lazy" /></div>
         <div class="project-overlay"></div>
-        <div class="project-hover">
-          <!-- 📌 TITRE : remplace le texte entre les balises -->
-          <span class="project-hover-title">Brand Identity — Projet 02</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
+        <div class="project-hover-icon icon-expand">
+          <svg viewBox="0 0 22 22" fill="none" stroke="rgba(246,230,209,0.85)" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+            <polyline points="14,3 19,3 19,8"/><line x1="19" y1="3" x2="12" y2="10"/>
+            <polyline points="8,19 3,19 3,14"/><line x1="3" y1="19" x2="10" y2="12"/>
+          </svg>
         </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Brand Identity</span><span class="project-tag">Visual Identity</span></div>
-          <!-- 📌 NOM : affiché en bas de la carte -->
-          <p class="project-name">Brand Identity — Projet 02</p>
+      </div>
+
+      <!-- ══ P03 — 3D ══ -->
+      <div class="project-card reveal img-card" data-category="3d" data-img="project-03.jpg" data-alt="3D Exploration — Projet 03">
+        <div class="project-bg"><img src="project-03.jpg" alt="3D Exploration — Projet 03" loading="lazy" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover-icon icon-expand">
+          <svg viewBox="0 0 22 22" fill="none" stroke="rgba(246,230,209,0.85)" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+            <polyline points="14,3 19,3 19,8"/><line x1="19" y1="3" x2="12" y2="10"/>
+            <polyline points="8,19 3,19 3,14"/><line x1="3" y1="19" x2="10" y2="12"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- ══ P04 — Digital ══ -->
+      <div class="project-card reveal img-card" data-category="digital" data-img="project-04.jpg" data-alt="Digital Design — Projet 04">
+        <div class="project-bg"><img src="project-04.jpg" alt="Digital Design — Projet 04" loading="lazy" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover-icon icon-expand">
+          <svg viewBox="0 0 22 22" fill="none" stroke="rgba(246,230,209,0.85)" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+            <polyline points="14,3 19,3 19,8"/><line x1="19" y1="3" x2="12" y2="10"/>
+            <polyline points="8,19 3,19 3,14"/><line x1="3" y1="19" x2="10" y2="12"/>
+          </svg>
         </div>
       </div>
 
       <!-- ══ P05 — Brand ══ -->
-      <div class="project-card reveal" data-category="brand">
-        <!-- 📌 IMAGE : remplace "project-05.jpg" par le nom de ton fichier -->
-        <div class="project-bg"><img src="projects/brand/logo02-brand.jpg" alt="Logotype — Projet 05" loading="lazy" /></div>
+      <div class="project-card reveal img-card" data-category="brand" data-img="project-05.jpg" data-alt="Logotype — Projet 05">
+        <div class="project-bg"><img src="project-05.jpg" alt="Logotype — Projet 05" loading="lazy" /></div>
         <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title">Logotype — Projet 05</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Logotype</span><span class="project-tag">Brand</span></div>
-          <p class="project-name">Logotype — Projet 05</p>
+        <div class="project-hover-icon icon-expand">
+          <svg viewBox="0 0 22 22" fill="none" stroke="rgba(246,230,209,0.85)" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+            <polyline points="14,3 19,3 19,8"/><line x1="19" y1="3" x2="12" y2="10"/>
+            <polyline points="8,19 3,19 3,14"/><line x1="3" y1="19" x2="10" y2="12"/>
+          </svg>
         </div>
       </div>
-
-       <div class="project-card reveal" data-category="brand">
-        <!-- 📌 IMAGE : remplace "project-05.jpg" par le nom de ton fichier -->
-        <div class="project-bg"><img src="projects/brand/logo03-brand.jpg" alt="Logotype — Projet 05" loading="lazy" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title">Logotype — Projet 05</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Logotype</span><span class="project-tag">Brand</span></div>
-          <p class="project-name">Logotype — Projet 05</p>
-        </div>
-      </div>
-
-       <div class="project-card reveal" data-category="brand">
-        <!-- 📌 IMAGE : remplace "project-05.jpg" par le nom de ton fichier -->
-        <div class="project-bg"><img src="projects/brand/logo04-brand.jpg" alt="Logotype — Projet 05" loading="lazy" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title">Logotype — Projet 05</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Logotype</span><span class="project-tag">Brand</span></div>
-          <p class="project-name">Logotype — Projet 05</p>
-        </div>
-      </div>
-
-      <div class="project-card reveal" data-category="brand">
-        <!-- 📌 IMAGE : remplace "project-02.jpg" par le nom de ton fichier -->
-        <div class="project-bg"><img src="projects/brand/logo05-brand.jpg" alt="Brand Identity — Projet 02" loading="lazy" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <!-- 📌 TITRE : remplace le texte entre les balises -->
-          <span class="project-hover-title">Brand Identity — Projet 02</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Brand Identity</span><span class="project-tag">Visual Identity</span></div>
-          <!-- 📌 NOM : affiché en bas de la carte -->
-          <p class="project-name">Brand Identity — Projet 02</p>
-        </div>
-      </div>
-
-      <div class="project-card reveal" data-category="brand">
-        <!-- 📌 IMAGE : remplace "project-02.jpg" par le nom de ton fichier -->
-        <div class="project-bg"><img src="projects/brand/logo06-brand.jpg" alt="Brand Identity — Projet 02" loading="lazy" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <!-- 📌 TITRE : remplace le texte entre les balises -->
-          <span class="project-hover-title">Brand Identity — Projet 02</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Brand Identity</span><span class="project-tag">Visual Identity</span></div>
-          <!-- 📌 NOM : affiché en bas de la carte -->
-          <p class="project-name">Brand Identity — Projet 02</p>
-        </div>
-      </div>
-
-      <div class="project-card reveal" data-category="brand">
-        <!-- 📌 IMAGE : remplace "project-02.jpg" par le nom de ton fichier -->
-        <div class="project-bg"><img src="projects/brand/logo07-brand.jpg" alt="Brand Identity — Projet 02" loading="lazy" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <!-- 📌 TITRE : remplace le texte entre les balises -->
-          <span class="project-hover-title">Brand Identity — Projet 02</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Brand Identity</span><span class="project-tag">Visual Identity</span></div>
-          <!-- 📌 NOM : affiché en bas de la carte -->
-          <p class="project-name">Brand Identity — Projet 02</p>
-        </div>
-      </div>
-
-      <div class="project-card reveal" data-category="brand">
-        <!-- 📌 IMAGE : remplace "project-02.jpg" par le nom de ton fichier -->
-        <div class="project-bg"><img src="projects/brand/logo08-brand.jpg" alt="Brand Identity — Projet 02" loading="lazy" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <!-- 📌 TITRE : remplace le texte entre les balises -->
-          <span class="project-hover-title">Brand Identity — Projet 02</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Brand Identity</span><span class="project-tag">Visual Identity</span></div>
-          <!-- 📌 NOM : affiché en bas de la carte -->
-          <p class="project-name">Brand Identity — Projet 02</p>
-        </div>
-      </div>
-
-      <div class="project-card reveal" data-category="brand">
-        <!-- 📌 IMAGE : remplace "project-02.jpg" par le nom de ton fichier -->
-        <div class="project-bg"><img src="projects/brand/logo09-brand.jpg" alt="Brand Identity — Projet 02" loading="lazy" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <!-- 📌 TITRE : remplace le texte entre les balises -->
-          <span class="project-hover-title">Brand Identity — Projet 02</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Brand Identity</span><span class="project-tag">Visual Identity</span></div>
-          <!-- 📌 NOM : affiché en bas de la carte -->
-          <p class="project-name">Brand Identity — Projet 02</p>
-        </div>
-      </div>
-
-      <div class="project-card reveal" data-category="brand">
-        <!-- 📌 IMAGE : remplace "project-02.jpg" par le nom de ton fichier -->
-        <div class="project-bg"><img src="projects/brand/logo10-brand.jpg" alt="Brand Identity — Projet 02" loading="lazy" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <!-- 📌 TITRE : remplace le texte entre les balises -->
-          <span class="project-hover-title">Brand Identity — Projet 02</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Brand Identity</span><span class="project-tag">Visual Identity</span></div>
-          <!-- 📌 NOM : affiché en bas de la carte -->
-          <p class="project-name">Brand Identity — Projet 02</p>
-        </div>
-      </div>
-
-      <div class="project-card reveal" data-category="brand">
-        <!-- 📌 IMAGE : remplace "project-02.jpg" par le nom de ton fichier -->
-        <div class="project-bg"><img src="projects/brand/logo11-brand.jpg" alt="Brand Identity — Projet 02" loading="lazy" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <!-- 📌 TITRE : remplace le texte entre les balises -->
-          <span class="project-hover-title">Brand Identity — Projet 02</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Brand Identity</span><span class="project-tag">Visual Identity</span></div>
-          <!-- 📌 NOM : affiché en bas de la carte -->
-          <p class="project-name">Brand Identity — Projet 02</p>
-        </div>
-      </div>
-
-      <div class="project-card reveal" data-category="brand">
-        <!-- 📌 IMAGE : remplace "project-02.jpg" par le nom de ton fichier -->
-        <div class="project-bg"><img src="projects/brand/logo12-brand.jpg" alt="Brand Identity — Projet 02" loading="lazy" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <!-- 📌 TITRE : remplace le texte entre les balises -->
-          <span class="project-hover-title">Brand Identity — Projet 02</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Brand Identity</span><span class="project-tag">Visual Identity</span></div>
-          <!-- 📌 NOM : affiché en bas de la carte -->
-          <p class="project-name">Brand Identity — Projet 02</p>
-        </div>
-      </div>
-      <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           🧊 3D — Image cards
-           Images à déposer dans : projects/3d/
-           Format recommandé : JPG, 1200×900px minimum
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-
-      <!-- ══ P03 — 3D ══ -->
-      <div class="project-card reveal" data-category="3d">
-        <!-- 📌 IMAGE : remplace "project-03.jpg" par le nom de ton fichier -->
-        <div class="project-bg"><img src="projects/3d/mod1-3d.jpg" alt="3D Exploration — Projet 03" loading="lazy" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title">3D Exploration — Projet 03</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">3D</span><span class="project-tag">Render</span></div>
-          <p class="project-name">3D Exploration — Projet 03</p>
-        </div>
-      </div>
-
-      <div class="project-card reveal" data-category="3d">
-        <!-- 📌 IMAGE : remplace "project-03.jpg" par le nom de ton fichier -->
-        <div class="project-bg"><img src="projects/3d/mod2-3d.jpg" alt="3D Exploration — Projet 03" loading="lazy" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title">3D Exploration — Projet 03</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">3D</span><span class="project-tag">Render</span></div>
-          <p class="project-name">3D Exploration — Projet 03</p>
-        </div>
-      </div>
-
-      <div class="project-card reveal" data-category="3d">
-        <!-- 📌 IMAGE : remplace "project-03.jpg" par le nom de ton fichier -->
-        <div class="project-bg"><img src="projects/3d/mod3-3d.jpg" alt="3D Exploration — Projet 03" loading="lazy" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title">3D Exploration — Projet 03</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">3D</span><span class="project-tag">Render</span></div>
-          <p class="project-name">3D Exploration — Projet 03</p>
-        </div>
-      </div>
-
-      <div class="project-card reveal" data-category="3d">
-        <!-- 📌 IMAGE : remplace "project-03.jpg" par le nom de ton fichier -->
-        <div class="project-bg"><img src="projects/3d/mod4-3d.jpg" alt="3D Exploration — Projet 03" loading="lazy" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title">3D Exploration — Projet 03</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">3D</span><span class="project-tag">Render</span></div>
-          <p class="project-name">3D Exploration — Projet 03</p>
-        </div>
-      </div>
-
-      <div class="project-card reveal" data-category="3d">
-        <!-- 📌 IMAGE : remplace "project-03.jpg" par le nom de ton fichier -->
-        <div class="project-bg"><img src="projects/3d/mod5-3d.jpg" alt="3D Exploration — Projet 03" loading="lazy" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title">3D Exploration — Projet 03</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">3D</span><span class="project-tag">Render</span></div>
-          <p class="project-name">3D Exploration — Projet 03</p>
-        </div>
-      </div>
-
-      <div class="project-card reveal" data-category="3d">
-        <!-- 📌 IMAGE : remplace "project-03.jpg" par le nom de ton fichier -->
-        <div class="project-bg"><img src="projects/3d/mod6-3d.jpg" alt="3D Exploration — Projet 03" loading="lazy" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title">3D Exploration — Projet 03</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">3D</span><span class="project-tag">Render</span></div>
-          <p class="project-name">3D Exploration — Projet 03</p>
-        </div>
-      </div>
-      <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           💻 DIGITAL — Image cards
-           Images à déposer dans : projects/digital/
-           Format recommandé : JPG ou PNG, 1200×900px minimum
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-
-      <!-- ══ P04 — Digital ══ -->
-      <div class="project-card reveal" data-category="digital">
-        <!-- 📌 IMAGE : remplace "project-04.jpg" par le nom de ton fichier -->
-        <div class="project-bg"><img src="projects/digital/sto1-digital.jpg" alt="Digital Design — Projet 04" loading="lazy" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title">Digital Design — Projet 04</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Digital Design</span><span class="project-tag">UI</span></div>
-          <p class="project-name">Digital Design — Projet 04</p>
-        </div>
-      </div>
-
-      <!-- ══ ➕ AJOUTER UN PROJET DIGITAL ICI ══
-           Copie le bloc ci-dessous, colle-le ici, et remplace :
-           - "mon-ui.jpg"    → nom de ton fichier dans projects/digital/
-           - "Mon Titre"     → nom de ton projet
-
-      <div class="project-card reveal" data-category="digital">
-        <div class="project-bg"><img src="projects/digital/mon-ui.jpg" alt="Mon Titre" loading="lazy" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title">Mon Titre</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Digital Design</span></div>
-          <p class="project-name">Mon Titre</p>
-        </div>
-      </div>
-      ══ FIN BLOC DIGITAL ══ -->
-
-      <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           📷 PHOTOGRAPHY — Image cards
-           Images à déposer dans : projects/photo/
-           Format recommandé : JPG, 1200×900px minimum
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
 
       <!-- ══ P06 — Photo ══ -->
-      <div class="project-card reveal" data-category="photo">
-        <!-- 📌 IMAGE : remplace "project-06.jpg" par le nom de ton fichier -->
-        <div class="project-bg"><img src="projects/photo/pic1-photos.jpg" alt="Photography — Projet 06" loading="lazy" /></div>
+      <div class="project-card reveal img-card" data-category="photo" data-img="" data-alt="Photography — Projet 06">
+        <div class="project-bg"><div class="project-placeholder"><span>Photo à venir</span></div></div>
         <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title">Photography — Projet 06</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Photography</span></div>
-          <p class="project-name">Photography — Projet 06</p>
+        <div class="project-hover-icon icon-expand">
+          <svg viewBox="0 0 22 22" fill="none" stroke="rgba(246,230,209,0.85)" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+            <polyline points="14,3 19,3 19,8"/><line x1="19" y1="3" x2="12" y2="10"/>
+            <polyline points="8,19 3,19 3,14"/><line x1="3" y1="19" x2="10" y2="12"/>
+          </svg>
         </div>
       </div>
-
-      <!-- ══ ➕ AJOUTER UN PROJET PHOTO ICI ══
-           Copie le bloc ci-dessous, colle-le ici, et remplace :
-           - "ma-photo.jpg"  → nom de ton fichier dans projects/photo/
-           - "Mon Titre"     → nom de ton projet
-
-      <div class="project-card reveal" data-category="photo">
-        <div class="project-bg"><img src="projects/photo/ma-photo.jpg" alt="Mon Titre" loading="lazy" /></div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title">Mon Titre</span>
-          <a class="project-hover-btn" href="#">Voir le projet</a>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Photography</span></div>
-          <p class="project-name">Mon Titre</p>
-        </div>
-      </div>
-      ══ FIN BLOC PHOTO ══ -->
-
-      <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           🎬 MOTION — Vimeo cards (suite)
-           Pour ajouter une vidéo : copie un bloc vimeo-card
-           et remplace le data-vimeo-id par l'ID Vimeo
-           (l'ID = les chiffres dans l'URL vimeo.com/XXXXXXX)
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
 
       <!-- ══ V02 — Motion ══ -->
       <div class="project-card reveal vimeo-card" data-category="motion" data-vimeo-id="1174003908">
         <div class="project-bg">
           <div class="vimeo-thumb-wrap">
-            <img alt="Vidéo 02" />
+            <img alt="Vidéo 02" loading="lazy" />
             <div class="vimeo-thumb-loading"><span>Chargement…</span></div>
           </div>
         </div>
-        <div class="play-icon">
-          <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="26" cy="26" r="25" stroke="rgba(246,230,209,0.7)" stroke-width="1"/>
-            <polygon points="21,17 37,26 21,35" fill="rgba(246,230,209,0.9)"/>
-          </svg>
-        </div>
         <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title" data-i18n="v02.title">Motion — Vidéo 02</span>
-          <button class="project-hover-btn vimeo-play-btn" data-i18n="v.play">▶ Voir la vidéo</button>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Motion</span><span class="project-tag">Vidéo</span></div>
-          <p class="project-name" data-i18n="v02.title">Vidéo 02</p>
+        <div class="project-hover-icon icon-play">
+          <svg viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="29" cy="29" r="28" stroke="rgba(246,230,209,0.7)" stroke-width="1"/>
+            <polygon points="23,19 41,29 23,39" fill="rgba(246,230,209,0.9)"/>
+          </svg>
         </div>
       </div>
 
@@ -814,24 +509,16 @@
       <div class="project-card reveal vimeo-card" data-category="motion" data-vimeo-id="1174008947">
         <div class="project-bg">
           <div class="vimeo-thumb-wrap">
-            <img alt="Vidéo 03" />
+            <img alt="Vidéo 03" loading="lazy" />
             <div class="vimeo-thumb-loading"><span>Chargement…</span></div>
           </div>
         </div>
-        <div class="play-icon">
-          <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="26" cy="26" r="25" stroke="rgba(246,230,209,0.7)" stroke-width="1"/>
-            <polygon points="21,17 37,26 21,35" fill="rgba(246,230,209,0.9)"/>
-          </svg>
-        </div>
         <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title" data-i18n="v03.title">Motion — Vidéo 03</span>
-          <button class="project-hover-btn vimeo-play-btn" data-i18n="v.play">▶ Voir la vidéo</button>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Motion</span><span class="project-tag">Vidéo</span></div>
-          <p class="project-name" data-i18n="v03.title">Vidéo 03</p>
+        <div class="project-hover-icon icon-play">
+          <svg viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="29" cy="29" r="28" stroke="rgba(246,230,209,0.7)" stroke-width="1"/>
+            <polygon points="23,19 41,29 23,39" fill="rgba(246,230,209,0.9)"/>
+          </svg>
         </div>
       </div>
 
@@ -839,24 +526,16 @@
       <div class="project-card reveal vimeo-card" data-category="motion" data-vimeo-id="1173991540">
         <div class="project-bg">
           <div class="vimeo-thumb-wrap">
-            <img alt="Vidéo 04" />
+            <img alt="Vidéo 04" loading="lazy" />
             <div class="vimeo-thumb-loading"><span>Chargement…</span></div>
           </div>
         </div>
-        <div class="play-icon">
-          <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="26" cy="26" r="25" stroke="rgba(246,230,209,0.7)" stroke-width="1"/>
-            <polygon points="21,17 37,26 21,35" fill="rgba(246,230,209,0.9)"/>
-          </svg>
-        </div>
         <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title" data-i18n="v04.title">Motion — Vidéo 04</span>
-          <button class="project-hover-btn vimeo-play-btn" data-i18n="v.play">▶ Voir la vidéo</button>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Motion</span><span class="project-tag">Vidéo</span></div>
-          <p class="project-name" data-i18n="v04.title">Vidéo 04</p>
+        <div class="project-hover-icon icon-play">
+          <svg viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="29" cy="29" r="28" stroke="rgba(246,230,209,0.7)" stroke-width="1"/>
+            <polygon points="23,19 41,29 23,39" fill="rgba(246,230,209,0.9)"/>
+          </svg>
         </div>
       </div>
 
@@ -864,24 +543,16 @@
       <div class="project-card reveal vimeo-card" data-category="motion" data-vimeo-id="1174018726">
         <div class="project-bg">
           <div class="vimeo-thumb-wrap">
-            <img alt="Vidéo 05" />
+            <img alt="Vidéo 05" loading="lazy" />
             <div class="vimeo-thumb-loading"><span>Chargement…</span></div>
           </div>
         </div>
-        <div class="play-icon">
-          <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="26" cy="26" r="25" stroke="rgba(246,230,209,0.7)" stroke-width="1"/>
-            <polygon points="21,17 37,26 21,35" fill="rgba(246,230,209,0.9)"/>
-          </svg>
-        </div>
         <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title" data-i18n="v05.title">Motion — Vidéo 05</span>
-          <button class="project-hover-btn vimeo-play-btn" data-i18n="v.play">▶ Voir la vidéo</button>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Motion</span><span class="project-tag">Vidéo</span></div>
-          <p class="project-name" data-i18n="v05.title">Vidéo 05</p>
+        <div class="project-hover-icon icon-play">
+          <svg viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="29" cy="29" r="28" stroke="rgba(246,230,209,0.7)" stroke-width="1"/>
+            <polygon points="23,19 41,29 23,39" fill="rgba(246,230,209,0.9)"/>
+          </svg>
         </div>
       </div>
 
@@ -889,24 +560,16 @@
       <div class="project-card reveal vimeo-card" data-category="motion" data-vimeo-id="1173991478">
         <div class="project-bg">
           <div class="vimeo-thumb-wrap">
-            <img alt="Vidéo 06" />
+            <img alt="Vidéo 06" loading="lazy" />
             <div class="vimeo-thumb-loading"><span>Chargement…</span></div>
           </div>
         </div>
-        <div class="play-icon">
-          <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="26" cy="26" r="25" stroke="rgba(246,230,209,0.7)" stroke-width="1"/>
-            <polygon points="21,17 37,26 21,35" fill="rgba(246,230,209,0.9)"/>
-          </svg>
-        </div>
         <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title" data-i18n="v06.title">Motion — Vidéo 06</span>
-          <button class="project-hover-btn vimeo-play-btn" data-i18n="v.play">▶ Voir la vidéo</button>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Motion</span><span class="project-tag">Vidéo</span></div>
-          <p class="project-name" data-i18n="v06.title">Vidéo 06</p>
+        <div class="project-hover-icon icon-play">
+          <svg viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="29" cy="29" r="28" stroke="rgba(246,230,209,0.7)" stroke-width="1"/>
+            <polygon points="23,19 41,29 23,39" fill="rgba(246,230,209,0.9)"/>
+          </svg>
         </div>
       </div>
 
@@ -914,24 +577,16 @@
       <div class="project-card reveal vimeo-card" data-category="motion" data-vimeo-id="1173991444">
         <div class="project-bg">
           <div class="vimeo-thumb-wrap">
-            <img alt="Vidéo 07" />
+            <img alt="Vidéo 07" loading="lazy" />
             <div class="vimeo-thumb-loading"><span>Chargement…</span></div>
           </div>
         </div>
-        <div class="play-icon">
-          <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="26" cy="26" r="25" stroke="rgba(246,230,209,0.7)" stroke-width="1"/>
-            <polygon points="21,17 37,26 21,35" fill="rgba(246,230,209,0.9)"/>
-          </svg>
-        </div>
         <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title" data-i18n="v07.title">Motion — Vidéo 07</span>
-          <button class="project-hover-btn vimeo-play-btn" data-i18n="v.play">▶ Voir la vidéo</button>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Motion</span><span class="project-tag">Vidéo</span></div>
-          <p class="project-name" data-i18n="v07.title">Vidéo 07</p>
+        <div class="project-hover-icon icon-play">
+          <svg viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="29" cy="29" r="28" stroke="rgba(246,230,209,0.7)" stroke-width="1"/>
+            <polygon points="23,19 41,29 23,39" fill="rgba(246,230,209,0.9)"/>
+          </svg>
         </div>
       </div>
 
@@ -939,64 +594,25 @@
       <div class="project-card reveal vimeo-card" data-category="motion" data-vimeo-id="1173991510">
         <div class="project-bg">
           <div class="vimeo-thumb-wrap">
-            <img alt="Vidéo 08" />
+            <img alt="Vidéo 08" loading="lazy" />
             <div class="vimeo-thumb-loading"><span>Chargement…</span></div>
           </div>
         </div>
-        <div class="play-icon">
-          <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="26" cy="26" r="25" stroke="rgba(246,230,209,0.7)" stroke-width="1"/>
-            <polygon points="21,17 37,26 21,35" fill="rgba(246,230,209,0.9)"/>
+        <div class="project-overlay"></div>
+        <div class="project-hover-icon icon-play">
+          <svg viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="29" cy="29" r="28" stroke="rgba(246,230,209,0.7)" stroke-width="1"/>
+            <polygon points="23,19 41,29 23,39" fill="rgba(246,230,209,0.9)"/>
           </svg>
         </div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title" data-i18n="v08.title">Motion — Vidéo 08</span>
-          <button class="project-hover-btn vimeo-play-btn" data-i18n="v.play">▶ Voir la vidéo</button>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Motion</span><span class="project-tag">Vidéo</span></div>
-          <p class="project-name" data-i18n="v08.title">Vidéo 08</p>
-        </div>
       </div>
-
-      <!-- ══ ➕ AJOUTER UNE VIDÉO VIMEO ICI ══
-           Copie le bloc ci-dessous, colle-le ici, et remplace :
-           - "XXXXXXXXX"   → l'ID de ta vidéo Vimeo
-           - "Mon Titre"   → nom de ta vidéo
-           - "v09.title"   → incrémente le numéro
-
-      <div class="project-card reveal vimeo-card" data-category="motion" data-vimeo-id="XXXXXXXXX">
-        <div class="project-bg">
-          <div class="vimeo-thumb-wrap">
-            <img alt="Mon Titre" />
-            <div class="vimeo-thumb-loading"><span>Chargement…</span></div>
-          </div>
-        </div>
-        <div class="play-icon">
-          <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="26" cy="26" r="25" stroke="rgba(246,230,209,0.7)" stroke-width="1"/>
-            <polygon points="21,17 37,26 21,35" fill="rgba(246,230,209,0.9)"/>
-          </svg>
-        </div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title">Mon Titre</span>
-          <button class="project-hover-btn vimeo-play-btn">▶ Voir la vidéo</button>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Motion</span><span class="project-tag">Vidéo</span></div>
-          <p class="project-name">Mon Titre</p>
-        </div>
-      </div>
-      ══ FIN BLOC VIDÉO ══ -->
 
     </div>
   </section>
 
-  <!-- ═══════ VIMEO MODAL -->
-  <div id="vimeoModal" role="dialog" aria-modal="true" aria-label="Lecteur vidéo">
-    <button class="modal-close" id="modalClose" aria-label="Fermer">✕</button>
+  <!-- ═══════ VIDEO MODAL -->
+  <div id="vimeoModal" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Lecteur vidéo">
+    <button class="modal-close" id="vimeoModalClose" aria-label="Fermer">✕</button>
     <div class="modal-inner">
       <iframe
         id="vimeoModalIframe"
@@ -1005,6 +621,16 @@
         allowfullscreen
       ></iframe>
     </div>
+  </div>
+
+  <!-- ═══════ IMAGE MODAL -->
+  <div id="imageModal" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Image agrandie">
+    <button class="modal-close" id="imgModalClose" aria-label="Fermer">✕</button>
+    <button class="img-nav" id="imgPrev" aria-label="Précédent">&#8592;</button>
+    <div class="modal-inner">
+      <img id="imgModalSrc" src="" alt="" />
+    </div>
+    <button class="img-nav" id="imgNext" aria-label="Suivant">&#8594;</button>
   </div>
 
   <!-- ═══════ CTA -->
@@ -1017,7 +643,7 @@
   <!-- ═══════ FOOTER -->
   <footer>
     <p class="footer-copy" data-i18n="footer">© 2026 Tamime Kaddour — All rights reserved</p>
-    <p class="footer-tag">Ideas, well-dressed.</p>
+    <p class="footer-tag">Designing with Purpose.</p>
   </footer>
 
   <script>
@@ -1026,56 +652,38 @@
     ══════════════════════════════════════════════ */
     const T = {
       en: {
-        'nav.back':   'Back to portfolio',
-        'eyebrow':    'Portfolio',
-        'title.sub':  'Projects',
-        'desc':       'A selection of projects spanning visual identity, motion, 3D and digital design — produced in-house and freelance.',
-        'f.all':      'All',
-        'f.brand':    'Brand Identity',
-        'f.motion':   'Motion & Video',
-        'f.3d':       '3D',
-        'f.digital':  'Digital',
-        'f.photo':    'Photography',
-        'v.watch':    'Watch on Vimeo',
-        'v.play':     '▶ Watch video',
-        'v01.title':  'Motion & Animation — Video 01',
-        'v02.title':  'Motion — Video 02',
-        'v03.title':  'Motion — Video 03',
-        'v04.title':  'Motion — Video 04',
-        'v05.title':  'Motion — Video 05',
-        'v06.title':  'Motion — Video 06',
-        'v07.title':  'Motion — Video 07',
-        'v08.title':  'Motion — Video 08',
-        'cta.title':  'Got a project in mind? <em>Let\'s talk.</em>',
-        'cta.sub':    'Available for collaborations in branding, motion, 3D and digital design.',
-        'cta.btn':    'Get in Touch',
-        'footer':     '© 2026 Tamime Kaddour — All rights reserved',
+        'nav.back':  'Back to portfolio',
+        'nav.cta':   'Get in Touch',
+        'eyebrow':   'Portfolio',
+        'title.sub': 'Projects',
+        'desc':      'A selection of projects spanning visual identity, motion, 3D and digital design — produced in-house and freelance.',
+        'f.all':     'All',
+        'f.brand':   'Brand Identity',
+        'f.motion':  'Motion & Video',
+        'f.3d':      '3D',
+        'f.digital': 'Digital',
+        'f.photo':   'Photography',
+        'cta.title': 'Got a project in mind? <em>Let\'s talk.</em>',
+        'cta.sub':   'Available for collaborations in branding, motion, 3D and digital design.',
+        'cta.btn':   'Get in Touch',
+        'footer':    '© 2026 Tamime Kaddour — All rights reserved',
       },
       fr: {
-        'nav.back':   'Retour au portfolio',
-        'eyebrow':    'Portfolio',
-        'title.sub':  'Projets',
-        'desc':       "Une sélection de projets couvrant l'identité visuelle, le motion, la 3D et le design digital — réalisés en agence et en freelance.",
-        'f.all':      'Tout',
-        'f.brand':    'Brand Identity',
-        'f.motion':   'Motion & Vidéo',
-        'f.3d':       '3D',
-        'f.digital':  'Digital',
-        'f.photo':    'Photographie',
-        'v.watch':    'Voir sur Vimeo',
-        'v.play':     '▶ Voir la vidéo',
-        'v01.title':  'Motion & Animation — Vidéo 01',
-        'v02.title':  'Motion — Vidéo 02',
-        'v03.title':  'Motion — Vidéo 03',
-        'v04.title':  'Motion — Vidéo 04',
-        'v05.title':  'Motion — Vidéo 05',
-        'v06.title':  'Motion — Vidéo 06',
-        'v07.title':  'Motion — Vidéo 07',
-        'v08.title':  'Motion — Vidéo 08',
-        'cta.title':  'Un projet en tête ? <em>Parlons-en.</em>',
-        'cta.sub':    'Disponible pour des collaborations en branding, motion, 3D et design digital.',
-        'cta.btn':    'Me contacter',
-        'footer':     '© 2026 Tamime Kaddour — Tous droits réservés',
+        'nav.back':  'Retour au portfolio',
+        'nav.cta':   'Me contacter',
+        'eyebrow':   'Portfolio',
+        'title.sub': 'Projets',
+        'desc':      "Une sélection de projets couvrant l'identité visuelle, le motion, la 3D et le design digital — réalisés en agence et en freelance.",
+        'f.all':     'Tout',
+        'f.brand':   'Brand Identity',
+        'f.motion':  'Motion & Vidéo',
+        'f.3d':      '3D',
+        'f.digital': 'Digital',
+        'f.photo':   'Photographie',
+        'cta.title': 'Un projet en tête ? <em>Parlons-en.</em>',
+        'cta.sub':   'Disponible pour des collaborations en branding, motion, 3D et design digital.',
+        'cta.btn':   'Me contacter',
+        'footer':    '© 2026 Tamime Kaddour — Tous droits réservés',
       }
     };
 
@@ -1091,7 +699,6 @@
         if (T[lang][key] !== undefined) el.innerHTML = T[lang][key];
       });
       document.getElementById('langToggle').textContent = lang === 'en' ? 'FR' : 'EN';
-      document.querySelector('.nav-back').textContent = '← ' + T[lang]['nav.back'];
       document.documentElement.lang = lang;
       localStorage.setItem('lang', lang);
       currentLang = lang;
@@ -1104,17 +711,26 @@
     applyLang(currentLang);
 
     /* ══════════════════════════════════════════════
-       CURSOR
+       CURSOR — desktop only
     ══════════════════════════════════════════════ */
     const cursor = document.getElementById('cursor');
-    document.addEventListener('mousemove', e => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top  = e.clientY + 'px';
-    });
-    document.querySelectorAll('a, button, .project-card').forEach(el => {
-      el.addEventListener('mouseenter', () => cursor.classList.add('large'));
-      el.addEventListener('mouseleave', () => cursor.classList.remove('large'));
-    });
+    const isTouch = window.matchMedia('(hover: none)').matches;
+
+    if (!isTouch) {
+      document.body.style.cursor = 'none';
+      cursor.classList.add('active');
+      document.addEventListener('mousemove', e => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top  = e.clientY + 'px';
+      });
+      document.querySelectorAll('a, button, .project-card').forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('large'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('large'));
+      });
+      document.querySelectorAll('a, button').forEach(el => {
+        el.style.cursor = 'none';
+      });
+    }
 
     /* ══════════════════════════════════════════════
        FILTERS
@@ -1136,12 +752,12 @@
 
     /* ══════════════════════════════════════════════
        VIMEO THUMBNAILS
-       API v2 : vimeo.com/api/v2/video/{id}.json
     ══════════════════════════════════════════════ */
     document.querySelectorAll('.vimeo-card').forEach(card => {
-      const id        = card.dataset.vimeoId;
+      const id = card.dataset.vimeoId;
       const img       = card.querySelector('.vimeo-thumb-wrap img');
       const loadingEl = card.querySelector('.vimeo-thumb-loading');
+      if (!img) return; /* wide card has iframe bg, no thumb */
 
       fetch(`https://vimeo.com/api/v2/video/${id}.json`)
         .then(r => r.json())
@@ -1155,51 +771,109 @@
           });
         })
         .catch(() => {
-          if (loadingEl) {
-            loadingEl.querySelector('span').textContent = '▶';
-          }
+          if (loadingEl) loadingEl.querySelector('span').textContent = '▶';
         });
     });
 
     /* ══════════════════════════════════════════════
-       VIMEO MODAL
+       VIDEO MODAL
     ══════════════════════════════════════════════ */
-    const modal       = document.getElementById('vimeoModal');
-    const modalIframe = document.getElementById('vimeoModalIframe');
-    const modalClose  = document.getElementById('modalClose');
+    const vimeoModal   = document.getElementById('vimeoModal');
+    const vimeoIframe  = document.getElementById('vimeoModalIframe');
+    const vimeoClose   = document.getElementById('vimeoModalClose');
 
-    function openModal(id) {
-      modalIframe.src = `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0`;
-      modal.classList.add('open');
+    function openVideoModal(id) {
+      vimeoIframe.src = `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0`;
+      vimeoModal.classList.add('open');
       document.body.style.overflow = 'hidden';
     }
-
-    function closeModal() {
-      modalIframe.src = '';
-      modal.classList.remove('open');
+    function closeVideoModal() {
+      vimeoIframe.src = '';
+      vimeoModal.classList.remove('open');
       document.body.style.overflow = '';
     }
 
-    document.querySelectorAll('.vimeo-play-btn').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        const id = btn.closest('.vimeo-card').dataset.vimeoId;
-        openModal(id);
-      });
-    });
-
     document.querySelectorAll('.vimeo-card').forEach(card => {
-      card.addEventListener('click', e => {
-        if (!e.target.closest('.project-hover-btn')) {
-          openModal(card.dataset.vimeoId);
-        }
+      card.addEventListener('click', () => openVideoModal(card.dataset.vimeoId));
+    });
+    vimeoClose.addEventListener('click', closeVideoModal);
+    vimeoModal.addEventListener('click', e => { if (e.target === vimeoModal) closeVideoModal(); });
+
+    /* ══════════════════════════════════════════════
+       IMAGE LIGHTBOX
+    ══════════════════════════════════════════════ */
+    const imageModal  = document.getElementById('imageModal');
+    const imgModalSrc = document.getElementById('imgModalSrc');
+    const imgClose    = document.getElementById('imgModalClose');
+    const imgPrev     = document.getElementById('imgPrev');
+    const imgNext     = document.getElementById('imgNext');
+
+    /* Build ordered list of visible image cards that have an actual image */
+    let imgCards     = [];
+    let currentImgIdx = 0;
+
+    function buildImgList() {
+      imgCards = Array.from(document.querySelectorAll('.img-card')).filter(c => {
+        return c.style.display !== 'none' && c.dataset.img;
       });
+    }
+
+    function openImageModal(card) {
+      buildImgList();
+      currentImgIdx = imgCards.indexOf(card);
+      if (currentImgIdx === -1) return;
+      const src = card.dataset.img;
+      if (!src) return;
+      imgModalSrc.src = src;
+      imgModalSrc.alt = card.dataset.alt || '';
+      updateNavVisibility();
+      imageModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeImageModal() {
+      imageModal.classList.remove('open');
+      imgModalSrc.src = '';
+      document.body.style.overflow = '';
+    }
+
+    function showImgAt(idx) {
+      if (idx < 0 || idx >= imgCards.length) return;
+      currentImgIdx = idx;
+      const card = imgCards[idx];
+      imgModalSrc.src = card.dataset.img;
+      imgModalSrc.alt = card.dataset.alt || '';
+      updateNavVisibility();
+    }
+
+    function updateNavVisibility() {
+      imgPrev.style.opacity = currentImgIdx > 0 ? '1' : '0.2';
+      imgNext.style.opacity = currentImgIdx < imgCards.length - 1 ? '1' : '0.2';
+      imgPrev.style.pointerEvents = currentImgIdx > 0 ? 'auto' : 'none';
+      imgNext.style.pointerEvents = currentImgIdx < imgCards.length - 1 ? 'auto' : 'none';
+    }
+
+    document.querySelectorAll('.img-card').forEach(card => {
+      card.addEventListener('click', () => openImageModal(card));
     });
 
-    modalClose.addEventListener('click', closeModal);
-    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    imgClose.addEventListener('click', closeImageModal);
+    imageModal.addEventListener('click', e => { if (e.target === imageModal) closeImageModal(); });
+    imgPrev.addEventListener('click', e => { e.stopPropagation(); showImgAt(currentImgIdx - 1); });
+    imgNext.addEventListener('click', e => { e.stopPropagation(); showImgAt(currentImgIdx + 1); });
+
+    /* ══════════════════════════════════════════════
+       KEYBOARD SHORTCUTS
+    ══════════════════════════════════════════════ */
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+      if (e.key === 'Escape') {
+        if (vimeoModal.classList.contains('open')) closeVideoModal();
+        if (imageModal.classList.contains('open'))  closeImageModal();
+      }
+      if (imageModal.classList.contains('open')) {
+        if (e.key === 'ArrowLeft')  showImgAt(currentImgIdx - 1);
+        if (e.key === 'ArrowRight') showImgAt(currentImgIdx + 1);
+      }
     });
 
     /* ══════════════════════════════════════════════
