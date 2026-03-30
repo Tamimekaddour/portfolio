@@ -85,7 +85,6 @@
     }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
 
-    /* ── LANG TOGGLE */
     .lang-toggle {
       font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 10px;
       letter-spacing: .18em; text-transform: uppercase;
@@ -103,7 +102,6 @@
     }
     .btn-nav:hover { background: var(--text); color: var(--bg); }
 
-    /* ── HAMBURGER */
     .hamburger {
       display: none;
       flex-direction: column; gap: 5px;
@@ -434,7 +432,6 @@
       position: absolute; bottom: 0; left: 0; right: 0; z-index: 3; padding: 32px;
       transition: opacity .35s ease;
     }
-    /* FIX: hide bottom info on hover so center hover layer shows cleanly */
     .project-card:hover .project-info { opacity: 0; }
     .project-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
     .project-tag {
@@ -572,7 +569,6 @@
       border: 1px solid rgba(26,163,122,.2); pointer-events: none;
     }
 
-    /* ── CONTACT PILLS — Full-width band */
     .contact-pills-band {
       border-top: 1px solid var(--border);
       margin-left: -52px; margin-right: -52px;
@@ -648,7 +644,6 @@
       <li><a href="#skills"   data-i18n="nav.skills">Skills</a></li>
       <li><a href="#contact"  data-i18n="nav.contact">Contact</a></li>
     </ul>
-    <!-- FIX: plain mailto link, no Cloudflare obfuscation -->
     <a class="mobile-cta" href="mailto:tamime.kaddour.b@gmail.com" data-i18n="contact.btn1">Get in Touch</a>
     <button class="mobile-lang-toggle" id="mobileLangToggle">FR</button>
   </div>
@@ -695,23 +690,96 @@
   <div class="marquee-strip">
     <div class="marquee-track">
       <!-- SET 1 -->
-      <div class="marquee-item"><img src="ps.svg" style="width:30px;height:30px;flex-shrink:0;" alt="Photoshop"/><span class="marquee-label">Photoshop</span></div>
-      <div class="marquee-item"><img src="ai.svg" style="width:30px;height:30px;flex-shrink:0;" alt="Illustrator"/><span class="marquee-label">Illustrator</span></div>
+      <!-- FIX: inline SVGs replace <img> tags for Adobe logos to ensure rendering on all hosts -->
+      <div class="marquee-item">
+        <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/>
+          <line x1="7" y1="9" x2="7" y2="21" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round"/>
+          <path d="M7 9h4.5c1.8 0 3 1.1 3 2.8s-1.2 2.7-3 2.7H9" stroke="var(--green-mid)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M17 17.5c0 1 .9 1.5 2 1.5 1.2 0 2.2-.5 2.2-1.5 0-1-.9-1.3-2.2-1.6-1.3-.4-2.2-.8-2.2-1.9 0-1 1-1.5 2.2-1.5 1.2 0 2 .5 2 1.5" stroke="var(--green-mid)" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="marquee-label">Photoshop</span>
+      </div>
+      <div class="marquee-item">
+        <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/>
+          <path d="M6 21l5.5-13 5.5 13" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="7.5" y1="17.5" x2="15.5" y2="17.5" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round"/>
+          <line x1="21" y1="13" x2="21" y2="21" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round"/>
+          <circle cx="21" cy="10.5" r="1.1" fill="var(--green-mid)"/>
+        </svg>
+        <span class="marquee-label">Illustrator</span>
+      </div>
       <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><polygon points="15,5 25,10 25,20 15,25 5,20 5,10" stroke="var(--green-mid)" stroke-width="1.2" fill="none"/><line x1="15" y1="5" x2="15" y2="15" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><line x1="25" y1="10" x2="15" y2="15" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><line x1="5" y1="10" x2="15" y2="15" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><circle cx="15" cy="15" r="2" fill="var(--green-mid)" opacity=".8"/></svg><span class="marquee-label">Cinema 4D</span></div>
       <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><path d="M8 21l4.5-12 4.5 12" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><line x1="9.5" y1="17" x2="16.5" y2="17" stroke="var(--green-mid)" stroke-width="1.2" stroke-linecap="round"/><line x1="19" y1="10" x2="19" y2="21" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round"/><line x1="19" y1="15" x2="23" y2="15" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round"/></svg><span class="marquee-label">After Effects</span></div>
-      <div class="marquee-item"><img src="pr.svg" style="width:30px;height:30px;flex-shrink:0;" alt="Premiere Pro"/><span class="marquee-label">Premiere Pro</span></div>
-      <div class="marquee-item"><img src="id.svg" style="width:30px;height:30px;flex-shrink:0;" alt="InDesign"/><span class="marquee-label">InDesign</span></div>
+      <div class="marquee-item">
+        <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/>
+          <line x1="6" y1="9" x2="6" y2="21" stroke="var(--green-mid)" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M6 9h4c1.5 0 2.5 1 2.5 2.5S11.5 14 10 14H8" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <line x1="16" y1="13" x2="16" y2="21" stroke="var(--green-mid)" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M16 16.5c1-2.5 3.5-3 5.5-2" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="marquee-label">Premiere Pro</span>
+      </div>
+      <div class="marquee-item">
+        <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/>
+          <line x1="8" y1="9" x2="8" y2="21" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round"/>
+          <line x1="5.5" y1="9" x2="10.5" y2="9" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round"/>
+          <line x1="5.5" y1="21" x2="10.5" y2="21" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round"/>
+          <line x1="22" y1="9" x2="22" y2="21" stroke="var(--green-mid)" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M22 19c-1 1.3-5 1.6-5-1.5 0-3.1 4-3 5-1.5" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="marquee-label">InDesign</span>
+      </div>
       <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><circle cx="15" cy="15" r="7.5" stroke="var(--green-mid)" stroke-width="1.2"/><circle cx="15" cy="15" r="3.2" stroke="var(--green-mid)" stroke-width="1.1"/><path d="M15 7.5v2M15 20.5v2M7.5 15h2M20.5 15h2" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round"/></svg><span class="marquee-label">Lightroom</span></div>
       <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><circle cx="15" cy="15" r="9" stroke="var(--green-mid)" stroke-width="1.2"/><circle cx="15" cy="15" r="5" stroke="var(--green-mid)" stroke-width="1.1" opacity=".6"/><circle cx="15" cy="15" r="1.8" fill="var(--green-mid)"/><line x1="15" y1="6" x2="15" y2="10" stroke="var(--green-mid)" stroke-width="1" stroke-linecap="round"/><line x1="15" y1="20" x2="15" y2="24" stroke="var(--green-mid)" stroke-width="1" stroke-linecap="round"/></svg><span class="marquee-label">DaVinci Resolve</span></div>
       <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><polygon points="15,6 25,22 5,22" stroke="var(--green-mid)" stroke-width="1.3" fill="none" stroke-linejoin="round"/><line x1="15" y1="6" x2="15" y2="22" stroke="var(--green-mid)" stroke-width=".85" opacity=".45" stroke-dasharray="2 2"/><line x1="10" y1="17" x2="20" y2="17" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round"/></svg><span class="marquee-label">ArchiCAD</span></div>
       <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><rect x="5" y="9" width="20" height="13" rx="1" stroke="var(--green-mid)" stroke-width="1.2"/><line x1="5" y1="14" x2="25" y2="14" stroke="var(--green-mid)" stroke-width=".85" opacity=".45"/><circle cx="9" cy="11.5" r="1.2" fill="var(--green-mid)" opacity=".7"/><path d="M9 17.5l3 3 8-6" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" opacity=".8"/></svg><span class="marquee-label">Artlantis</span></div>
       <!-- SET 2 (duplicate) -->
-      <div class="marquee-item"><img src="ps.svg" style="width:30px;height:30px;flex-shrink:0;" alt="Photoshop"/><span class="marquee-label">Photoshop</span></div>
-      <div class="marquee-item"><img src="ai.svg" style="width:30px;height:30px;flex-shrink:0;" alt="Illustrator"/><span class="marquee-label">Illustrator</span></div>
+      <div class="marquee-item">
+        <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/>
+          <line x1="7" y1="9" x2="7" y2="21" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round"/>
+          <path d="M7 9h4.5c1.8 0 3 1.1 3 2.8s-1.2 2.7-3 2.7H9" stroke="var(--green-mid)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M17 17.5c0 1 .9 1.5 2 1.5 1.2 0 2.2-.5 2.2-1.5 0-1-.9-1.3-2.2-1.6-1.3-.4-2.2-.8-2.2-1.9 0-1 1-1.5 2.2-1.5 1.2 0 2 .5 2 1.5" stroke="var(--green-mid)" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="marquee-label">Photoshop</span>
+      </div>
+      <div class="marquee-item">
+        <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/>
+          <path d="M6 21l5.5-13 5.5 13" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="7.5" y1="17.5" x2="15.5" y2="17.5" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round"/>
+          <line x1="21" y1="13" x2="21" y2="21" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round"/>
+          <circle cx="21" cy="10.5" r="1.1" fill="var(--green-mid)"/>
+        </svg>
+        <span class="marquee-label">Illustrator</span>
+      </div>
       <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><polygon points="15,5 25,10 25,20 15,25 5,20 5,10" stroke="var(--green-mid)" stroke-width="1.2" fill="none"/><line x1="15" y1="5" x2="15" y2="15" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><line x1="25" y1="10" x2="15" y2="15" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><line x1="5" y1="10" x2="15" y2="15" stroke="var(--green-mid)" stroke-width=".9" opacity=".55"/><circle cx="15" cy="15" r="2" fill="var(--green-mid)" opacity=".8"/></svg><span class="marquee-label">Cinema 4D</span></div>
       <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><path d="M8 21l4.5-12 4.5 12" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><line x1="9.5" y1="17" x2="16.5" y2="17" stroke="var(--green-mid)" stroke-width="1.2" stroke-linecap="round"/><line x1="19" y1="10" x2="19" y2="21" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round"/><line x1="19" y1="15" x2="23" y2="15" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round"/></svg><span class="marquee-label">After Effects</span></div>
-      <div class="marquee-item"><img src="pr.svg" style="width:30px;height:30px;flex-shrink:0;" alt="Premiere Pro"/><span class="marquee-label">Premiere Pro</span></div>
-      <div class="marquee-item"><img src="id.svg" style="width:30px;height:30px;flex-shrink:0;" alt="InDesign"/><span class="marquee-label">InDesign</span></div>
+      <div class="marquee-item">
+        <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/>
+          <line x1="6" y1="9" x2="6" y2="21" stroke="var(--green-mid)" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M6 9h4c1.5 0 2.5 1 2.5 2.5S11.5 14 10 14H8" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <line x1="16" y1="13" x2="16" y2="21" stroke="var(--green-mid)" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M16 16.5c1-2.5 3.5-3 5.5-2" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="marquee-label">Premiere Pro</span>
+      </div>
+      <div class="marquee-item">
+        <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/>
+          <line x1="8" y1="9" x2="8" y2="21" stroke="var(--green-mid)" stroke-width="1.3" stroke-linecap="round"/>
+          <line x1="5.5" y1="9" x2="10.5" y2="9" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round"/>
+          <line x1="5.5" y1="21" x2="10.5" y2="21" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round"/>
+          <line x1="22" y1="9" x2="22" y2="21" stroke="var(--green-mid)" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M22 19c-1 1.3-5 1.6-5-1.5 0-3.1 4-3 5-1.5" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="marquee-label">InDesign</span>
+      </div>
       <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><circle cx="15" cy="15" r="7.5" stroke="var(--green-mid)" stroke-width="1.2"/><circle cx="15" cy="15" r="3.2" stroke="var(--green-mid)" stroke-width="1.1"/><path d="M15 7.5v2M15 20.5v2M7.5 15h2M20.5 15h2" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round"/></svg><span class="marquee-label">Lightroom</span></div>
       <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><circle cx="15" cy="15" r="9" stroke="var(--green-mid)" stroke-width="1.2"/><circle cx="15" cy="15" r="5" stroke="var(--green-mid)" stroke-width="1.1" opacity=".6"/><circle cx="15" cy="15" r="1.8" fill="var(--green-mid)"/><line x1="15" y1="6" x2="15" y2="10" stroke="var(--green-mid)" stroke-width="1" stroke-linecap="round"/><line x1="15" y1="20" x2="15" y2="24" stroke="var(--green-mid)" stroke-width="1" stroke-linecap="round"/></svg><span class="marquee-label">DaVinci Resolve</span></div>
       <div class="marquee-item"><svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="28" height="28" rx="2" stroke="var(--green-mid)" stroke-width="1"/><polygon points="15,6 25,22 5,22" stroke="var(--green-mid)" stroke-width="1.3" fill="none" stroke-linejoin="round"/><line x1="15" y1="6" x2="15" y2="22" stroke="var(--green-mid)" stroke-width=".85" opacity=".45" stroke-dasharray="2 2"/><line x1="10" y1="17" x2="20" y2="17" stroke="var(--green-mid)" stroke-width="1.1" stroke-linecap="round"/></svg><span class="marquee-label">ArchiCAD</span></div>
@@ -816,7 +884,7 @@
       </a>
 
       <div class="project-card reveal">
-        <div class="project-bg"><img src="project-02.jpg" alt="Brand Identity — Projet 02" loading="lazy" /></div>
+        <div class="project-bg"><img src="project-02.jpg" alt="Brand Identity — Project 02" loading="lazy" /></div>
         <div class="project-overlay"></div>
         <div class="project-hover">
           <span class="project-hover-title">Brand Identity — Project 02</span>
@@ -829,7 +897,7 @@
       </div>
 
       <div class="project-card reveal">
-        <div class="project-bg"><img src="project-03.jpg" alt="3D Exploration — Projet 03" loading="lazy" /></div>
+        <div class="project-bg"><img src="project-03.jpg" alt="3D Exploration — Project 03" loading="lazy" /></div>
         <div class="project-overlay"></div>
         <div class="project-hover">
           <span class="project-hover-title">3D Exploration — Project 03</span>
@@ -842,7 +910,7 @@
       </div>
 
       <div class="project-card reveal">
-        <div class="project-bg"><img src="project-04.jpg" alt="Digital Design — Projet 04" loading="lazy" /></div>
+        <div class="project-bg"><img src="project-04.jpg" alt="Digital Design — Project 04" loading="lazy" /></div>
         <div class="project-overlay"></div>
         <div class="project-hover">
           <span class="project-hover-title">Digital Design — Project 04</span>
@@ -855,7 +923,7 @@
       </div>
 
       <div class="project-card reveal">
-        <div class="project-bg"><img src="project-05.jpg" alt="Logotype — Projet 05" loading="lazy" /></div>
+        <div class="project-bg"><img src="project-05.jpg" alt="Logotype — Project 05" loading="lazy" /></div>
         <div class="project-overlay"></div>
         <div class="project-hover">
           <span class="project-hover-title">Logotype — Project 05</span>
@@ -867,8 +935,9 @@
         </div>
       </div>
 
+      <!-- FIX: project-06.jpg now loaded instead of placeholder -->
       <div class="project-card reveal">
-        <div class="project-bg"><div class="project-placeholder"><span>Photo à venir</span></div></div>
+        <div class="project-bg"><img src="project-06.jpg" alt="Photography — Project 06" loading="lazy" /></div>
         <div class="project-overlay"></div>
         <div class="project-hover">
           <span class="project-hover-title">Photography — Project 06</span>
@@ -880,8 +949,9 @@
         </div>
       </div>
 
+      <!-- FIX: project-07.jpg now loaded instead of placeholder -->
       <div class="project-card reveal">
-        <div class="project-bg"><div class="project-placeholder"><span>Screenshot à venir</span></div></div>
+        <div class="project-bg"><img src="project-07.jpg" alt="Other Stuff — Project 07" loading="lazy" /></div>
         <div class="project-overlay"></div>
         <div class="project-hover">
           <span class="project-hover-title">Other Stuff — Project 07</span>
@@ -1009,16 +1079,13 @@
         <h2 class="contact-heading" data-i18n-html="contact.heading">Got a brief?<br>A spark? <em>Let's talk.</em></h2>
         <p class="contact-desc" data-i18n="contact.desc">Whether it's a brand in the making or a concept that needs form — open to meaningful collaborations with people who value strong visual thinking.</p>
         <div class="contact-btns">
-          <!-- FIX: plain mailto link -->
           <a class="btn-primary" href="mailto:tamime.kaddour.b@gmail.com" data-i18n="contact.btn1">Get in Touch</a>
           <a class="btn-secondary" href="https://www.behance.net/Tamime" target="_blank" data-i18n="contact.btn2">View Behance</a>
         </div>
       </div>
     </div>
 
-    <!-- Pills — full-width band -->
     <div class="contact-pills-band">
-      <!-- FIX: plain mailto link + real email text -->
       <a class="contact-pill" href="mailto:tamime.kaddour.b@gmail.com">
         <svg viewBox="0 0 12 12"><rect x="1" y="2.5" width="10" height="7" rx=".5"/><path d="M1 3.5L6 7l5-3.5"/></svg>
         tamime.kaddour.b@gmail.com
@@ -1065,13 +1132,11 @@
         'nav.contact':     'Contact',
         'nav.open':        'Open to Projects',
         'nav.cta':         'Get in Touch',
-
         'hero.role':  'Art Director & Graphic Designer',
         'hero.tag1':  'Art Director',
         'hero.tag2':  'Brand Design',
         'hero.tag3':  'Visual Identity',
         'hero.tag4':  'Algiers, Algeria',
-
         'about.eyebrow': 'About',
         'about.heading': 'Designing with Purpose,<br><em>clear &amp; lasting identities</em><br>that resonate.',
         'about.p1':  "I'm a graphic designer and visual creator based in Algiers with more than a decade of experience across branding, digital design, and visual communication.",
@@ -1080,7 +1145,6 @@
         'about.stat1': 'Years Exp.',
         'about.stat2': 'Studios',
         'about.stat3': 'Disciplines',
-
         'services.eyebrow': 'Services',
         'services.heading': 'What I do &amp; <em>How I do it</em>',
         'services.tagline': 'Three disciplines, one principle: every visual should earn its place and leave a mark.',
@@ -1090,25 +1154,20 @@
         'services.s2.desc':  'Designing smooth, modern, and human-centered experiences across apps, websites, and social content.',
         'services.s3.title': 'Motion, 3D & Creative Exploration',
         'services.s3.desc':  'From motion graphics and editing to 3D worlds and experimental tools — pushing ideas beyond static design.',
-
         'work.eyebrow': 'Work',
         'work.title':   'Selected<br><em>Projects</em>',
-
         'timeline.eyebrow': 'Experience',
         'timeline.title':   'Professional <em>Journey</em>',
         'timeline.intro':   'Tracing a path from studies to practice — blending creativity with technical skills across fifteen years of continuous growth.',
-
         'skills.eyebrow': 'Skills',
         'skills.heading': 'Creative <em>Tools</em> &amp; Disciplines',
         'skills.col1': 'Disciplines',
         'skills.col2': 'Focus Areas',
-
         'contact.eyebrow': 'Contact',
         'contact.heading': "Got a brief?<br>A spark? <em>Let's talk.</em>",
         'contact.desc':    "Whether it's a brand in the making or a concept that needs form — open to meaningful collaborations with people who value strong visual thinking.",
         'contact.btn1':    'Get in Touch',
         'contact.btn2':    'View Behance',
-
         'footer.copy': '© 2026 Tamime Kaddour — All rights reserved',
       },
       fr: {
@@ -1119,13 +1178,11 @@
         'nav.contact':     'Contact',
         'nav.open':        'Disponible',
         'nav.cta':         'Me contacter',
-
         'hero.role':  'Directeur Artistique & Graphiste',
         'hero.tag1':  'Directeur Artistique',
         'hero.tag2':  'Design de Marque',
         'hero.tag3':  'Identité Visuelle',
         'hero.tag4':  'Alger, Algérie',
-
         'about.eyebrow': 'À propos',
         'about.heading': 'Je transforme la pensée visuelle en<br><em>identités claires et durables</em><br>qui résonnent.',
         'about.p1':  "Graphiste et créateur visuel basé à Alger, avec plus d'une décennie d'expérience en branding, design digital et communication visuelle.",
@@ -1134,7 +1191,6 @@
         'about.stat1': "Ans d'exp.",
         'about.stat2': 'Structures',
         'about.stat3': 'Disciplines',
-
         'services.eyebrow': 'Services',
         'services.heading': 'Ce que je fais &amp; <em>Comment je le fais</em>',
         'services.tagline': 'Trois disciplines, un principe : chaque visuel doit mériter sa place et laisser une trace.',
@@ -1144,25 +1200,20 @@
         'services.s2.desc':  "Concevoir des expériences fluides, modernes et centrées sur l'humain — apps, sites web, contenus digitaux.",
         'services.s3.title': 'Motion, 3D & Exploration Créative',
         'services.s3.desc':  "Du motion design et de l'édition vidéo aux univers 3D et aux outils expérimentaux — pousser les idées au-delà du design statique.",
-
         'work.eyebrow': 'Travaux',
         'work.title':   'Projets<br><em>Sélectionnés</em>',
-
         'timeline.eyebrow': 'Parcours',
         'timeline.title':   'Parcours <em>Professionnel</em>',
         'timeline.intro':   "Un chemin tracé des études à la pratique — alliant créativité et compétences techniques à travers quinze ans de progression continue.",
-
         'skills.eyebrow': 'Compétences',
         'skills.heading': 'Outils <em>Créatifs</em> &amp; Disciplines',
         'skills.col1': 'Disciplines',
         'skills.col2': 'Domaines de focus',
-
         'contact.eyebrow': 'Contact',
         'contact.heading': "Un brief ?<br>Une idée ? <em>Parlons-en.</em>",
         'contact.desc':    "Qu'il s'agisse d'une marque en construction ou d'un concept à mettre en forme — ouvert aux collaborations avec des personnes qui valorisent la pensée visuelle forte.",
         'contact.btn1':    'Me contacter',
         'contact.btn2':    'Voir Behance',
-
         'footer.copy': '© 2026 Tamime Kaddour — Tous droits réservés',
       }
     };
@@ -1186,15 +1237,12 @@
       currentLang = lang;
     }
 
-    /* ── LANG TOGGLE */
     document.getElementById('langToggle').addEventListener('click', () => {
       applyLang(currentLang === 'en' ? 'fr' : 'en');
     });
     document.getElementById('mobileLangToggle').addEventListener('click', () => {
       applyLang(currentLang === 'en' ? 'fr' : 'en');
     });
-
-    /* Apply saved language on load */
     applyLang(currentLang);
 
     /* ══════════════════════════════════════
@@ -1305,7 +1353,6 @@
 
     /* ══════════════════════════════════════
        FILM GRAIN — animated noise overlay
-       Renders at 55% res, ~18fps, overlay blend
     ══════════════════════════════════════ */
     (function() {
       const c = document.createElement('canvas');
