@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Projects — Tamime Kaddour</title>
   <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  
+  <script src="https://player.vimeo.com/api/player.js"></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -23,7 +29,11 @@
       --border:     rgba(26,163,122,0.18);
     }
 
-    html { scroll-behavior: smooth; }
+    html.lenis, html.lenis body {
+      height: auto;
+      scroll-behavior: auto !important; /* Géré par Lenis */
+    }
+
     body {
       background: var(--bg); color: var(--text);
       font-family: 'Lexend', sans-serif;
@@ -52,6 +62,10 @@
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
       border-bottom: 1px solid var(--border);
+      transition: padding .3s ease;
+    }
+    nav.scrolled {
+      padding-top: 14px; padding-bottom: 14px;
     }
     .nav-logo { display: flex; align-items: center; text-decoration: none; }
     .nav-logo img { height: 46px; width: auto; opacity: .88; transition: opacity .3s; }
@@ -64,6 +78,7 @@
     }
     .nav-back:hover { color: var(--text); }
     .nav-back::before { content: '←'; font-size: 14px; line-height: 1; }
+    
     .nav-cta {
       font-family: 'Lexend', sans-serif; font-weight: 500; font-size: 10px;
       letter-spacing: .18em; text-transform: uppercase; color: var(--text);
@@ -71,6 +86,7 @@
       text-decoration: none; transition: all .3s; background: transparent;
     }
     .nav-cta:hover { background: var(--text); color: var(--bg); }
+    
     .lang-toggle {
       font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 10px;
       letter-spacing: .18em; text-transform: uppercase;
@@ -144,12 +160,21 @@
       grid-column: span 2; aspect-ratio: 16/7;
     }
 
+    /* Parallax Setup GSAP */
     .project-bg {
       position: absolute; inset: 0;
       transition: transform .7s cubic-bezier(.25,.46,.45,.94);
     }
     .project-card:not(.wide):hover .project-bg { transform: scale(1.04); }
-    .project-bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    
+    .project-card:not(.vimeo-card) .project-bg img { 
+      width: 100%; height: 120%; /* Plus grand pour le parallaxe */
+      object-fit: cover; display: block; 
+      position: relative; top: -10%;
+    }
+    .vimeo-card .project-bg img { 
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
 
     /* Vimeo bg iframe */
     .vimeo-bg-iframe {
@@ -171,7 +196,6 @@
     /* Vimeo thumbnail */
     .vimeo-thumb-wrap { width: 100%; height: 100%; position: relative; }
     .vimeo-thumb-wrap img {
-      width: 100%; height: 100%; object-fit: cover; display: block;
       opacity: 0; transition: opacity .5s ease;
     }
     .vimeo-thumb-wrap img.loaded { opacity: 1; }
@@ -195,18 +219,6 @@
     }
     .project-card:hover .play-icon { opacity: 1; }
     .play-icon svg { width: 52px; height: 52px; filter: drop-shadow(0 2px 12px rgba(0,0,0,.6)); }
-
-    /* Gallery hint icon */
-    .gallery-icon {
-      position: absolute; top: 18px; right: 18px; z-index: 3;
-      display: flex; align-items: center; gap: 6px;
-      font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 9px;
-      letter-spacing: .16em; text-transform: uppercase;
-      color: rgba(246,230,209,.6);
-      background: rgba(0,0,0,.45); padding: 6px 12px;
-      backdrop-filter: blur(4px);
-      pointer-events: none;
-    }
 
     /* Overlay */
     .project-overlay {
@@ -343,9 +355,8 @@
     .footer-copy { font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 9.5px; letter-spacing: .16em; color: var(--muted); }
     .footer-tag  { font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 13px; color: rgba(246,230,209,.2); }
 
-    /* ── REVEAL */
-    .reveal { opacity: 0; transform: translateY(26px); transition: opacity .9s ease, transform .9s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    /* ── REVEAL INITIAL STATE (GSAP) */
+    .reveal { opacity: 0; transform: translateY(30px); }
 
     /* ── RESPONSIVE */
     @media (max-width: 960px) {
@@ -370,11 +381,12 @@
 
   <div id="cursor"></div>
 
-  <nav>
+  <nav id="mainNav">
     <a class="nav-logo" href="index.html"><img src="logo.svg" alt="Tamime Kaddour" /></a>
     <a class="nav-back" href="index.html" data-i18n="nav.back">Back to portfolio</a>
     <div style="display:flex;align-items:center;gap:14px;">
       <button class="lang-toggle" id="langToggle">FR</button>
+      <a href="cv-tamime-kaddour.pdf" download class="nav-cta">CV</a>
       <a class="nav-cta" href="index.html#contact" data-i18n="nav.cta">Get in Touch</a>
     </div>
   </nav>
@@ -502,23 +514,6 @@
         <div class="project-info">
           <div class="project-tags"><span class="project-tag">3D</span><span class="project-tag">Render</span></div>
           <p class="project-name" data-i18n="d02.title">3D — Model 02</p>
-        </div>
-      </div>
-
-      <div class="project-card wide reveal gallery-card" data-category="photo" data-gallery="photo">
-        <div class="project-bg"><img src="projects/photo/pic10-photos.jpg" alt="Photography Gallery" loading="lazy" /></div>
-        <div class="gallery-icon">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="1" y="1" width="4.5" height="4.5"/><rect x="6.5" y="1" width="4.5" height="4.5"/><rect x="1" y="6.5" width="4.5" height="4.5"/><rect x="6.5" y="6.5" width="4.5" height="4.5"/></svg>
-          20 photos
-        </div>
-        <div class="project-overlay"></div>
-        <div class="project-hover">
-          <span class="project-hover-title" data-i18n="photo.title">Photography — Gallery</span>
-          <button class="project-hover-btn" data-i18n="photo.btn">View Gallery (20)</button>
-        </div>
-        <div class="project-info">
-          <div class="project-tags"><span class="project-tag">Photography</span></div>
-          <p class="project-name" data-i18n="photo.title">Photography — Gallery</p>
         </div>
       </div>
 
@@ -1050,6 +1045,266 @@
         </div>
       </div>
 
+      <div class="project-card reveal image-card" data-category="photo" data-img-src="projects/photo/pic1-photos.jpg">
+        <div class="project-bg"><img src="projects/photo/pic1-photos.jpg" alt="Photography — 01" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'project-placeholder\'><span>Coming soon</span></div>'" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title" data-i18n="ph1.title">Photography — Image 01</span>
+          <button class="project-hover-btn" data-i18n="p.view">View</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name" data-i18n="ph1.title">Photography — Image 01</p>
+        </div>
+      </div>
+      
+      <div class="project-card reveal image-card" data-category="photo" data-img-src="projects/photo/pic2-photos.jpg">
+        <div class="project-bg"><img src="projects/photo/pic2-photos.jpg" alt="Photography — 02" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'project-placeholder\'><span>Coming soon</span></div>'" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title" data-i18n="ph2.title">Photography — Image 02</span>
+          <button class="project-hover-btn" data-i18n="p.view">View</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name" data-i18n="ph2.title">Photography — Image 02</p>
+        </div>
+      </div>
+      
+      <div class="project-card reveal image-card" data-category="photo" data-img-src="projects/photo/pic3-photos.jpg">
+        <div class="project-bg"><img src="projects/photo/pic3-photos.jpg" alt="Photography — 03" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'project-placeholder\'><span>Coming soon</span></div>'" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title" data-i18n="ph3.title">Photography — Image 03</span>
+          <button class="project-hover-btn" data-i18n="p.view">View</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name" data-i18n="ph3.title">Photography — Image 03</p>
+        </div>
+      </div>
+      
+      <div class="project-card reveal image-card" data-category="photo" data-img-src="projects/photo/pic4-photos.jpg">
+        <div class="project-bg"><img src="projects/photo/pic4-photos.jpg" alt="Photography — 04" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'project-placeholder\'><span>Coming soon</span></div>'" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title" data-i18n="ph4.title">Photography — Image 04</span>
+          <button class="project-hover-btn" data-i18n="p.view">View</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name" data-i18n="ph4.title">Photography — Image 04</p>
+        </div>
+      </div>
+      
+      <div class="project-card reveal image-card" data-category="photo" data-img-src="projects/photo/pic5-photos.jpg">
+        <div class="project-bg"><img src="projects/photo/pic5-photos.jpg" alt="Photography — 05" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'project-placeholder\'><span>Coming soon</span></div>'" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title" data-i18n="ph5.title">Photography — Image 05</span>
+          <button class="project-hover-btn" data-i18n="p.view">View</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name" data-i18n="ph5.title">Photography — Image 05</p>
+        </div>
+      </div>
+      
+      <div class="project-card reveal image-card" data-category="photo" data-img-src="projects/photo/pic6-photos.jpg">
+        <div class="project-bg"><img src="projects/photo/pic6-photos.jpg" alt="Photography — 06" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'project-placeholder\'><span>Coming soon</span></div>'" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title" data-i18n="ph6.title">Photography — Image 06</span>
+          <button class="project-hover-btn" data-i18n="p.view">View</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name" data-i18n="ph6.title">Photography — Image 06</p>
+        </div>
+      </div>
+      
+      <div class="project-card reveal image-card" data-category="photo" data-img-src="projects/photo/pic7-photos.jpg">
+        <div class="project-bg"><img src="projects/photo/pic7-photos.jpg" alt="Photography — 07" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'project-placeholder\'><span>Coming soon</span></div>'" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title" data-i18n="ph7.title">Photography — Image 07</span>
+          <button class="project-hover-btn" data-i18n="p.view">View</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name" data-i18n="ph7.title">Photography — Image 07</p>
+        </div>
+      </div>
+      
+      <div class="project-card reveal image-card" data-category="photo" data-img-src="projects/photo/pic8-photos.jpg">
+        <div class="project-bg"><img src="projects/photo/pic8-photos.jpg" alt="Photography — 08" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'project-placeholder\'><span>Coming soon</span></div>'" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title" data-i18n="ph8.title">Photography — Image 08</span>
+          <button class="project-hover-btn" data-i18n="p.view">View</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name" data-i18n="ph8.title">Photography — Image 08</p>
+        </div>
+      </div>
+      
+      <div class="project-card reveal image-card" data-category="photo" data-img-src="projects/photo/pic9-photos.jpg">
+        <div class="project-bg"><img src="projects/photo/pic9-photos.jpg" alt="Photography — 09" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'project-placeholder\'><span>Coming soon</span></div>'" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title" data-i18n="ph9.title">Photography — Image 09</span>
+          <button class="project-hover-btn" data-i18n="p.view">View</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name" data-i18n="ph9.title">Photography — Image 09</p>
+        </div>
+      </div>
+      
+      <div class="project-card reveal image-card" data-category="photo" data-img-src="projects/photo/pic10-photos.jpg">
+        <div class="project-bg"><img src="projects/photo/pic10-photos.jpg" alt="Photography — 10" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'project-placeholder\'><span>Coming soon</span></div>'" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title" data-i18n="ph10.title">Photography — Image 10</span>
+          <button class="project-hover-btn" data-i18n="p.view">View</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name" data-i18n="ph10.title">Photography — Image 10</p>
+        </div>
+      </div>
+
+      <div class="project-card reveal image-card" data-category="photo" data-img-src="projects/photo/pic11-photos.jpg">
+        <div class="project-bg"><img src="projects/photo/pic11-photos.jpg" alt="Photography — 11" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'project-placeholder\'><span>Coming soon</span></div>'" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title" data-i18n="ph11.title">Photography — Image 11</span>
+          <button class="project-hover-btn" data-i18n="p.view">View</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name" data-i18n="ph11.title">Photography — Image 11</p>
+        </div>
+      </div>
+
+      <div class="project-card reveal image-card" data-category="photo" data-img-src="projects/photo/pic12-photos.jpg">
+        <div class="project-bg"><img src="projects/photo/pic12-photos.jpg" alt="Photography — 12" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'project-placeholder\'><span>Coming soon</span></div>'" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title" data-i18n="ph12.title">Photography — Image 12</span>
+          <button class="project-hover-btn" data-i18n="p.view">View</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name" data-i18n="ph12.title">Photography — Image 12</p>
+        </div>
+      </div>
+
+      <div class="project-card reveal image-card" data-category="photo" data-img-src="projects/photo/pic13-photos.jpg">
+        <div class="project-bg"><img src="projects/photo/pic13-photos.jpg" alt="Photography — 13" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'project-placeholder\'><span>Coming soon</span></div>'" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title" data-i18n="ph13.title">Photography — Image 13</span>
+          <button class="project-hover-btn" data-i18n="p.view">View</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name" data-i18n="ph13.title">Photography — Image 13</p>
+        </div>
+      </div>
+
+      <div class="project-card reveal image-card" data-category="photo" data-img-src="projects/photo/pic14-photos.jpg">
+        <div class="project-bg"><img src="projects/photo/pic14-photos.jpg" alt="Photography — 14" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'project-placeholder\'><span>Coming soon</span></div>'" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title" data-i18n="ph14.title">Photography — Image 14</span>
+          <button class="project-hover-btn" data-i18n="p.view">View</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name" data-i18n="ph14.title">Photography — Image 14</p>
+        </div>
+      </div>
+
+      <div class="project-card reveal image-card" data-category="photo" data-img-src="projects/photo/pic15-photos.jpg">
+        <div class="project-bg"><img src="projects/photo/pic15-photos.jpg" alt="Photography — 15" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'project-placeholder\'><span>Coming soon</span></div>'" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title" data-i18n="ph15.title">Photography — Image 15</span>
+          <button class="project-hover-btn" data-i18n="p.view">View</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name" data-i18n="ph15.title">Photography — Image 15</p>
+        </div>
+      </div>
+
+      <div class="project-card reveal image-card" data-category="photo" data-img-src="projects/photo/pic16-photos.jpg">
+        <div class="project-bg"><img src="projects/photo/pic16-photos.jpg" alt="Photography — 16" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'project-placeholder\'><span>Coming soon</span></div>'" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title" data-i18n="ph16.title">Photography — Image 16</span>
+          <button class="project-hover-btn" data-i18n="p.view">View</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name" data-i18n="ph16.title">Photography — Image 16</p>
+        </div>
+      </div>
+
+      <div class="project-card reveal image-card" data-category="photo" data-img-src="projects/photo/pic17-photos.jpg">
+        <div class="project-bg"><img src="projects/photo/pic17-photos.jpg" alt="Photography — 17" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'project-placeholder\'><span>Coming soon</span></div>'" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title" data-i18n="ph17.title">Photography — Image 17</span>
+          <button class="project-hover-btn" data-i18n="p.view">View</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name" data-i18n="ph17.title">Photography — Image 17</p>
+        </div>
+      </div>
+
+      <div class="project-card reveal image-card" data-category="photo" data-img-src="projects/photo/pic18-photos.jpg">
+        <div class="project-bg"><img src="projects/photo/pic18-photos.jpg" alt="Photography — 18" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'project-placeholder\'><span>Coming soon</span></div>'" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title" data-i18n="ph18.title">Photography — Image 18</span>
+          <button class="project-hover-btn" data-i18n="p.view">View</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name" data-i18n="ph18.title">Photography — Image 18</p>
+        </div>
+      </div>
+
+      <div class="project-card reveal image-card" data-category="photo" data-img-src="projects/photo/pic19-photos.jpg">
+        <div class="project-bg"><img src="projects/photo/pic19-photos.jpg" alt="Photography — 19" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'project-placeholder\'><span>Coming soon</span></div>'" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title" data-i18n="ph19.title">Photography — Image 19</span>
+          <button class="project-hover-btn" data-i18n="p.view">View</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name" data-i18n="ph19.title">Photography — Image 19</p>
+        </div>
+      </div>
+
+      <div class="project-card reveal image-card" data-category="photo" data-img-src="projects/photo/pic20-photos.jpg">
+        <div class="project-bg"><img src="projects/photo/pic20-photos.jpg" alt="Photography — 20" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\'project-placeholder\'><span>Coming soon</span></div>'" /></div>
+        <div class="project-overlay"></div>
+        <div class="project-hover">
+          <span class="project-hover-title" data-i18n="ph20.title">Photography — Image 20</span>
+          <button class="project-hover-btn" data-i18n="p.view">View</button>
+        </div>
+        <div class="project-info">
+          <div class="project-tags"><span class="project-tag">Photography</span></div>
+          <p class="project-name" data-i18n="ph20.title">Photography — Image 20</p>
+        </div>
+      </div>
+
     </div></section>
 
   <div id="vimeoModal" role="dialog" aria-modal="true" aria-label="Video player">
@@ -1114,11 +1369,20 @@
         'dig1.title': 'Digital Design — Campaign 01', 'dig3.title': 'Digital Design — Campaign 03',
         'dig4.title': 'Digital Design — Campaign 04', 'dig5.title': 'Digital Design — Campaign 05',
         'dig6.title': 'Digital Design — Campaign 06',
-        'photo.title': 'Photography — Gallery', 'photo.btn': 'View Gallery (20)',
         'o01.title': 'Other Work — Item 01', 'o02.title': 'Other Work — Item 02',
         'o03.title': 'Other Work — Item 03', 'o04.title': 'Other Work — Item 04',
         'o05.title': 'Other Work — Item 05', 'o06.title': 'Other Work — Item 06',
         'o07.title': 'Other Work — Item 07', 'o08.title': 'Other Work — Item 08',
+        'ph1.title': 'Photography — Image 01', 'ph2.title': 'Photography — Image 02',
+        'ph3.title': 'Photography — Image 03', 'ph4.title': 'Photography — Image 04',
+        'ph5.title': 'Photography — Image 05', 'ph6.title': 'Photography — Image 06',
+        'ph7.title': 'Photography — Image 07', 'ph8.title': 'Photography — Image 08',
+        'ph9.title': 'Photography — Image 09', 'ph10.title': 'Photography — Image 10',
+        'ph11.title': 'Photography — Image 11', 'ph12.title': 'Photography — Image 12',
+        'ph13.title': 'Photography — Image 13', 'ph14.title': 'Photography — Image 14',
+        'ph15.title': 'Photography — Image 15', 'ph16.title': 'Photography — Image 16',
+        'ph17.title': 'Photography — Image 17', 'ph18.title': 'Photography — Image 18',
+        'ph19.title': 'Photography — Image 19', 'ph20.title': 'Photography — Image 20',
         'cta.title': 'Got a project in mind? <em>Let\'s talk.</em>',
         'cta.sub': 'Available for collaborations in branding, motion, 3D and digital design.',
         'cta.btn': 'Get in Touch',
@@ -1152,11 +1416,20 @@
         'dig1.title': 'Design Digital — Campagne 01', 'dig3.title': 'Design Digital — Campagne 03',
         'dig4.title': 'Design Digital — Campagne 04', 'dig5.title': 'Design Digital — Campagne 05',
         'dig6.title': 'Design Digital — Campagne 06',
-        'photo.title': 'Photographie — Galerie', 'photo.btn': 'Voir la galerie (20)',
         'o01.title': 'Autres — Item 01', 'o02.title': 'Autres — Item 02',
         'o03.title': 'Autres — Item 03', 'o04.title': 'Autres — Item 04',
         'o05.title': 'Autres — Item 05', 'o06.title': 'Autres — Item 06',
         'o07.title': 'Autres — Item 07', 'o08.title': 'Autres — Item 08',
+        'ph1.title': 'Photographie — Image 01', 'ph2.title': 'Photographie — Image 02',
+        'ph3.title': 'Photographie — Image 03', 'ph4.title': 'Photographie — Image 04',
+        'ph5.title': 'Photographie — Image 05', 'ph6.title': 'Photographie — Image 06',
+        'ph7.title': 'Photographie — Image 07', 'ph8.title': 'Photographie — Image 08',
+        'ph9.title': 'Photographie — Image 09', 'ph10.title': 'Photographie — Image 10',
+        'ph11.title': 'Photographie — Image 11', 'ph12.title': 'Photographie — Image 12',
+        'ph13.title': 'Photographie — Image 13', 'ph14.title': 'Photographie — Image 14',
+        'ph15.title': 'Photographie — Image 15', 'ph16.title': 'Photographie — Image 16',
+        'ph17.title': 'Photographie — Image 17', 'ph18.title': 'Photographie — Image 18',
+        'ph19.title': 'Photographie — Image 19', 'ph20.title': 'Photographie — Image 20',
         'cta.title': 'Un projet en tête ? <em>Parlons-en.</em>',
         'cta.sub': 'Disponible pour des collaborations en branding, motion, 3D et design digital.',
         'cta.btn': 'Me contacter',
@@ -1186,6 +1459,34 @@
       applyLang(currentLang === 'en' ? 'fr' : 'en');
     });
     applyLang(currentLang);
+
+    /* ══════════════════════════════════════════
+       INITIALISATION LENIS & GSAP
+    ══════════════════════════════════════════ */
+    // Enregistrer ScrollTrigger
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Initialiser Lenis (Smooth Scroll)
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      direction: 'vertical',
+      gestureDirection: 'vertical',
+      smooth: true,
+      mouseMultiplier: 1,
+      smoothTouch: false,
+      touchMultiplier: 2,
+    });
+
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
+
+    /* NAV SCROLL */
+    const mainNav = document.getElementById('mainNav');
+    lenis.on('scroll', ({ scroll }) => {
+      mainNav.classList.toggle('scrolled', scroll > 60);
+    });
 
     /* ══════════════════════════════════════════
        CURSOR
@@ -1221,6 +1522,9 @@
         allCards.forEach(card => {
           card.style.display = (f === 'all' || card.dataset.category === f) ? '' : 'none';
         });
+        
+        // Refresh ScrollTrigger après le filtrage pour corriger les hauteurs
+        setTimeout(() => ScrollTrigger.refresh(), 100);
       });
     });
 
@@ -1254,12 +1558,12 @@
     function openVimeo(id) {
       vimeoIframe.src = `https://player.vimeo.com/video/${id}?autoplay=1&title=0&byline=0&portrait=0`;
       vimeoModal.classList.add('open');
-      document.body.style.overflow = 'hidden';
+      lenis.stop(); // Stoppe le scroll en arrière plan
     }
     function closeVimeo() {
       vimeoIframe.src = '';
       vimeoModal.classList.remove('open');
-      document.body.style.overflow = '';
+      lenis.start();
     }
 
     document.querySelectorAll('.vimeo-play-btn').forEach(btn => {
@@ -1279,21 +1583,6 @@
     /* ══════════════════════════════════════════
        IMAGE LIGHTBOX
     ══════════════════════════════════════════ */
-
-    /* Photo gallery — all 20 photos in order */
-    const PHOTO_GALLERY = [
-      'projects/photo/pic2-photos.jpg',  'projects/photo/pic3-photos.jpg',
-      'projects/photo/pic4-photos.jpg',  'projects/photo/pic5-photos.jpg',
-      'projects/photo/pic6-photos.jpg',  'projects/photo/pic7-photos.jpg',
-      'projects/photo/pic8-photos.jpg',  'projects/photo/pic9-photos.jpg',
-      'projects/photo/pic10-photos.jpg', 'projects/photo/pic11-photos.jpg',
-      'projects/photo/pic12-photos.jpg', 'projects/photo/pic13-photos.jpg',
-      'projects/photo/pic14-photos.jpg', 'projects/photo/pic15-photos.jpg',
-      'projects/photo/pic16-photos.jpg', 'projects/photo/pic17-photos.jpg',
-      'projects/photo/pic18-photos.jpg', 'projects/photo/pic19-photos.jpg',
-      'projects/photo/pic20-photos.jpg', 'projects/photo/pic21-photos.jpg',
-    ];
-
     const imageModal    = document.getElementById('imageModal');
     const imgModalImg   = document.getElementById('imgModalImg');
     const imgModalClose = document.getElementById('imgModalClose');
@@ -1309,7 +1598,7 @@
       galleryIdx = startIdx;
       refreshImageModal();
       imageModal.classList.add('open');
-      document.body.style.overflow = 'hidden';
+      lenis.stop();
     }
 
     function refreshImageModal() {
@@ -1323,7 +1612,7 @@
     function closeImageModal() {
       imgModalImg.src = '';
       imageModal.classList.remove('open');
-      document.body.style.overflow = '';
+      lenis.start();
     }
 
     imgModalClose.addEventListener('click', closeImageModal);
@@ -1346,18 +1635,9 @@
       });
     });
 
-    /* Photo gallery card */
-    document.querySelectorAll('.gallery-card').forEach(card => {
-      card.addEventListener('click', e => {
-        openImageModal(PHOTO_GALLERY, 0);
-      });
-    });
-
     /* Keyboard navigation */
     document.addEventListener('keydown', e => {
-      /* Vimeo modal */
       if (vimeoModal.classList.contains('open') && e.key === 'Escape') { closeVimeo(); return; }
-      /* Image modal */
       if (!imageModal.classList.contains('open')) return;
       if (e.key === 'Escape')      { closeImageModal(); return; }
       if (e.key === 'ArrowLeft'  && galleryIdx > 0)                  { galleryIdx--; refreshImageModal(); }
@@ -1375,17 +1655,40 @@
     });
 
     /* ══════════════════════════════════════════
-       SCROLL REVEAL
+       GSAP REVEAL ANIMATIONS
     ══════════════════════════════════════════ */
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach((e, i) => {
-        if (e.isIntersecting) {
-          setTimeout(() => e.target.classList.add('visible'), i * 60);
-          obs.unobserve(e.target);
+    gsap.utils.toArray('.reveal').forEach(elem => {
+      gsap.fromTo(elem, 
+        { opacity: 0, y: 30 },
+        {
+          scrollTrigger: { trigger: elem, start: "top 85%" },
+          opacity: 1, y: 0, duration: 0.8, ease: "power2.out"
         }
-      });
-    }, { threshold: 0.06 });
-    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+      );
+    });
+
+    /* ══════════════════════════════════════════
+       GSAP PARALLAX ON PROJECTS
+    ══════════════════════════════════════════ */
+    gsap.utils.toArray('.project-card').forEach(card => {
+      const bgImg = card.querySelector('.project-bg img');
+      // On applique le parallaxe sur les images, mais on évite les iframes Vimeo pour éviter les bugs de scroll
+      if (bgImg && !card.classList.contains('vimeo-card')) {
+        gsap.fromTo(bgImg,
+          { yPercent: -10 },
+          {
+            yPercent: 10,
+            ease: "none",
+            scrollTrigger: {
+              trigger: card,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true
+            }
+          }
+        );
+      }
+    });
 
     /* ══════════════════════════════════════════
        FILM GRAIN
@@ -1411,18 +1714,6 @@
         requestAnimationFrame(grain);
       })();
     })();
-  </script>
-  <script>
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
-      link.addEventListener('click', function(e) {
-        const target = document.querySelector(this.getAttribute('href'));
-        if (!target) return;
-        e.preventDefault();
-        const navHeight = document.querySelector('nav')?.offsetHeight || 0;
-        const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 24;
-        window.scrollTo({ top, behavior: 'smooth' });
-      });
-    });
   </script>
 </body>
 </html>
