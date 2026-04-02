@@ -31,7 +31,7 @@
 
     html.lenis, html.lenis body {
       height: auto;
-      scroll-behavior: auto !important; /* Géré par Lenis */
+      scroll-behavior: auto !important;
     }
 
     body {
@@ -152,23 +152,24 @@
 
     /* ── CARDS */
     .project-card {
-      position: relative; overflow: hidden;
-      background: var(--bg2); aspect-ratio: 4/3;
+      position: relative; overflow: hidden; /* Important pour le zoom */
+      background: var(--bg2); aspect-ratio: 4/3; /* Ratio fixe */
       cursor: none;
     }
     .project-card.wide {
       grid-column: span 2; aspect-ratio: 16/7;
     }
 
-    /* Parallax Setup GSAP */
+    /* Hover Zoom & Parallax Setup GSAP */
     .project-bg {
       position: absolute; inset: 0;
-      transition: transform .7s cubic-bezier(.25,.46,.45,.94);
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
-    .project-card:not(.wide):hover .project-bg { transform: scale(1.04); }
+    /* Zoom accentué au survol */
+    .project-card:not(.wide):hover .project-bg { transform: scale(1.06); }
     
     .project-card:not(.vimeo-card) .project-bg img { 
-      width: 100%; height: 120%; /* Plus grand pour le parallaxe */
+      width: 100%; height: 120%;
       object-fit: cover; display: block; 
       position: relative; top: -10%;
     }
@@ -226,7 +227,7 @@
       background: linear-gradient(to top, rgba(18,18,22,.94) 0%, rgba(18,18,22,.18) 55%, transparent 100%);
       z-index: 2; transition: background .4s ease;
     }
-    .project-card:hover .project-overlay { background: rgba(0,103,79,.55); }
+    .project-card:hover .project-overlay { background: rgba(0,103,79,.65); } /* Légèrement plus opaque au survol */
 
     /* Hover layer */
     .project-hover {
@@ -252,20 +253,24 @@
     }
     .project-hover-btn:hover { background: var(--text); color: var(--bg); }
 
-    /* Info bottom */
+    /* Info bottom & Tags Art Director Style */
     .project-info {
       position: absolute; bottom: 0; left: 0; right: 0;
       z-index: 3; padding: 28px; transition: opacity .35s ease;
     }
     .project-card:hover .project-info { opacity: 0; }
-    .project-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+    .project-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+    
     .project-tag {
-      font-family: 'Lexend', sans-serif; font-weight: 200; font-size: 8.5px;
-      letter-spacing: .2em; text-transform: uppercase; color: var(--green-mid);
-      border: 1px solid rgba(26,163,122,.3); padding: 4px 10px;
+      font-family: 'Lexend', sans-serif; font-weight: 500; font-size: 8px;
+      letter-spacing: .25em; text-transform: uppercase; 
+      color: var(--bg); background: var(--green-mid);
+      border: none; padding: 6px 12px; border-radius: 2px;
     }
+    
     .project-name {
-      font-family: 'Lexend', sans-serif; font-weight: 600; font-size: 16px; color: var(--text);
+      font-family: 'Lexend', sans-serif; font-weight: 600; font-size: 16px; 
+      color: var(--text); letter-spacing: 0.02em;
     }
 
     /* ── VIMEO MODAL */
@@ -363,7 +368,7 @@
       nav { padding: 18px 24px; }
       .page-header { padding: 120px 24px 60px; }
       .projects-section { padding: 40px 24px 80px; }
-      .projects-grid { grid-template-columns: 1fr; }
+      .projects-grid { grid-template-columns: 1fr; } /* 1 colonne sur mobile */
       .project-card.wide { grid-column: span 1; aspect-ratio: 4/3; }
       footer { flex-direction: column; gap: 12px; padding: 24px; text-align: center; }
       .cta-band { padding: 60px 24px; }
@@ -409,16 +414,17 @@
   <section class="projects-section">
     <div class="projects-grid" id="projectsGrid">
 
-      <div class="project-card wide reveal" data-category="motion">
+      <div class="project-card wide reveal vimeo-card" data-category="motion" data-vimeo-id="1056586616">
         <div class="project-bg">
           <iframe class="vimeo-bg-iframe"
-            src="https://player.vimeo.com/video/1173747074?autoplay=1&muted=1&loop=1&background=1&title=0&byline=0&portrait=0"
+            src="https://player.vimeo.com/video/1056586616?autoplay=1&muted=1&loop=1&background=1&title=0&byline=0&portrait=0"
             allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
         </div>
+        <div class="play-icon"><svg viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="25" stroke="rgba(246,230,209,0.7)" stroke-width="1"/><polygon points="21,17 37,26 21,35" fill="rgba(246,230,209,0.9)"/></svg></div>
         <div class="project-overlay"></div>
         <div class="project-hover">
           <span class="project-hover-title" data-i18n="v01.title">Motion &amp; Animation — Video 01</span>
-          <a class="project-hover-btn" href="https://vimeo.com/1173747074" target="_blank" rel="noopener" data-i18n="v.watch">Watch on Vimeo</a>
+          <button class="project-hover-btn vimeo-play-btn" data-i18n="v.play">▶ Watch video</button>
         </div>
         <div class="project-info">
           <div class="project-tags"><span class="project-tag">Motion</span><span class="project-tag">Animation</span></div>
