@@ -379,7 +379,7 @@
     
     /* GSAP Parallax Setup */
     .project-bg { 
-      position: absolute; inset: -15%; /* Larger for Parallax */
+      position: absolute; inset: -15%;
       transition: transform .7s cubic-bezier(.25,.46,.45,.94); 
     }
     .project-card:hover .project-bg { transform: scale(1.04); }
@@ -479,7 +479,7 @@
       letter-spacing: .2em; color: rgba(246,230,209,.3); margin-bottom: 10px; text-transform: uppercase;
     }
 
-    /* Right: scrolling entries (IMPROVED ANIMATION) */
+    /* Right: scrolling entries */
     .tl-scroll-right { padding: 80px 52px 80px 60px; }
     .tl-entry { 
       padding: 56px 0; 
@@ -557,7 +557,7 @@
     }
     .s-tag:hover { color: var(--green-mid); border-color: rgba(26,163,122,.5); }
 
-    /* ── CONTACT */
+    /* ── CONTACT SECTION */
     #contact { background: var(--bg2); border-top: 1px solid var(--border); padding: 120px 52px 0; }
     .contact-inner {
       display: grid; grid-template-columns: 480px 1fr; gap: 80px; align-items: stretch;
@@ -594,25 +594,60 @@
     }
     .contact-photo::after { content: ''; position: absolute; inset: 0; border: 1px solid rgba(26,163,122,.2); pointer-events: none; }
 
-    /* Pills band (MODIFIED) */
-    .contact-pills-band { border-top: 1px solid var(--border); margin-left: -52px; margin-right: -52px; display: flex; flex-wrap: wrap; }
-    
-    .contact-pill {
-      flex: 1; display: flex; align-items: center; justify-content: center; gap: 12px;
-      font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 10.5px;
-      letter-spacing: .15em; text-transform: uppercase; color: rgba(246,230,209,.5);
-      border-right: 1px solid var(--border); padding: 24px 16px; text-decoration: none; transition: all .3s;
+    /* ══════════════════════════════════════
+       CONTACT SUMMARY BAND (RECTANGULAR)
+    ══════════════════════════════════════ */
+    .contact-summary-band {
+      display: flex; flex-wrap: wrap;
+      border-top: 1px solid var(--border);
+      margin-left: -52px; margin-right: -52px;
     }
-    .contact-pill.text-pill { flex: 2; } /* Gives a bit more space to the phone pill so it isn't squeezed */
-    .contact-pill:last-child { border-right: none; }
-    .contact-pill:hover { color: var(--text); background: rgba(26,163,122,.05); }
     
-    /* Slightly bigger icons with a hover bounce */
-    .contact-pill svg { 
-      width: 20px; height: 20px; flex-shrink: 0; stroke: currentColor; fill: none; stroke-width: 1.3; 
+    .cs-box {
+      flex: 1; min-width: 260px;
+      padding: 32px 40px;
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; justify-content: center;
+      text-decoration: none; transition: background .3s;
+    }
+    
+    a.cs-box:hover { background: rgba(26,163,122,.04); cursor: none; }
+    
+    .cs-label {
+      font-family: 'Lexend', sans-serif; font-weight: 300; font-size: 10px;
+      letter-spacing: .2em; text-transform: uppercase; color: var(--green-mid);
+      margin-bottom: 8px;
+    }
+    
+    .cs-val {
+      font-family: 'Lexend', sans-serif; font-weight: 500; font-size: 15px;
+      color: var(--text); letter-spacing: .02em;
+    }
+    
+    .cs-socials {
+      display: flex; flex: 1.2; min-width: 280px;
+    }
+    
+    .cs-social-link {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      border-right: 1px solid var(--border);
+      text-decoration: none; transition: all .3s;
+      color: rgba(246,230,209,.5); cursor: none;
+    }
+    
+    .cs-social-link:last-child { border-right: none; }
+    
+    .cs-social-link:hover {
+      background: rgba(26,163,122,.05); color: var(--text);
+    }
+    
+    .cs-social-link svg {
+      width: 20px; height: 20px; flex-shrink: 0;
+      stroke: currentColor; fill: none; stroke-width: 1.3;
       transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .contact-pill:hover svg { transform: scale(1.15); }
+    
+    .cs-social-link:hover svg { transform: scale(1.15); }
 
     /* ── FOOTER */
     footer { padding: 36px 52px; border-top: 1px solid var(--border); background: var(--bg2); display: flex; justify-content: space-between; align-items: center; }
@@ -631,29 +666,28 @@
       .contact-photo { min-height: 350px; }
       .about-stats { min-width: unset; }
 
-      /* Timeline mobile: stack */
+      /* Timeline mobile */
       .tl-sticky-container { grid-template-columns: 1fr; }
       .tl-sticky-left { position: relative; height: auto; padding: 80px 24px 40px; border-right: none; border-bottom: 1px solid var(--border); }
       .tl-active-display, .tl-progress-bar, .tl-progress-label { display: none; }
       .tl-scroll-right { padding: 40px 24px 80px; }
-      
-      /* Disable complex timeline animation on mobile */
       .tl-entry { opacity: 1 !important; transform: none !important; filter: none !important; padding: 40px 0; }
-      
       .tl-desc, .tl-tools { padding-left: 0; }
 
       .hero-name { font-size: clamp(48px, 12vw, 88px); }
       .hero-tags { display: none; }
       footer { flex-direction: column; gap: 16px; padding: 32px 24px; text-align: center; }
-      .contact-pills-band { margin-left: -24px; margin-right: -24px; }
-      .contact-pill { flex: 0 0 33.33%; border-bottom: 1px solid var(--border); }
+      
+      /* Contact summary mobile adaptation */
+      .contact-summary-band { flex-direction: column; margin-left: -24px; margin-right: -24px; }
+      .cs-box { border-right: none; border-bottom: 1px solid var(--border); padding: 24px; }
       
 @media (max-width: 768px) {
   section { padding: 80px 20px; }
   #contact { padding: 80px 20px 0; }
   .marquee-item { padding: 18px 32px; gap: 10px; }
   .marquee-label { display: none; }
-  .contact-pills-band { margin-left: -20px; margin-right: -20px; }
+  .contact-summary-band { margin-left: -20px; margin-right: -20px; }
 }
 
 @media (max-width: 480px) {
@@ -677,9 +711,14 @@
   .contact-btns { gap: 12px; }
   .btn-primary, .btn-secondary { padding: 14px 24px; font-size: 9.5px; }
   .contact-photo { min-height: 280px; }
-  .contact-pill { flex: 0 0 50%; min-width: 50%; padding: 24px 16px; }
-  .contact-pill.text-pill { flex: 0 0 100%; min-width: 100%; }
-  .contact-pills-band { margin-left: -16px; margin-right: -16px; }
+  
+  /* Contact summary stacking */
+  .contact-summary-band { margin-left: -16px; margin-right: -16px; }
+  .cs-box { padding: 24px 20px; min-width: 100%; }
+  .cs-socials { flex-wrap: wrap; border-bottom: 1px solid var(--border); }
+  .cs-social-link { flex: 0 0 50%; padding: 20px 0; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+  .cs-social-link:nth-child(even) { border-right: none; }
+  .cs-social-link:nth-last-child(-n+2) { border-bottom: none; }
 }
     }
   </style>
@@ -1144,26 +1183,37 @@
         </div>
       </div>
     </div>
-    <div class="contact-pills-band">
-      <a class="contact-pill" href="mailto:tamime.kaddour.b@gmail.com" title="Email">
-        <svg viewBox="0 0 12 12"><rect x="1" y="2.5" width="10" height="7" rx=".5"/><path d="M1 3.5L6 7l5-3.5"/></svg>
+    
+    <div class="contact-summary-band">
+      <div class="cs-box">
+        <span class="cs-label" data-i18n="contact.based">Based in</span>
+        <span class="cs-val">Algiers, Algeria</span>
+      </div>
+      
+      <a href="mailto:tamime.kaddour.b@gmail.com" class="cs-box">
+        <span class="cs-label" data-i18n="contact.email">Email</span>
+        <span class="cs-val">tamime.kaddour.b@gmail.com</span>
       </a>
-      <a class="contact-pill text-pill" href="tel:+213553157737" title="Téléphone">
-        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M2 2.5c0 4.5 3.5 8 8 8l.5-2-2-.5-.5 1c-1.5-.5-3-2-3.5-3.5l1-.5L5 3 3 2.5z"/></svg>
-        <span>+213 553 157 337</span>
+      
+      <a href="tel:+213553157737" class="cs-box">
+        <span class="cs-label" data-i18n="contact.phone">Phone</span>
+        <span class="cs-val">+213 553 157 337</span>
       </a>
-      <a class="contact-pill" href="https://behance.net/Tamime" target="_blank" title="Behance">
-        <svg viewBox="0 0 12 12"><path d="M1 2h4c1.2 0 2 .6 2 1.5S5.2 5 4 5H1V2z"/><path d="M1 5h4.5C7 5 8 5.8 8 7s-1 2-2.5 2H1V5z"/><line x1="8" y1="2" x2="11" y2="2"/><path d="M8 5c0-1.5 1-2.5 2-2.5s2 1 2 2.5H8z"/></svg>
-      </a>
-      <a class="contact-pill" href="https://instagram.com/morros.design" target="_blank" title="Instagram">
-        <svg viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="2.5"/><circle cx="6" cy="6" r="2.3"/><circle cx="9" cy="3" r=".5" fill="currentColor" stroke="none"/></svg>
-      </a>
-      <a class="contact-pill" href="https://linkedin.com/in/tamimekaddour" target="_blank" title="LinkedIn">
-        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><rect x="1" y="1" width="10" height="10" rx="1.5"/><line x1="3.5" y1="5" x2="3.5" y2="9"/><path d="M5.5 9V6.5a1.5 1.5 0 013 0V9"/><circle cx="3.5" cy="3.5" r=".5" fill="currentColor" stroke="none"/></svg>
-      </a>
-      <a class="contact-pill" href="https://www.flickr.com/photos/tamime/with/17181092728" target="_blank" title="Flickr">
-        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="3.8" cy="6" r="2.2"/><circle cx="8.2" cy="6" r="2.2"/></svg>
-      </a>
+      
+      <div class="cs-socials">
+        <a class="cs-social-link" href="https://behance.net/Tamime" target="_blank" title="Behance">
+          <svg viewBox="0 0 12 12"><path d="M1 2h4c1.2 0 2 .6 2 1.5S5.2 5 4 5H1V2z"/><path d="M1 5h4.5C7 5 8 5.8 8 7s-1 2-2.5 2H1V5z"/><line x1="8" y1="2" x2="11" y2="2"/><path d="M8 5c0-1.5 1-2.5 2-2.5s2 1 2 2.5H8z"/></svg>
+        </a>
+        <a class="cs-social-link" href="https://instagram.com/morros.design" target="_blank" title="Instagram">
+          <svg viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="2.5"/><circle cx="6" cy="6" r="2.3"/><circle cx="9" cy="3" r=".5" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a class="cs-social-link" href="https://linkedin.com/in/tamimekaddour" target="_blank" title="LinkedIn">
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><rect x="1" y="1" width="10" height="10" rx="1.5"/><line x1="3.5" y1="5" x2="3.5" y2="9"/><path d="M5.5 9V6.5a1.5 1.5 0 013 0V9"/><circle cx="3.5" cy="3.5" r=".5" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a class="cs-social-link" href="https://www.flickr.com/photos/tamime/with/17181092728" target="_blank" title="Flickr">
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="3.8" cy="6" r="2.2"/><circle cx="8.2" cy="6" r="2.2"/></svg>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -1270,6 +1320,7 @@
         'contact.heading': "Got a brief?<br>A spark? <em>Let's talk.</em>",
         'contact.desc': "Whether it's a brand in the making or a concept that needs form — open to meaningful collaborations with people who value strong visual thinking.",
         'contact.btn1': 'Get in Touch', 'contact.btn2': 'View Behance',
+        'contact.based': 'Based in', 'contact.email': 'Email', 'contact.phone': 'Phone',
         'footer.copy': '© 2026 Tamime Kaddour — All rights reserved',
       },
       fr: {
@@ -1304,6 +1355,7 @@
         'contact.heading': "Un brief ?<br>Une idée ? <em>Parlons-en.</em>",
         'contact.desc': "Qu'il s'agisse d'une marque en devenir ou d'un concept à matérialiser — ouvert aux collaborations porteuses de sens, avec ceux qui valorisent une pensée visuelle forte.",
         'contact.btn1': 'Me contacter', 'contact.btn2': 'Voir Behance',
+        'contact.based': 'Basé à', 'contact.email': 'Email', 'contact.phone': 'Téléphone',
         'footer.copy': '© 2026 Tamime Kaddour — Tous droits réservés',
       }
     };
